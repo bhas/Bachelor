@@ -1,26 +1,24 @@
-package poker;
+package game;
 
 import java.util.ArrayList;
 
 public class Dealer {
 	
-	private State state;
+	private State state = State.START;
 	private Deck deck;
 	private ArrayList<Card> p1Cards = new ArrayList<Card>();
 	private ArrayList<Card> p2Cards = new ArrayList<Card>();
-	private ArrayList<Card> tableCards = new ArrayList<Card>();
-
+	private ArrayList<Card> commCards = new ArrayList<Card>();
 	
-	
-	
-	public enum State{
-		START, PREFlOP, FLOP, TURN, RIVER;
+	public Dealer() {
+		deck = new Deck();
 	}
 	
-	//Observer pattern?
+	public Dealer(int seed) {
+		deck = new Deck(seed);
+	}
 	
 	public void deal(){
-		
 		switch (state){
 		case START:
 			deck.shuffle();
@@ -32,32 +30,46 @@ public class Dealer {
 			break;
 		case PREFlOP:
 			deck.draw(); // Burn card
-			tableCards.add(deck.draw());
-			tableCards.add(deck.draw());
-			tableCards.add(deck.draw());
+			commCards.add(deck.draw());
+			commCards.add(deck.draw());
+			commCards.add(deck.draw());
 			state = State.FLOP;
 			break;
 		case FLOP:
 			deck.draw(); // Burn card
-			tableCards.add(deck.draw());
+			commCards.add(deck.draw());
 			state = State.TURN;
 			break;
 		case TURN:
 			deck.draw(); // Burn card
-			tableCards.add(deck.draw());
+			commCards.add(deck.draw());
 			state = State.RIVER;
 			break;
 		case RIVER:
 			p1Cards.clear();
 			p2Cards.clear();
-			tableCards.clear();
+			commCards.clear();
 			state = State.START;
 			break;
 		}
-		
 	}
 	
+	public ArrayList<Card> getHand(int id) {
+		switch (id) {
+		case 1:
+			return p1Cards;
+		case 2:
+			return p2Cards;
+		default:
+			return null;
+		}
+	}
 	
+	public ArrayList<Card> getCommunityCards() {
+		return commCards;
+	}
 	
-
+	public enum State{
+		START, PREFlOP, FLOP, TURN, RIVER;
+	}
 }

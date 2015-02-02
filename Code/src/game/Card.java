@@ -1,4 +1,4 @@
-package poker;
+package game;
 
 public enum Card {
 
