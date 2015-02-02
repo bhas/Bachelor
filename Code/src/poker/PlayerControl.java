@@ -17,7 +17,12 @@ public class PlayerControl {
 		this.game = game;
 	}
 	
+	public void onRoundStarted(boolean isBB) {
+		
+	}
+	
 	public void onTurnedGained() {
+		
 		
 	}
 	
@@ -63,5 +68,9 @@ public class PlayerControl {
 	
 	public void isMyTurn() {
 		// TODO Auto-generated method stub
+	}
+	
+	public void payBlind(int i){
+		
 	}
 }
