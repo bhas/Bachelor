@@ -1,6 +1,5 @@
 package poker;
 
-import java.util.HashMap;
 
 public class ChipManager {
 	private PlayerControl p1, p2;
@@ -17,18 +16,20 @@ public class ChipManager {
 		BB = bb;
 	}
 	
+	// place a bet
 	public boolean bet(PlayerControl p, int bid) {
-		if (p == p1 && isValidBid(chips1, bid, bet2)) {
-			bet1 = bid;
+		if (p == p1 && isValidBid(bid, bet2)) {
+			pay(p, bid);
 			return true;
 		}
-		if (p == p2 && isValidBid(chips2, bid, bet1)) {
-			bet2 = bid;
+		if (p == p2 && isValidBid(bid, bet1)) {
+			pay(p, bid);
 			return true;
 		}
 		return false;
 	}
 	
+	// call opponent player
 	public boolean call(PlayerControl p) {
 		if (p == p1)
 			return bet(p, bet2);
@@ -38,6 +39,8 @@ public class ChipManager {
 		return false;
 	}
 	
+	// Adds the bets to the pot.
+	// Any difference in bets will be put back to players chips
 	public void commit() {
 		if (bet1 > bet2) {
 			int diff = bet1 - bet2;
@@ -54,18 +57,45 @@ public class ChipManager {
 		bet2 = 0;
 	}
 	
+	// gives the chips to the winner and resets bets and pot
 	public void roundEnded(PlayerControl winner) {
 		if (winner == p1)
 			chips1 += (pot + bet1 + bet2);
 		else
 			chips2 += (pot + bet1 + bet2);
-	}
-	
-	private void newRound() {
 		
+		bet1 = 0;
+		bet2 = 0;
+		pot = 0;
 	}
 	
-	private boolean isValidBid(int chips, int yourBid, int oppBid) {
-		return yourBid <= chips && yourBid >= oppBid + BB;
+	// checks if a bid is valid
+	private boolean isValidBid(int yourBid, int oppBid) {
+		return yourBid >= oppBid + BB;
+	}
+	
+	// Will pay for a player.
+	// If the amount exceeds his total chips then it will go all in.
+	private void pay(PlayerControl p, int amount) {
+		int tmp = 0;
+		if (p == p1) {
+			tmp = (chips1 < amount ? chips1 : amount);
+			bet1 += tmp;
+			chips1 -= tmp;
+		}
+		else if (p == p2) {
+			tmp = (chips2 < amount ? chips2 : amount);
+			bet2 += tmp;
+			chips2 -= tmp;
+		}
+	}
+	
+	public boolean isAllin(PlayerControl p) {
+		if (p == p1)
+			return chips1 == 0;
+		else if (p == p2)
+			return chips2 == 0;
+		
+		return false;
 	}
 }

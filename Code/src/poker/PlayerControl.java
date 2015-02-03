@@ -5,25 +5,17 @@ import game.Card;
 import java.util.ArrayList;
 
 public class PlayerControl {
-	public final int id;
-	
+	public final String name;
 	private Game game;
 	private ArrayList<Card> hand;
-	private int chips;
 	
-	public PlayerControl(int id, int chips, Game game) {
-		this.id = id;
-		this.chips = chips;
+	public PlayerControl(String name, Game game) {
+		this.name = name;
 		this.game = game;
 	}
 	
-	public void onRoundStarted(boolean isBB) {
-		
-	}
-	
 	public void onTurnedGained() {
-		
-		
+		call();	
 	}
 	
 	public void onRoundEnded() {
@@ -31,7 +23,7 @@ public class PlayerControl {
 	}
 	
 	public void call() {
-		// TODO Auto-generated method stub
+		
 	}
 	
 	public void raise() {
