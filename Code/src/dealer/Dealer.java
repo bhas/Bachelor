@@ -1,4 +1,4 @@
-package game;
+package dealer;
 
 import java.util.ArrayList;
 

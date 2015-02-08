@@ -1,4 +1,4 @@
-package game;
+package dealer;
 
 public enum Card {
 

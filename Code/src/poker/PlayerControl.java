@@ -1,15 +1,15 @@
 package poker;
 
-import game.Card;
-
 import java.util.ArrayList;
+
+import dealer.Card;
 
 public class PlayerControl {
 	public final String name;
-	private Game game;
+	private GameController game;
 	private ArrayList<Card> hand;
 	
-	public PlayerControl(String name, Game game) {
+	public PlayerControl(String name, GameController game) {
 		this.name = name;
 		this.game = game;
 	}

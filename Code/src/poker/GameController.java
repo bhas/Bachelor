@@ -1,10 +1,10 @@
 package poker;
 
-import game.Dealer;
-
 import java.util.Random;
 
-public class Game {
+import dealer.Dealer;
+
+public class GameController {
 
 	private Random random = new Random();
 	private PlayerControl player1, player2;
@@ -18,7 +18,7 @@ public class Game {
 	// skal turn være playercontrol?
 	private PlayerControl waitingFor;
 
-	public Game(int BB, int startChips) {
+	public GameController(int BB, int startChips) {
 		this.BB = BB;
 		SB = BB / 2;
 		this.startChips = startChips;
