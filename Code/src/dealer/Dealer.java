@@ -1,4 +1,4 @@
-package game;
+package dealer;
 
 import java.util.ArrayList;
 
@@ -46,10 +46,7 @@ public class Dealer {
 			state = State.RIVER;
 			break;
 		case RIVER:
-			p1Cards.clear();
-			p2Cards.clear();
-			commCards.clear();
-			state = State.START;
+			newRound();
 			break;
 		}
 	}
@@ -71,5 +68,13 @@ public class Dealer {
 	
 	public enum State{
 		START, PREFlOP, FLOP, TURN, RIVER;
+	}
+	
+	public void newRound(){
+		p1Cards.clear();
+		p2Cards.clear();
+		commCards.clear();
+		state = State.START;
+		deck.shuffle();
 	}
 }
