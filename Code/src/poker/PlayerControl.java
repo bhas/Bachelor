@@ -38,12 +38,14 @@ public class PlayerControl {
 		// TODO Auto-generated method stub
 	}
 	
-	public void getMyChips() {
+	public int getMyChips() {
 		// TODO Auto-generated method stub
+		return 0;
 	}
 	
-	public void getMyBet() {
+	public int getMyBet() {
 		// TODO Auto-generated method stub
+		return 0;
 	}
 	
 	public void getOpponentsBet() {
@@ -65,4 +67,5 @@ public class PlayerControl {
 	public void payBlind(int i){
 		
 	}
+	
 }

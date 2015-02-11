@@ -19,20 +19,49 @@ public class PokerBoard extends JPanel {
 	private SharedPanel sp;
 	private final Font font = new Font("Calibri", Font.PLAIN, 18);
 
-	public PokerBoard() {
+	public PokerBoard(String name1, String name2, int chips, int blind) {
 		setLayout(null);
 		setBackground(new Color(0, 150, 0));
-		p1 = new PlayerPanel("Poker Bot", 2500);
-		p1.setHand(Card.C_A, Card.S_A);
+		p1 = new PlayerPanel(name1, chips);
 		p1.setBounds(10, 180, 170, 220);
 		add(p1);
-		p2 = new PlayerPanel("Kasper Støy", 5000);
-		p2.setHand(Card.D_Q, Card.D_K);
+		p2 = new PlayerPanel(name2, chips);
 		p2.setBounds(340, 180, 170, 220);
 		add(p2);
-		sp = new SharedPanel(50);
+		sp = new SharedPanel(blind);
 		sp.setBounds(60, 10, 400, 160);
 		add(sp);
+		clear();
+	}
+	
+	public void hideHand(int player) {
+		(player == 0 ? p1 : p2).clear();
+	}
+	
+	public void clear() {
+		p1.clear();
+		p2.clear();
+		sp.clear();
+	}
+
+	public void setChips(int player, int chips) {
+		(player == 0 ? p1 : p2).setChips(chips);
+	}
+
+	public void setBet(int player, int bet) {
+		(player == 0 ? p1 : p2).setBet(bet);
+	}
+
+	public void setPot(int pot) {
+		sp.setPot(pot);
+	}
+
+	public void setHand(int player, Card c1, Card c2) {
+		(player == 0 ? p1 : p2).setHand(c1, c2);
+	}
+
+	public void setSharedCard(int i, Card c) {
+		sp.setCard(i, c);
 	}
 
 	private class SharedPanel extends JPanel {
@@ -45,6 +74,7 @@ public class PokerBoard extends JPanel {
 					Color.darkGray));
 			initComponents(blind);
 			createLayout();
+			clear();
 		}
 
 		private void initComponents(int blind) {
@@ -64,7 +94,7 @@ public class PokerBoard extends JPanel {
 		private void createLayout() {
 			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 			add(blind);
-			
+
 			JPanel cards = new JPanel();
 			cards.add(ci1);
 			cards.add(ci2);
@@ -76,31 +106,43 @@ public class PokerBoard extends JPanel {
 			add(pot);
 		}
 
-		public void setFlop(Card c1, Card c2, Card c3) {
-			ci1.setCard(c1);
-			ci2.setCard(c2);
-			ci3.setCard(c3);
-			ci1.setVisible(true);
-			ci2.setVisible(true);
-			ci3.setVisible(true);
+		private void setCard(int i, Card c) {
+			switch (i) {
+			case 0:
+				ci1.setCard(c);
+				ci1.setVisible(true);
+				break;
+			case 1:
+				ci2.setCard(c);
+				ci2.setVisible(true);
+				break;
+			case 2:
+				ci3.setCard(c);
+				ci3.setVisible(true);
+				break;
+			case 3:
+				ci4.setCard(c);
+				ci4.setVisible(true);
+				break;
+			case 4:
+				ci5.setCard(c);
+				ci5.setVisible(true);
+				break;
+			default:
+				return;
+			}
 		}
 
-		public void setTurn(Card c) {
-			ci4.setCard(c);
-			ci4.setVisible(true);
-		}
-
-		public void setRiver(Card c) {
-			ci5.setCard(c);
-			ci5.setVisible(true);
-		}
-
-		public void clear() {
+		private void clear() {
 			ci1.setVisible(false);
 			ci2.setVisible(false);
 			ci3.setVisible(false);
 			ci4.setVisible(false);
 			ci5.setVisible(false);
+		}
+
+		private void setPot(int amount) {
+			pot.setText("Pot:  " + amount);
 		}
 	}
 
@@ -152,22 +194,24 @@ public class PokerBoard extends JPanel {
 				public void itemStateChanged(ItemEvent e) {
 					showHand = e.getStateChange() == ItemEvent.SELECTED ? true
 							: false;
-					setHand(c1, c2);
+					
 				}
 			});
 			box.setFont(font);
 		}
 
-		public void setHand(Card c1, Card c2) {
+		public void setHand(Card c1, Card c2, boolean forceVisible) {
 			this.c1 = c1;
 			this.c2 = c2;
-			if (showHand) {
+			if (forceVisible || showHand) {
 				ci1.setCard(c1);
 				ci2.setCard(c2);
 			} else {
 				ci1.setCard(null);
 				ci2.setCard(null);
 			}
+			ci1.setVisible(true); 
+			ci2.setVisible(true);
 		}
 
 		public void setBet(int amount) {
@@ -177,9 +221,11 @@ public class PokerBoard extends JPanel {
 		public void setChips(int amount) {
 			chips.setText("Chips:  " + amount + "$");
 		}
-
-		public void setPlayerName(String s) {
-			name.setText(s);
+		
+		public void clear() {
+			ci1.setVisible(false);
+			ci2.setVisible(false);
 		}
+
 	}
 }

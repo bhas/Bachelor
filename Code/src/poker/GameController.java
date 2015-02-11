@@ -13,9 +13,7 @@ public class GameController {
 	private int BB;
 	private int SB;
 	private int startChips;
-	// overvejer ny datastruktur for at undgå if statements
 	private PlayerControl isBB;
-	// skal turn være playercontrol?
 	private PlayerControl waitingFor;
 
 	public GameController(int BB, int startChips) {
