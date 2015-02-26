@@ -8,17 +8,12 @@
 \input{pre-content/frontpage.tex}
 
 % abstract
-\begin{abstract}
-this is abstract
-\end{abstract}
-\newpage
+\input{pre-content/abstract.tex}
 
 % preface
 \section*{Preface}
 \input{pre-content/preface.tex}
-
-% glossary and abbreviations
-\section*{Glossary and abbreviations}
+\newpage
 
 % table of contents
 \tableofcontents
@@ -26,36 +21,18 @@ this is abstract
 % list of figures
 \listoffigures
 
+% project overview
+\input{project-overview/overview.tex}
+
 % theoretic part
-\part{Theory} 
+\input{theory/theory-part.tex}
 
 % experimental part
+\input{experiment/experiment-part.tex};
 
 % testing part
-\section{Glossary}
-\textbf{Poker terms}
-\textbf{Neural network terms}
 
-\section{Problem statement}
-
-\section{Theory}
-\subsection{Bayes theorem}
-\subsection{Monte Carlo simulation}
-\input{theory/monte-carlo-simulation.tex}
-\subsection{Nash equilibrium}
-\input{theory/nash-equilibrium.tex}
-\subsection{Neural network}
-\input{theory/neural-network.tex}
-\subsection{What did we use?}
-
-\section{Method}
-
-\section{Implementation}
-\subsection{Poker game system}
-\subsection{Implementation of the neural network}
-
-\section{Test}
-
+% conclusion
 \section{Conclusion}
 
 \end{document}
