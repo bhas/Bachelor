@@ -44,19 +44,19 @@ import bots.CallBot;
  * 
  * @author Oscar Stigter
  */
-public class Main extends JFrame implements Client {
+public class MainWindow extends JFrame implements Client {
     
     /** Serial version UID. */
     private static final long serialVersionUID = -5414633931666096443L;
     
     /** Table type (betting structure). */
-    private static final TableType TABLE_TYPE = TableType.NO_LIMIT;
+    private final TableType TABLE_TYPE;
 
     /** The size of the big blind. */
-    private static final int BIG_BLIND = 10;
+    private final int BIG_BLIND;
     
     /** The starting cash per player. */
-    private static final int STARTING_CASH = 500;
+    private final int STARTING_CASH;
     
     /** The table. */
     private final Table table;
@@ -88,8 +88,12 @@ public class Main extends JFrame implements Client {
     /**
      * Constructor.
      */
-    public Main() {
+    public MainWindow(TableType tt, int bb, int startMoney) {
         super("Texas Hold'em poker");
+        
+        TABLE_TYPE = tt;
+        BIG_BLIND = bb;
+        STARTING_CASH = startMoney;
         
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setBackground(UIConstants.TABLE_COLOR);
@@ -149,16 +153,6 @@ public class Main extends JFrame implements Client {
 
         // Start the game.
         table.run();
-    }
-    
-    /**
-     * The application's entry point.
-     * 
-     * @param args
-     *            The command line arguments.
-     */
-    public static void main(String[] args) {
-        new Main();
     }
 
     @Override
