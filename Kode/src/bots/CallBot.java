@@ -18,37 +18,38 @@ public class CallBot extends Bot {
 
 	@Override
 	public void joinedTable(TableType type, int bigBlind, List<Player> players) {
-		// TODO Auto-generated method stub
-		
+		System.out.println("CallBot Game started");
 	}
 
 	@Override
 	public void handStarted(Player dealer) {
-		// TODO Auto-generated method stub
-		
+		System.out.println("hand started");		
 	}
 
 	@Override
 	public void actorRotated(Player actor) {
-		// TODO Auto-generated method stub
+		System.out.println("waiting for "+ actor.getName());
 		
 	}
 
 	@Override
 	public void playerUpdated(Player player) {
-		// TODO Auto-generated method stub
+		System.out.println("Player updated");
 		
 	}
 
 	@Override
 	public void boardUpdated(List<Card> cards, int bet, int pot) {
-		// TODO Auto-generated method stub
+		System.out.println("Board updated");
+		for(Card c : cards){
+			System.out.println("card: " + c);
+		}
 		
 	}
 
 	@Override
 	public void playerActed(Player player) {
-		// TODO Auto-generated method stub
+		System.out.println(player.getName() +  " acted");
 		
 	}
 
