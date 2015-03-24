@@ -3,6 +3,7 @@ package game.hand;
 import game.cards.Card;
 
 import java.util.ArrayList;
+<<<<<<< HEAD
 import java.util.Collections;
 import java.math.BigDecimal;
 import java.lang.Math;
@@ -16,6 +17,15 @@ public class Hand implements Comparable<Hand> {
 	private int[] subRanks;
 	private int[] suitDis = new int[4];
 	private int[] rankDis = new int[13];
+=======
+import java.util.List;
+
+public class Hand implements Comparable<Hand> {
+	private ArrayList<Card> cards;
+	private Card[] optimalHand;
+	private Rank rank;
+	private int[] subRanks;
+>>>>>>> 22e2043c1d4916581afce0fd4929e6355776cf70
 
 	public Hand(ArrayList<Card> cards) {
 		this.cards = cards;
@@ -23,6 +33,7 @@ public class Hand implements Comparable<Hand> {
 		System.out.println(findStraightFlush());
 	}
 
+<<<<<<< HEAD
 	public static void main(String[] args) {
 		cc.add(Card.CA);
 		cc.add(Card.C8);
@@ -35,6 +46,12 @@ public class Hand implements Comparable<Hand> {
 		cards.addAll(cc);
 
 		Hand hand = new Hand(cards);
+=======
+	public Hand(List<Card> hand, List<Card> community) {
+		cards.addAll(hand);
+		cards.addAll(community);
+		evaluate();
+>>>>>>> 22e2043c1d4916581afce0fd4929e6355776cf70
 	}
 
 	private void evaluate() {
@@ -43,6 +60,7 @@ public class Hand implements Comparable<Hand> {
 			suitDis[c.getSuit()]++;
 			rankDis[c.getRank()]++;
 		}
+<<<<<<< HEAD
 		// determinRank(suitDis, rankDis);
 	}
 
@@ -152,6 +170,14 @@ public class Hand implements Comparable<Hand> {
 			return true;
 		}
 		return false;
+=======
+
+		determinRank(suitDis, rankDis);
+	}
+
+	private void determinRank(int[] suitDis, int[] rankDis) {
+
+>>>>>>> 22e2043c1d4916581afce0fd4929e6355776cf70
 	}
 
 	// private boolean isStraight(int[] ranks) {
