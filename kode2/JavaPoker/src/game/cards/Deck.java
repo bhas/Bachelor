@@ -17,6 +17,8 @@ public class Deck {
 	}
 
 	public Deck(List<Card> excludes) {
+		stack = new Stack<Card>();
+		random = new SecureRandom();
 		this.excludes = excludes;
 	}
 
@@ -27,8 +29,12 @@ public class Deck {
 			if (excludes != null && excludes.contains(c))
 				continue;
 
-			int index = random.nextInt(stack.size());
-			stack.add(index, c);
+			if (!stack.isEmpty()) {
+				int index = random.nextInt(stack.size());
+				stack.add(index, c);
+			} else {
+				stack.add(c);
+			}
 		}
 	}
 
@@ -41,7 +47,7 @@ public class Deck {
 		for (int i = 0; i < noOfCards; i++) {
 			cards.add(stack.pop());
 		}
-		
+
 		return cards;
 	}
 }
