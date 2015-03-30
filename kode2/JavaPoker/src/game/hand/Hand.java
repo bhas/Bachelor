@@ -1,34 +1,57 @@
 package game.hand;
 
 import game.cards.Card;
+import game.cards.Deck;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Hand implements Comparable<Hand> {
-	private static ArrayList<Card> cards = new ArrayList<Card>();
+	private ArrayList<Card> cards = new ArrayList<Card>();
 	private ArrayList<Card> optimalHand = new ArrayList<Card>();
 	private Rank rank;
 	private int[] subRanks;
 	private int[] suitDis = new int[4];
 	private int[] rankDis = new int[13];
+	private int fs, sr, maxDup, maxDupRank;
 
 	public static void main(String[] args) {
-		ArrayList<Card> cc = new ArrayList<Card>();
-		cc.add(Card.CA);
-		cc.add(Card.CQ);
-		cc.add(Card.S3);
-		cc.add(Card.CK);
-		cc.add(Card.D5);
+		Hand h1 = generateHand();
+		Hand h2 = generateHand();
+		int res = h1.compareTo(h2);
+		System.out.println(res);
+		// int runs = 50;
+		// int[] array = new int[10];
+		// System.out.println(runs + " runs");
+		// for(int i = 0; i<runs;i++){
+		// array[testSingleHand().getValue()]++;
+		//
+		//
+		// }
+		// printArray(array, "test");
+	}
 
-		ArrayList<Card> handCards = new ArrayList<Card>();
-		handCards.add(Card.CJ);
-		handCards.add(Card.C10);
+	public static Hand generateHand() {
+		System.out.println();
+		Deck d = new Deck();
+		d.shuffle();
+		List<Card> cc = d.deal(5);
+		List<Card> handCards = d.deal(2);
 
-		Hand hand = new Hand(handCards, cc);
-		System.out.println(hand.getRank());
-		System.out.println(hand.getAllCards());
-		System.out.println(hand.getoptimalCards());
+		Hand h = new Hand(handCards, cc);
+		System.out.println(h);
+
+		return h;
+
+	}
+
+	public static void printArray(int[] ar, String name) {
+		System.out.print(name + ": [");
+		for (int i : ar) {
+			System.out.print(i + ", ");
+		}
+		System.out.println("]");
 	}
 
 	public Hand(List<Card> hand, List<Card> community) {
@@ -42,73 +65,127 @@ public class Hand implements Comparable<Hand> {
 		return cards;
 	}
 
-	public List<Card> getoptimalCards() {
+	public List<Card> getOptimalCards() {
 		return optimalHand;
 	}
 
-	private ArrayList<Integer> findNumOfDuplicates(int numOfDups) {
-
-		ArrayList<Integer> dups = new ArrayList<Integer>();
-
-		for (int i = 0; i < rankDis.length; i++) {
-			if (rankDis[i] == numOfDups) {
-				dups.add(i);
+	private void findMaxDup() {
+		for (int i = rankDis.length - 1; i >= 0; i--) {
+			if (rankDis[i] > maxDup) {
+				maxDup = rankDis[i];
+				maxDupRank = i;
 			}
 		}
-		return dups;
 	}
 
-	private int maxDup() {
-		int max = 0;
-		for (int i = 0; i < rankDis.length; i++) {
-			if (rankDis[i] > max)
-				max = rankDis[i];
+	private void findFlushSuit() {
+		for (int i = 0; i < suitDis.length; i++) {
+			if (suitDis[i] >= 5) {
+				fs = i;
+				return;
+			}
 		}
-		return max;
+		fs = -1;
 	}
 
-	private boolean isFlush() {
-		return findSuit() != -1;
+	private boolean isStraight() {
+
+		if (sr == -1) {
+			return false;
+		}
+
+		int[] usedCards = new int[5];
+		for (Card c : cards) {
+			int i = sr - c.getRank();
+			if (i >= 0 && i < 5 && usedCards[i] == 0) {
+				optimalHand.add(c);
+				usedCards[i]++;
+			}
+		}
+		subRanks = new int[] { sr };
+		rank = Rank.STRAIGHT;
+		return true;
+
 	}
 
-	private int findStraightRank(int[] ranks) {
+	private void findStraightRank(int[] ranks) {
 		int count = 0;
 
 		for (int i = ranks.length - 1; i >= 0; i--) {
 			if (ranks[i] > 0) {
 				count++;
 				if (count > 4) {
-					return i + 4;
+					sr = i + 4;
+					return;
 				}
 			} else {
 				count = 0;
 			}
 		}
-		return -1;
+		sr = -1;
 	}
 
-	private boolean isStraight() {
+	private boolean isFullHouse() {
 
-		int count = 0;
+		if (maxDup < 3) {
+			return false;
+		}
 
+		int pairRank = -1;
 		for (int i = rankDis.length - 1; i >= 0; i--) {
-			if (rankDis[i] > 0) {
-				count++;
-				if (count > 4) {
-					return true;
-				}
-			} else {
-				count = 0;
+			if (i != maxDupRank && rankDis[i] >= 2) {
+				pairRank = i;
+				break;
+			}
+		}
+		if (pairRank == -1) {
+			return false;
+		}
+
+		int i = 0;
+		for (Card c : cards) {
+			if (c.getRank() == maxDupRank || c.getRank() == pairRank && i < 2) {
+				optimalHand.add(c);
+			} else if (c.getRank() == pairRank && i < 2) {
+				optimalHand.add(c);
+				i++;
 			}
 		}
 
-		if (count == 4)
-			return rankDis[Card.ACE] != 0;
-		return false;
+		rank = Rank.FULL_HOUSE;
+		subRanks = new int[] { maxDupRank, pairRank };
+		return true;
+
 	}
 
-	private boolean findStraightFlush() {
-		int fs = findSuit();
+	private boolean isQuads() {
+		Card kicker = null;
+
+		if (maxDup < 4) {
+			return false;
+		}
+
+		for (Card c : cards) {
+			if (c.getRank() == maxDupRank) {
+				optimalHand.add(c);
+			} else {
+				if (kicker == null || kicker.getRank() < c.getRank()) {
+					kicker = c;
+				}
+			}
+		}
+
+		optimalHand.add(kicker);
+		subRanks = new int[] { maxDupRank, kicker.getRank() };
+		rank = Rank.FOUR_OF_A_KIND;
+		return true;
+	}
+
+	private boolean isStraightFlush() {
+
+		if (sr == -1 || fs == -1) {
+			return false;
+		}
 
 		int[] flushRanks = new int[13];
 		for (Card c : cards) {
@@ -117,48 +194,28 @@ public class Hand implements Comparable<Hand> {
 				flushRanks[c.getRank()]++;
 			}
 		}
-		int straightRank = findStraightRank(flushRanks);
+		findStraightRank(flushRanks);
 
-		if (straightRank == -1) {
+		if (sr == -1) {
 			return false;
 		} else {
 			for (Card c : cards) {
-				if (c.getSuit() == fs && c.getRank() <= straightRank) {
-					if (c.getRank() > straightRank - 5) {
+				if (c.getSuit() == fs && c.getRank() <= sr) {
+					if (c.getRank() > sr - 5) {
 						optimalHand.add(c);
-					} else if (straightRank == 3 && c.getRank() == 12) {
+					} else if (sr == 3 && c.getRank() == 12) {
 						optimalHand.add(c);
 					}
 				}
 			}
-			if (straightRank == 12) {
+			if (sr == 12) {
 				rank = Rank.ROYAL_FLUSH;
 			} else {
-				subRanks = new int[] { straightRank };
+				subRanks = new int[] { sr };
 				rank = Rank.STRAIGHT_FLUSH;
 			}
 			return true;
 		}
-	}
-
-	private int findSuit() {
-
-		for (int i = 0; i < suitDis.length; i++) {
-			if (suitDis[i] >= 5) {
-				return i;
-			}
-		}
-		return -1;
-	}
-
-	private int highestCard() {
-
-		for (int i = 12; i >= 0; i--) {
-			if (rankDis[i] > 0) {
-				return i;
-			}
-		}
-		return -1;
 	}
 
 	public Rank getRank() {
@@ -172,19 +229,211 @@ public class Hand implements Comparable<Hand> {
 			rankDis[c.getRank()]++;
 		}
 
-		boolean flush = isFlush();
-		boolean straight = isStraight();
-		int maxDup = maxDup();
+		findFlushSuit();
+		findStraightRank(rankDis);
+		findMaxDup();
 
-		if (flush && straight) {
-			if (findStraightFlush()) {
-				return;
+		if (isStraightFlush()) {
+			return;
+		}
+
+		if (isQuads()) {
+			return;
+		}
+
+		if (isFullHouse()) {
+			return;
+		}
+
+		if (isFlush()) {
+			return;
+		}
+
+		if (isStraight()) {
+			return;
+		}
+
+		if (isThreeOfAKind()) {
+			return;
+		}
+
+		if (isTwoPair()) {
+			return;
+		}
+		if (isPair()) {
+			return;
+		}
+		isHighCard();
+
+	}
+
+	private void isHighCard() {
+		subRanks = new int[5];
+		int a = 0;
+
+		for (int i = rankDis.length - 1; i >= 0; i--) {
+			if (rankDis[i] == 1) {
+				subRanks[a] = i;
+				a++;
+				if (a == 5) {
+					break;
+				}
+			}
+		}
+		for (Card c : cards) {
+			if (c.getRank() >= subRanks[4]) {
+				optimalHand.add(c);
+			}
+		}
+		rank = Rank.HIGH_CARD;
+
+	}
+
+	private boolean isPair() {
+		if (maxDup != 2) {
+			return false;
+		}
+
+		int kicker1 = -1, kicker2 = -1, kicker3 = -1;
+		for (int i = rankDis.length - 1; i >= 0; i--) {
+			if (rankDis[i] == 1) {
+				if (kicker1 == -1) {
+					kicker1 = i;
+				} else if (kicker2 == -1) {
+					kicker2 = i;
+				} else if (kicker3 == -1) {
+					kicker3 = i;
+					break;
+				}
+
 			}
 		}
 
-		if (maxDup == 4) {
-
+		for (Card c : cards) {
+			int r = c.getRank();
+			if (r == maxDupRank || r == kicker1 || r == kicker2 || r == kicker3) {
+				optimalHand.add(c);
+			}
 		}
+		subRanks = new int[] { maxDupRank, kicker1, kicker2, kicker3 };
+		rank = Rank.ONE_PAIR;
+		return true;
+	}
+
+	private boolean isTwoPair() {
+		if (maxDup != 2) {
+			return false;
+		}
+
+		int pair2 = -1;
+
+		for (int i = maxDupRank - 1; i >= 0; i--) {
+			if (rankDis[i] == 2 && i != maxDupRank) {
+				pair2 = i;
+			}
+		}
+		if (pair2 == -1) {
+			return false;
+		}
+		Card kicker = null;
+
+		for (Card c : cards) {
+			if (c.getRank() == maxDupRank || c.getRank() == pair2) {
+				optimalHand.add(c);
+			} else if (kicker == null || c.getRank() > kicker.getRank()) {
+				kicker = c;
+			}
+		}
+		optimalHand.add(kicker);
+		subRanks = new int[] { maxDupRank, pair2, kicker.getRank() };
+		rank = Rank.TWO_PAIRS;
+		return true;
+
+	}
+
+	private boolean isThreeOfAKind() {
+		if (maxDup != 3) {
+			return false;
+		}
+
+		int kicker1 = -1;
+		int kicker2 = -1;
+
+		for (int i = rankDis.length - 1; i >= 0; i--) {
+			if (rankDis[i] > 0 && i != maxDupRank) {
+				if (kicker1 == -1) {
+					kicker1 = i;
+				} else {
+					kicker2 = i;
+					break;
+				}
+			}
+		}
+		subRanks = new int[3];
+		subRanks[0] = maxDupRank;
+
+		for (Card c : cards) {
+			if (c.getRank() == maxDupRank) {
+				optimalHand.add(c);
+			} else if (c.getRank() == kicker1) {
+				optimalHand.add(c);
+				subRanks[1] = kicker1;
+				kicker1 = -1;
+			} else if (c.getRank() == kicker2) {
+				optimalHand.add(c);
+				subRanks[2] = kicker2;
+				kicker2 = -1;
+			}
+		}
+
+		rank = Rank.THREE_OF_A_KIND;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		String s = rank + " " + optimalHand + " - " + cards;
+
+		return s;
+
+	}
+
+	private boolean isFlush() {
+		if (fs == -1) {
+			return false;
+		}
+
+		for (Card c : cards) {
+			if (c.getSuit() == fs) {
+				optimalHand.add(c);
+			}
+		}
+		optimalHand.sort(new Comparator<Card>() {
+			@Override
+			public int compare(Card o1, Card o2) {
+				if (o1.getRank() < o2.getRank()) {
+					return -1;
+				} else if (o1.getRank() == o2.getRank()) {
+					return 0;
+				} else {
+					return 1;
+				}
+			}
+		});
+
+		if (optimalHand.size() > 5) {
+			optimalHand = new ArrayList<Card>(optimalHand.subList(0, 5));
+		}
+		subRanks = new int[5];
+		for (int i = 0; i < 5; i++) {
+			subRanks[i] = optimalHand.get(i).getRank();
+		}
+		rank = Rank.FLUSH;
+		return true;
+	}
+
+	public int[] getSubRanks() {
+		return subRanks;
 	}
 
 	public enum Rank {
@@ -204,8 +453,21 @@ public class Hand implements Comparable<Hand> {
 	}
 
 	@Override
-	public int compareTo(Hand o) {
-		// TODO Auto-generated method stub
+	public int compareTo(Hand h) {
+		if (rank.getValue() > h.getRank().getValue()) {
+			return 1;
+		} else if (rank.getValue() < h.getRank().getValue()) {
+			return -1;
+		} else {
+			int[] sr = h.getSubRanks();
+			for (int i = 0; i < subRanks.length; i++) {
+				if (subRanks[i] < sr[i]) {
+					return -1;
+				} else if (subRanks[i] > sr[i]) {
+					return 1;
+				}
+			}
+		}
 		return 0;
 	}
 }

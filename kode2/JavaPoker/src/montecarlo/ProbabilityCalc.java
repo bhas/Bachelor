@@ -2,6 +2,7 @@ package montecarlo;
 
 import game.cards.Card;
 import game.cards.Deck;
+import game.hand.Hand;
 import graph.Graph;
 import graph.GraphData;
 import graph.GraphWindow;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.Random;
 
 public class ProbabilityCalc {
-	public static final int CALCULATIONS = 100;
+	public static final int CALCULATIONS = 10000;
 
 	public static Probability getProbability(List<Card> hand,
 			List<Card> community, int opponents) {
@@ -59,37 +60,41 @@ public class ProbabilityCalc {
 			community.addAll(deck.deal(missing));
 		}
 		// create the hands
-		// ArrayList<Hand> oppHands = new ArrayList<Hand>();
-		// Hand hand = new Hand(handCards, community);
-		// int result = 1;
-		// for (int i = 0; i < opponents; i++) {
-		// int beatOpp = hand.compareTo(new Hand(deck.deal(2), community));
-		// if (beatOpp < 0)
-		// return -1;
-		// if (beatOpp == 0)
-		// result = 0;
-		// }
-		//
-		// return result;
-		Random r = new Random();
-		int res = r.nextInt(10);
-		if (res == 0)
-			return 0;
-		if (res < 4)
-			return 1;
-		else
-			return -1;
+		Hand hand = new Hand(handCards, community);
+		int result = 1;
+		for (int i = 0; i < opponents; i++) {
+			int beatOpp = hand.compareTo(new Hand(deck.deal(2), community));
+			if (beatOpp < 0)
+				return -1;
+			if (beatOpp == 0)
+				result = 0;
+		}
+
+		return result;
+//		Random r = new Random();
+//		int res = r.nextInt(10);
+//		if (res == 0)
+//			return 0;
+//		if (res < 4)
+//			return 1;
+//		else
+//			return -1;
 	}
 
 	public static void main(String[] args) {
 		ArrayList<Card> arr = new ArrayList<Card>();
-		arr.add(Card.C2);
-		arr.add(Card.D2);
+		arr.add(Card.C6);
+		arr.add(Card.D7);
+		ArrayList<Card> arr2 = new ArrayList<Card>();
+		arr2.add(Card.S5);
+		arr2.add(Card.D4);
+		arr2.add(Card.CQ);
+		arr2.add(Card.H10);
 
 		Probability result = new Probability(0, 0, 0);
 		GraphData gd = new GraphData();
 		for (int i = 1; i <= 10; i++) {
-			Probability p = ProbabilityCalc.getProbability(arr, null, 5);
+			Probability p = ProbabilityCalc.getProbability(arr, arr2, 5);
 			result.add(p);
 			gd.addEntry(i * ProbabilityCalc.CALCULATIONS, result.percent());
 			System.out.println("Run " + i + ": " + result.percent());
@@ -97,7 +102,7 @@ public class ProbabilityCalc {
 
 		Graph g = new Graph(gd);
 		g.setDescriptions("Monte Carlo tests", "Probability");
-		g.setViewY(0.2, .4);
+		g.setViewY(0, 1);
 		g.setViewX(0, 10 * ProbabilityCalc.CALCULATIONS);
 
 		new GraphWindow(g);

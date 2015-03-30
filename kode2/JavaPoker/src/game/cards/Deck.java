@@ -24,17 +24,16 @@ public class Deck {
 
 	public void shuffle() {
 		stack.clear();
-
+		ArrayList<Card> allCards = new ArrayList<Card>();
 		for (Card c : Card.values()) {
-			if (excludes != null && excludes.contains(c))
-				continue;
-
-			if (!stack.isEmpty()) {
-				int index = random.nextInt(stack.size());
-				stack.add(index, c);
-			} else {
-				stack.add(c);
-			}
+			allCards.add(c);
+		}
+		if (excludes != null) {
+			allCards.removeAll(excludes);
+		}
+		while (!allCards.isEmpty()) {
+			int i = random.nextInt(allCards.size());
+			stack.push(allCards.remove(i));
 		}
 	}
 
