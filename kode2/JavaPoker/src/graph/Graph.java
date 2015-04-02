@@ -30,8 +30,10 @@ public class Graph extends JComponent {
 	private Rectangle2D gbox;
 	private String xDesc, yDesc;
 	private ArrayList<GraphData> datasets;
-	private Color[] colors = new Color[] { new Color(40,40,40), Color.BLUE, Color.RED,
-			new Color(0, 220, 0), Color.ORANGE, Color.PINK };
+	private Color[] colors = new Color[] { new Color(40, 40, 40), Color.BLUE,
+			Color.RED, new Color(0, 220, 0), Color.ORANGE, Color.PINK };
+	private Color expColor = new Color(205, 0, 0);
+	private double expVal;
 
 	public Graph() {
 		// setSize(500,700);
@@ -52,6 +54,10 @@ public class Graph extends JComponent {
 	public void setViewX(double min, double max) {
 		vxMin = min;
 		vxMax = max;
+	}
+	
+	public void setExpectedVal(double val) {
+		expVal = val;
 	}
 
 	public void setViewY(double min, double max) {
@@ -78,6 +84,7 @@ public class Graph extends JComponent {
 		g2.fillRect(0, 0, getWidth(), getHeight());
 
 		drawGraphContainer(g2);
+		drawExp(g2);
 		g2.setClip(gbox);
 		for (int i = 0; i < datasets.size(); i++) {
 			drawDataset(g2, datasets.get(i), colors[i]);
@@ -114,11 +121,13 @@ public class Graph extends JComponent {
 		FontMetrics fm = g.getFontMetrics();
 		if (xDesc != null) {
 			int sw = fm.stringWidth(xDesc);
-			g.drawString(xDesc, (int) gbox.getCenterX() - sw/2, (int) gbox.getMaxY() + 40);
+			g.drawString(xDesc, (int) gbox.getCenterX() - sw / 2,
+					(int) gbox.getMaxY() + 40);
 		}
 		if (yDesc != null) {
 			int sw = fm.stringWidth(yDesc);
-			g.drawString(yDesc, (int) gbox.getX() - 40 - sw, (int) gbox.getCenterY());
+			g.drawString(yDesc, (int) gbox.getX() - 40 - sw,
+					(int) gbox.getCenterY());
 		}
 	}
 
@@ -135,6 +144,19 @@ public class Graph extends JComponent {
 
 			g.drawString(s, x - sw / 2, y);
 		}
+	}
+	
+	private void drawExp(Graphics2D g) {
+		double ry = (expVal - vyMin) / (vyMax - vyMin * 1.);
+		int y = (int) (gbox.getMaxY() - (ry * gbox.getHeight()));
+		
+		g.setColor(expColor);
+		g.drawLine((int) gbox.getX()+1, y, (int) gbox.getMaxX() - 1, y);
+		
+		
+		int x = (int) gbox.getMaxX() + 5;
+
+		g.drawString(expVal+"", x, y + 5);
 	}
 
 	private void drawYs(Graphics2D g) {

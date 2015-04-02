@@ -1,7 +1,4 @@
-package game.hand;
-
-import game.cards.Card;
-import game.cards.Deck;
+package game.essentials;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -16,44 +13,6 @@ public class Hand implements Comparable<Hand> {
 	private int[] rankDis = new int[13];
 	private int fs, sr, maxDup, maxDupRank;
 
-	public static void main(String[] args) {
-		Hand h1 = generateHand();
-		Hand h2 = generateHand();
-		int res = h1.compareTo(h2);
-		System.out.println(res);
-		// int runs = 50;
-		// int[] array = new int[10];
-		// System.out.println(runs + " runs");
-		// for(int i = 0; i<runs;i++){
-		// array[testSingleHand().getValue()]++;
-		//
-		//
-		// }
-		// printArray(array, "test");
-	}
-
-	public static Hand generateHand() {
-		System.out.println();
-		Deck d = new Deck();
-		d.shuffle();
-		List<Card> cc = d.deal(5);
-		List<Card> handCards = d.deal(2);
-
-		Hand h = new Hand(handCards, cc);
-		System.out.println(h);
-
-		return h;
-
-	}
-
-	public static void printArray(int[] ar, String name) {
-		System.out.print(name + ": [");
-		for (int i : ar) {
-			System.out.print(i + ", ");
-		}
-		System.out.println("]");
-	}
-
 	public Hand(List<Card> hand, List<Card> community) {
 		cards.addAll(hand);
 		if (community != null)
@@ -61,14 +20,27 @@ public class Hand implements Comparable<Hand> {
 		determineRank();
 	}
 
+	// returns all cards
 	public List<Card> getAllCards() {
 		return cards;
 	}
 
+	// returns 5 best cards
 	public List<Card> getOptimalCards() {
 		return optimalHand;
 	}
+	
+	// get the sub ranks
+	public int[] getSubRanks() {
+		return subRanks;
+	}
 
+	// returns the rank of the hand
+	public Rank getRank() {
+		return rank;
+	}
+	
+	// find the max number of duplicates and their rank
 	private void findMaxDup() {
 		for (int i = rankDis.length - 1; i >= 0; i--) {
 			if (rankDis[i] > maxDup) {
@@ -78,6 +50,7 @@ public class Hand implements Comparable<Hand> {
 		}
 	}
 
+	// find the suit of the flush. Returns -1 if no flush is found
 	private void findFlushSuit() {
 		for (int i = 0; i < suitDis.length; i++) {
 			if (suitDis[i] >= 5) {
@@ -88,6 +61,26 @@ public class Hand implements Comparable<Hand> {
 		fs = -1;
 	}
 
+	// find the highest card in the straight. returns -1 if no straight was
+	// found.
+	private void findStraightRank(int[] ranks) {
+		int count = 0;
+
+		for (int i = ranks.length - 1; i >= 0; i--) {
+			if (ranks[i] > 0) {
+				count++;
+				if (count > 4) {
+					sr = i + 4;
+					return;
+				}
+			} else {
+				count = 0;
+			}
+		}
+		sr = -1;
+	}
+
+	// checks if hand is a straight
 	private boolean isStraight() {
 
 		if (sr == -1) {
@@ -108,23 +101,7 @@ public class Hand implements Comparable<Hand> {
 
 	}
 
-	private void findStraightRank(int[] ranks) {
-		int count = 0;
-
-		for (int i = ranks.length - 1; i >= 0; i--) {
-			if (ranks[i] > 0) {
-				count++;
-				if (count > 4) {
-					sr = i + 4;
-					return;
-				}
-			} else {
-				count = 0;
-			}
-		}
-		sr = -1;
-	}
-
+	// checks if hand is a full house
 	private boolean isFullHouse() {
 
 		if (maxDup < 3) {
@@ -158,6 +135,7 @@ public class Hand implements Comparable<Hand> {
 
 	}
 
+	// checks if hand is a four of a kind
 	private boolean isQuads() {
 		Card kicker = null;
 
@@ -181,6 +159,7 @@ public class Hand implements Comparable<Hand> {
 		return true;
 	}
 
+	// checks if hand is a straight flush
 	private boolean isStraightFlush() {
 
 		if (sr == -1 || fs == -1) {
@@ -218,10 +197,7 @@ public class Hand implements Comparable<Hand> {
 		}
 	}
 
-	public Rank getRank() {
-		return rank;
-	}
-
+	// determines the rank of the hand
 	private void determineRank() {
 		// find the distributions of cards
 		for (Card c : cards) {
@@ -233,40 +209,35 @@ public class Hand implements Comparable<Hand> {
 		findStraightRank(rankDis);
 		findMaxDup();
 
-		if (isStraightFlush()) {
+		if (isStraightFlush())
 			return;
-		}
 
-		if (isQuads()) {
+		if (isQuads())
 			return;
-		}
 
-		if (isFullHouse()) {
+		if (isFullHouse())
 			return;
-		}
 
-		if (isFlush()) {
+		if (isFlush())
 			return;
-		}
 
-		if (isStraight()) {
+		if (isStraight())
 			return;
-		}
 
-		if (isThreeOfAKind()) {
+		if (isThreeOfAKind())
 			return;
-		}
 
-		if (isTwoPair()) {
+		if (isTwoPair())
 			return;
-		}
-		if (isPair()) {
+
+		if (isPair())
 			return;
-		}
+		
 		isHighCard();
 
 	}
 
+	// checks if hand is high card
 	private void isHighCard() {
 		subRanks = new int[5];
 		int a = 0;
@@ -289,6 +260,7 @@ public class Hand implements Comparable<Hand> {
 
 	}
 
+	// checks if hand is a pair
 	private boolean isPair() {
 		if (maxDup != 2) {
 			return false;
@@ -320,6 +292,7 @@ public class Hand implements Comparable<Hand> {
 		return true;
 	}
 
+	// checks if hand is two pairs
 	private boolean isTwoPair() {
 		if (maxDup != 2) {
 			return false;
@@ -351,6 +324,7 @@ public class Hand implements Comparable<Hand> {
 
 	}
 
+	// checks if hand is a three of a kind
 	private boolean isThreeOfAKind() {
 		if (maxDup != 3) {
 			return false;
@@ -390,14 +364,7 @@ public class Hand implements Comparable<Hand> {
 		return true;
 	}
 
-	@Override
-	public String toString() {
-		String s = rank + " " + optimalHand + " - " + cards;
-
-		return s;
-
-	}
-
+	// checks if hand is a flush
 	private boolean isFlush() {
 		if (fs == -1) {
 			return false;
@@ -431,27 +398,12 @@ public class Hand implements Comparable<Hand> {
 		rank = Rank.FLUSH;
 		return true;
 	}
-
-	public int[] getSubRanks() {
-		return subRanks;
+	
+	@Override
+	public String toString() {
+		return cards + "  -  " + optimalHand + "  " + rank;
 	}
-
-	public enum Rank {
-		ROYAL_FLUSH(9), STRAIGHT_FLUSH(8), FOUR_OF_A_KIND(7), FULL_HOUSE(6), FLUSH(
-				5), STRAIGHT(4), THREE_OF_A_KIND(3), TWO_PAIRS(2), ONE_PAIR(1), HIGH_CARD(
-				0);
-
-		private int value;
-
-		Rank(int value) {
-			this.value = value;
-		}
-
-		public int getValue() {
-			return value;
-		}
-	}
-
+	
 	@Override
 	public int compareTo(Hand h) {
 		if (rank.getValue() > h.getRank().getValue()) {
@@ -469,5 +421,22 @@ public class Hand implements Comparable<Hand> {
 			}
 		}
 		return 0;
+	}
+
+	// Rank for a hand
+	public enum Rank {
+		ROYAL_FLUSH(9), STRAIGHT_FLUSH(8), FOUR_OF_A_KIND(7), FULL_HOUSE(6), FLUSH(
+				5), STRAIGHT(4), THREE_OF_A_KIND(3), TWO_PAIRS(2), ONE_PAIR(1), HIGH_CARD(
+				0);
+
+		private int value;
+
+		Rank(int value) {
+			this.value = value;
+		}
+
+		public int getValue() {
+			return value;
+		}
 	}
 }

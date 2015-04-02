@@ -1,4 +1,4 @@
-package game.cards;
+package game.essentials;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;

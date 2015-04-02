@@ -1,6 +1,6 @@
-package game;
+package game.essentials;
 
-import game.cards.Card;
+import game.GameSettings;
 
 import java.util.ArrayList;
 import java.util.HashMap;
