@@ -410,12 +410,13 @@ public class Hand implements Comparable<Hand> {
 			return 1;
 		} else if (rank.getValue() < h.getRank().getValue()) {
 			return -1;
-		} else {
+		} else if(rank != Rank.ROYAL_FLUSH){
 			int[] sr = h.getSubRanks();
 			for (int i = 0; i < subRanks.length; i++) {
 				if (subRanks[i] < sr[i]) {
 					return -1;
 				} else if (subRanks[i] > sr[i]) {
+					
 					return 1;
 				}
 			}

@@ -1,5 +1,7 @@
 package game.essentials;
 
+import java.util.ArrayList;
+
 public enum Card {
 	/*
 	 * Ranks:
@@ -24,10 +26,10 @@ public enum Card {
 	 * 3  ->  Spades
 	 */
 
-	D2("2d", 0, 0), D3("3d", 1, 0), D4("4d", 2, 0), D5("5d", 3, 0), D6("6d", 4, 0), D7("7d", 5, 0), D8("8d", 6, 0), D9("9d", 7, 0), D10("10d", 8, 0), DJ("Jd", 9, 0), DQ("Qd", 10, 0), DK("Kd", 11, 0), DA("Ad", 12, 0), 
-	C2("2c", 0, 1), C3("3c", 1, 1), C4("4c", 2, 1), C5("5c", 3, 1), C6("6c", 4, 1), C7("7c", 5, 1), C8("8c", 6, 1), C9("9c", 7, 1), C10("10c", 8, 1), CJ("Jc", 9, 1), CQ("Qc", 10, 1), CK("Kc", 11, 1), CA("Ac", 12, 1), 
-	H2("2h", 0, 2), H3("3h", 1, 2), H4("4h", 2, 2), H5("5h", 3, 2), H6("6h", 4, 2), H7("7h", 5, 2), H8("8h", 6, 2), H9("9h", 7, 2), H10("10h", 8, 2), HJ("Jh", 9, 2), HQ("Qh", 10, 2), HK("Kh", 11, 2), HA("Ah", 12, 2), 
-	S2("2s", 0, 3), S3("3s", 1, 3), S4("4s", 2, 3), S5("5s", 3, 3), S6("6s", 4, 3), S7("7s", 5, 3), S8("8s", 6, 3), S9("9s", 7, 3), S10("10s", 8, 3), SJ("Js", 9, 3), SQ("Qs", 10, 3), SK("Ks", 11, 3), SA("As", 12, 3);
+	D2("2d", 0, 0), D3("3d", 1, 0), D4("4d", 2, 0), D5("5d", 3, 0), D6("6d", 4, 0), D7("7d", 5, 0), D8("8d", 6, 0), D9("9d", 7, 0), DT("Td", 8, 0), DJ("Jd", 9, 0), DQ("Qd", 10, 0), DK("Kd", 11, 0), DA("Ad", 12, 0), 
+	C2("2c", 0, 1), C3("3c", 1, 1), C4("4c", 2, 1), C5("5c", 3, 1), C6("6c", 4, 1), C7("7c", 5, 1), C8("8c", 6, 1), C9("9c", 7, 1), CT("Tc", 8, 1), CJ("Jc", 9, 1), CQ("Qc", 10, 1), CK("Kc", 11, 1), CA("Ac", 12, 1), 
+	H2("2h", 0, 2), H3("3h", 1, 2), H4("4h", 2, 2), H5("5h", 3, 2), H6("6h", 4, 2), H7("7h", 5, 2), H8("8h", 6, 2), H9("9h", 7, 2), HT("Th", 8, 2), HJ("Jh", 9, 2), HQ("Qh", 10, 2), HK("Kh", 11, 2), HA("Ah", 12, 2), 
+	S2("2s", 0, 3), S3("3s", 1, 3), S4("4s", 2, 3), S5("5s", 3, 3), S6("6s", 4, 3), S7("7s", 5, 3), S8("8s", 6, 3), S9("9s", 7, 3), ST("Ts", 8, 3), SJ("Js", 9, 3), SQ("Qs", 10, 3), SK("Ks", 11, 3), SA("As", 12, 3);
 
 	public static final int NO_OF_RANKS = 13;
 	public static final int NO_OF_SUITS = 4;
@@ -66,5 +68,24 @@ public enum Card {
 	@Override
 	public String toString() {
 		return tag;
+	}
+	
+	public static ArrayList<Card> createMultiple(String s){
+		ArrayList<Card> list = new ArrayList<Card>();
+		String[] cards = s.split(" ");
+		for(String cs : cards){
+			list.add(create(cs));
+		}
+		
+		return list;
+	}
+	
+	public static Card create(String s){
+		for(Card c : Card.values()){
+			if(c.toString().equals(s)){
+				return c;
+			}
+		}
+		return null;
 	}
 }

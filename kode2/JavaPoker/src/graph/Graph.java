@@ -30,8 +30,8 @@ public class Graph extends JComponent {
 	private Rectangle2D gbox;
 	private String xDesc, yDesc;
 	private ArrayList<GraphData> datasets;
-	private Color[] colors = new Color[] { new Color(40, 40, 40), Color.BLUE,
-			Color.RED, new Color(0, 220, 0), Color.ORANGE, Color.PINK };
+	private Color[] colors = new Color[] { Color.RED, Color.BLUE,
+			Color.GREEN, new Color(0, 220, 0), Color.ORANGE, Color.PINK };
 	private Color expColor = new Color(205, 0, 0);
 	private double expVal;
 
@@ -41,7 +41,7 @@ public class Graph extends JComponent {
 		vxMax = 10;
 		vyMin = 0;
 		vyMax = 100;
-		gbox = new Rectangle2D.Double(100, 10, 600, 400);
+		gbox = new Rectangle2D.Double(100, 10, 1000, 400);
 
 		datasets = new ArrayList<GraphData>();
 	}
