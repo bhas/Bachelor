@@ -13,53 +13,60 @@ import montecarlo.Probability;
 import montecarlo.ProbabilityCalc;
 
 public class DataReader {
-	
-	public static boolean isAggressive(String s){
+	private static final int FULL_DATA = 13;
+	private static final int PREFLOP = 4;
+	private static final int CARD1 = 11;
+	private static final int CARD2 = 12;
+
+	public static boolean isAggressive(String s) {
 		return s.contains("b") || s.contains("r");
-		
 	}
-	
-	public static boolean isDefensive(String s){
+
+	public static boolean isDefensive(String s) {
 		return !(isAggressive(s) || s.contains("f"));
 	}
-	
-	public static void main(String[] args) throws IOException {
+
+	public static Probability getProb(String hand) {
+		return ProbabilityCalc.getProbability(
+				Card.createMultiple(hand), null, 1);
+	}
+
+	public static void scanPlayer(String name) throws IOException {
 		FileInputStream inputStream = null;
 		Scanner sc = null;
 
-		String path = "data/players/pdb.PokiSimA";
+		String path = "data/players/pdb." + name;
 
 		try {
 			inputStream = new FileInputStream(path);
 			sc = new Scanner(inputStream, "UTF-8");
+
 			GraphData gda = new GraphData();
 			GraphData gdd = new GraphData();
 			int i1 = 0, i2 = 0;
 			while (sc.hasNextLine()) {
+				i1++;
+				if (i1 % 100 == 0)
+					System.out.println("loaded "+i1+" lines");
 				String line = sc.nextLine().replaceAll("\\s+", " ");
 				String[] data = line.split(" ");
-				if (data.length == 13) {
-					if (isAggressive(data[4])) {
-						String hand = data[11] + " " + data[12];
-						Probability res = ProbabilityCalc.getProbability(
-								Card.createMultiple(hand), null, 1);
-						gda.addEntry(i1++ + 1, res.percent());
-					}
-					else if (isDefensive(data[4])) {
-						String hand = data[11] + " " + data[12];
-						System.out.println(hand);
-						Probability res = ProbabilityCalc.getProbability(
-								Card.createMultiple(hand), null, 1);
-						gdd.addEntry(i2++ + 1, res.percent());
+				if (data.length == FULL_DATA) {
+					if (isAggressive(data[PREFLOP])) {
+						Probability res = getProb(data[CARD1] + " " + data[CARD2]);
+						gda.addEntry(i1, res.percent());
+					} else if (isDefensive(data[PREFLOP])) {
+						Probability res = getProb(data[CARD1] + " " + data[CARD2]);
+						gdd.addEntry(i1, res.percent());
 					}
 				}
 			}
-			Graph ga = new Graph(gda);
-			ga.addDataset(gdd);
-			ga.setViewX(0,Math.max(i1, i2)+1);
-			ga.setViewY(0, 1);
-			new GraphWindow(ga);
-			
+			Graph g = new Graph(gda);
+			g.addDataset(gdd);
+			g.setViewX(0, Math.max(i1, i2) + 1);
+			g.setViewY(0, 1);
+			g.drawRanges(true);
+			new GraphWindow(g);
+
 			// note that Scanner suppresses exceptions
 			if (sc.ioException() != null) {
 				throw sc.ioException();
@@ -71,6 +78,14 @@ public class DataReader {
 			if (sc != null) {
 				sc.close();
 			}
+		}
+	}
+
+	public static void main(String[] args) {
+		try {
+			scanPlayer("holdemgod");
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 }

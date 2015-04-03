@@ -1,11 +1,13 @@
 package graph;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 public class GraphData {
+	private static final double NOISE = 0.03;
 	private TreeSet<Entry> entries;
 
 	public GraphData() {
@@ -28,6 +30,16 @@ public class GraphData {
 		this();
 		entries.addAll(data);
 	}
+	
+	public Range getRange() {
+		ArrayList<Double> vals = new ArrayList<Double>();
+		for(Entry e : entries) {
+			vals.add(e.y);
+		}
+		Collections.sort(vals);
+		int ignores = (int) (NOISE * vals.size());
+		return new Range(vals.get(ignores), vals.get(vals.size()-ignores-1));
+	}
 
 	public void addEntry(double x, double y) {
 		entries.add(new Entry(x, y));
@@ -49,6 +61,21 @@ public class GraphData {
 		Entry e1 = new Entry(xMin, 0);
 		Entry e2 = new Entry(xMin, 0);
 		return entries.subSet(e1, e2);
+	}
+	
+	public class Range {
+		public double min;
+		public double max;
+		
+		public Range(double min, double max) {
+			this.min = min;
+			this.max = max;
+		}
+		
+		@Override
+		public String toString() {
+			return "["+min + " - " + max+"]";
+		}
 	}
 	
 	public class Entry {

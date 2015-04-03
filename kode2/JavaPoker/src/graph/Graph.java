@@ -1,6 +1,7 @@
 package graph;
 
 import graph.GraphData.Entry;
+import graph.GraphData.Range;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -30,10 +31,11 @@ public class Graph extends JComponent {
 	private Rectangle2D gbox;
 	private String xDesc, yDesc;
 	private ArrayList<GraphData> datasets;
-	private Color[] colors = new Color[] { Color.RED, Color.BLUE,
-			Color.GREEN, new Color(0, 220, 0), Color.ORANGE, Color.PINK };
-	private Color expColor = new Color(205, 0, 0);
+	private Color[] colors = new Color[] { Color.RED, Color.BLUE, Color.GREEN,
+			new Color(50, 50, 50), Color.ORANGE, Color.PINK };
+	private Color expColor = Color.ORANGE;
 	private double expVal;
+	private boolean drawExp, drawLines, drawRanges;
 
 	public Graph() {
 		// setSize(500,700);
@@ -55,8 +57,9 @@ public class Graph extends JComponent {
 		vxMin = min;
 		vxMax = max;
 	}
-	
+
 	public void setExpectedVal(double val) {
+		drawExp = true;
 		expVal = val;
 	}
 
@@ -70,6 +73,14 @@ public class Graph extends JComponent {
 		yDesc = y;
 	}
 
+	public void drawLines(boolean b) {
+		drawLines = b;
+	}
+
+	public void drawRanges(boolean b) {
+		drawRanges = b;
+	}
+
 	public void addDataset(GraphData data) {
 		datasets.add(data);
 	}
@@ -80,14 +91,14 @@ public class Graph extends JComponent {
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
 
-		g2.setColor(new Color(200, 200, 200));
+		g2.setColor(Color.white);
 		g2.fillRect(0, 0, getWidth(), getHeight());
 
 		drawGraphContainer(g2);
-		drawExp(g2);
-		g2.setClip(gbox);
+		if (drawExp)
+			drawIndicator(g2, expColor, expVal);
 		for (int i = 0; i < datasets.size(); i++) {
-			drawDataset(g2, datasets.get(i), colors[i]);
+			drawDataset((Graphics2D) g2.create(), datasets.get(i), colors[i]);
 		}
 	}
 
@@ -97,11 +108,11 @@ public class Graph extends JComponent {
 		int y2 = (int) gbox.getMaxY();
 
 		// background
-		g.setColor(Color.white);
+		g.setColor(new Color(230, 240, 255));
 		g.fill(gbox);
 
 		// horizontal value lines
-		g.setColor(new Color(210, 210, 210));
+		g.setColor(new Color(0,0,0,60));
 		for (int i = 1; i <= VER_SECTIONS; i++) {
 			int y = (int) (y2 - (gbox.getHeight() * i / VER_SECTIONS));
 			g.drawLine(x1, y, x2, y);
@@ -145,18 +156,13 @@ public class Graph extends JComponent {
 			g.drawString(s, x - sw / 2, y);
 		}
 	}
-	
-	private void drawExp(Graphics2D g) {
-		double ry = (expVal - vyMin) / (vyMax - vyMin * 1.);
-		int y = (int) (gbox.getMaxY() - (ry * gbox.getHeight()));
-		
-		g.setColor(expColor);
-		g.drawLine((int) gbox.getX()+1, y, (int) gbox.getMaxX() - 1, y);
-		
-		
-		int x = (int) gbox.getMaxX() + 5;
 
-		g.drawString(expVal+"", x, y + 5);
+	private void drawIndicator(Graphics2D g, Color c, double val) {
+		g.setColor(c);
+		int y = getYCoord(val);
+		g.drawLine((int) gbox.getX() + 1, y, (int) gbox.getMaxX() - 1, y);
+		int x = (int) gbox.getMaxX() + 5;
+		g.drawString(val + "", x, y + 5);
 	}
 
 	private void drawYs(Graphics2D g) {
@@ -175,12 +181,20 @@ public class Graph extends JComponent {
 	}
 
 	private void drawDataset(Graphics2D g, GraphData data, Color c) {
+		if (drawRanges) {
+			Range r = data.getRange();
+			drawIndicator(g, c, r.min);
+			drawIndicator(g, c, r.max);
+		}
+
+		g.setClip(gbox);
+
 		Point p0 = null;
 		g.setColor(c);
 		g.setStroke(new BasicStroke(LINE_SIZE));
 		for (Entry e : data.getEntries()) {
 			Point p = getPoint(e);
-			if (p0 != null) {
+			if (p0 != null && drawLines) {
 				g.drawLine(p0.x, p0.y, p.x, p.y);
 			}
 
@@ -196,11 +210,19 @@ public class Graph extends JComponent {
 	}
 
 	private Point getPoint(Entry e) {
-		double rx = (e.x - vxMin) / (vxMax - vxMin * 1.);
-		int x = (int) (rx * gbox.getWidth() + gbox.getX());
-		double ry = (e.y - vyMin) / (vyMax - vyMin * 1.);
-		int y = (int) (gbox.getMaxY() - (ry * gbox.getHeight()));
+		int x = getXCoord(e.x);
+		int y = getYCoord(e.y);
 		return new Point(x, y);
+	}
+
+	private int getXCoord(double valX) {
+		double rx = (valX - vxMin) / (vxMax - vxMin * 1.);
+		return (int) (rx * gbox.getWidth() + gbox.getX());
+	}
+
+	private int getYCoord(double valY) {
+		double ry = (valY - vyMin) / (vyMax - vyMin * 1.);
+		return (int) (gbox.getMaxY() - (ry * gbox.getHeight()));
 	}
 
 }

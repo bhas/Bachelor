@@ -10,7 +10,7 @@ public class GraphWindow extends JFrame {
 	public GraphWindow(Graph graph) {
 		super("Graph");
 		add(graph);
-		setSize(new Dimension(800,600));
+		setSize(new Dimension(1300,600));
 		setVisible(true);
 	}
 	
