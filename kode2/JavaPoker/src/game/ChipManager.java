@@ -1,104 +1,199 @@
 package game;
 
+import game.essentials.PokerAction;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 public class ChipManager {
-	
+
 	private ArrayList<Pot> pots = new ArrayList<Pot>();
-	private ArrayList<Integer> allIns = new ArrayList<Integer>();
-	private HashMap<Integer, PlayerChips> pcs;
+	private ArrayList<Integer> actives = new ArrayList<Integer>();
+	private HashMap<Integer, PlayerState> pss;
 	private int highestBid = 0;
 	private int BB;
-	
+	private int aggressor = -1;
+	private int actor;
+
 	public ChipManager(int BB) {
-		pcs = new HashMap<Integer, PlayerChips>();
+		pss = new HashMap<Integer, PlayerState>();
 		this.BB = BB;
 	}
-	
-	public boolean canAfford(int seat, int amount) {
-		PlayerChips pc = pcs.get(seat);
-		return (pc.bet + pc.chips) >= amount;
-	}
-	
-	public void commit() {
-		
-	}
-	
-	public void betTo(int seat, int amount) {
-		PlayerChips pc = pcs.get(seat);
-		pc.chips -= amount - pc.bet;
-		pc.bet = amount;
-	}
-	
-	public void allIn(int seat) {
-		PlayerChips pc = pcs.get(seat);
-		pc.bet += pc.chips;
-		allIns.add(seat);
-	}
-	
-	public int next(int seat) {
-		int nextSeat = (seat + 1) % GameSettings.TABLE_SEATS;
-		while(!pcs.containsKey(nextSeat) && nextSeat != seat) {
-			nextSeat = ++nextSeat  % GameSettings.TABLE_SEATS;
+
+	public void newRound() {
+		highestBid = BB;
+		aggressor = -1;
+		for (Entry<Integer, PlayerState> entry : pss.entrySet()) {
+			entry.getValue().isActive = true;
+			actives.add(entry.getKey());
 		}
-		
-		if (nextSeat == seat)
-			return -1;
-		else
-			return nextSeat;
+
 	}
-	
+
+	public int amountToCall(int seat) {
+		return highestBid - pss.get(seat).bet;
+	}
+
+	public boolean hasMoreThan(int seat, int amount) {
+		PlayerState pc = pss.get(seat);
+		return (pc.bet + pc.chips) > amount;
+	}
+
+	public void commit() {
+		ArrayList<Pot> roundPot = new ArrayList<Pot>();
+		int totalPot = 0;
+		Pot p = test(0);
+		while (p != null) {
+			roundPot.add(p);
+			totalPot += p.amountPerPlayer;
+			p = test(totalPot);
+		}
+		for (Pot pot : roundPot) {
+			for (PlayerState ps : pss.values()) {
+				if(ps.bet == 0){
+					continue;
+				}
+				if (ps.bet < pot.amountPerPlayer) {
+					pot.totalAmount += ps.bet;
+					ps.bet = 0;
+				}
+				else{
+					pot.totalAmount += pot.amountPerPlayer;
+					ps.bet -= pot.amountPerPlayer;
+				}
+			}
+		}
+
+	}
+
+	public Pot test(int min) {
+		ArrayList<Integer> players = new ArrayList<Integer>();
+		int minBid = -1;
+
+		for (int seat : actives) {
+			PlayerState ps = pss.get(seat);
+			if (ps.bet > min) {
+				if (ps.bet < minBid || minBid == -1) {
+					minBid = ps.bet;
+				}
+				players.add(seat);
+			}
+		}
+		if (players.size() == 0) {
+			return null;
+		} else {
+			Pot p = new Pot();
+			p.players = players;
+			p.amountPerPlayer = minBid - min;
+			return p;
+		}
+	}
+
+	public void call(int seat) {
+		PlayerState ps = pss.get(seat);
+		ps.chips -= amountToCall(seat);
+		ps.bet = highestBid;
+		actor = next(actor);
+	}
+
+	public int waitingFor() {
+		return actor;
+	}
+
+	public int aggressor() {
+		return aggressor;
+	}
+
+	public void betTo(int seat, int amount) {
+		PlayerState pc = pss.get(seat);
+		int toPay = amount - pc.bet;
+		pc.chips -= toPay;
+		pc.bet = amount;
+		highestBid = amount;
+		aggressor = seat;
+		actor = next(seat);
+	}
+
+	public void allIn(int seat) {
+		PlayerState pc = pss.get(seat);
+		pc.bet += pc.chips;
+		pc.chips = 0;
+		pc.isActive = false;
+		if (pc.bet > highestBid) {
+			highestBid = pc.bet;
+			aggressor = seat;
+		}
+		actor = next(seat);
+	}
+
+	private int next(int seat) {
+		for (int i = 1; i < GameSettings.TABLE_SEATS; i++) {
+			int nextSeat = seat + i % GameSettings.TABLE_SEATS;
+
+			if (pss.containsKey(nextSeat) && pss.get(nextSeat).isActive) {
+				return nextSeat;
+			}
+		}
+		return -1;
+	}
+
+	public void fold(int seat) {
+		pss.get(seat).isActive = false;
+		actives.remove(seat);
+	}
+
 	public void payBlinds(int dealer) {
 		// next player
 		int player = next(dealer);
-		if (canAfford(player, BB / 2))
+		if (hasMoreThan(player, BB / 2))
 			betTo(player, BB / 2);
 		else {
 			allIn(player);
 		}
 		player = next(player);
-		if (canAfford(player, BB / 2))
+		if (hasMoreThan(player, BB / 2))
 			betTo(player, BB / 2);
 		else {
 			allIn(player);
 		}
-		dealer = (dealer + 1) % GameSettings.TABLE_SEATS;
-		
 	}
-	
+
 	public int getChips(int seat) {
-		return pcs.get(seat).chips;
+		return pss.get(seat).chips;
 	}
-	
+
 	public int getBet(int seat) {
-		return pcs.get(seat).bet;
+		return pss.get(seat).bet;
 	}
-	
-	public int chipsToCall(int seat){
-		return highestBid - pcs.get(seat).bet;		
+
+	public int chipsToCall(int seat) {
+		return highestBid - pss.get(seat).bet;
 	}
-	
-	public void addPlayer(int seat, int amount){
-		pcs.put(seat, new PlayerChips(amount));
+
+	public void addPlayer(int seat, int amount) {
+		pss.put(seat, new PlayerState(amount));
 	}
-	
-	public void removePlayer(int seat){
-		pcs.remove(seat);
+
+	public void removePlayer(int seat) {
+		pss.remove(seat);
 	}
-	
-	private class PlayerChips {
-		
+
+	private class PlayerState {
+
 		public int bet = 0;
 		public int chips;
-		
-		public PlayerChips(int chips) {
+		public boolean isActive = true;
+
+		public PlayerState(int chips) {
 			this.chips = chips;
 		}
+
 	}
-	
+
 	private class Pot {
-		public int amount;
-		public int[] players;
+		public int amountPerPlayer;
+		public int totalAmount;
+		public ArrayList<Integer> players = new ArrayList<Integer>();
 	}
 }
