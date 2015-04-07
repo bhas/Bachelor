@@ -15,20 +15,62 @@ public class ChipManager {
 	private int BB;
 	private int aggressor = -1;
 	private int actor;
-
+	private int raises = 0;
+	private int dealer; 
+	
 	public ChipManager(int BB) {
 		pss = new HashMap<Integer, PlayerState>();
 		this.BB = BB;
+		dealer = -1;
 	}
+	
+	public static void main(String[] args) {
+		ChipManager cm = new ChipManager(20);
+		cm.addPlayer(0, 200);
+		cm.addPlayer(2, 200);
+		cm.addPlayer(3, 200);
+		cm.addPlayer(5, 200);
+		cm.newRound();
+		cm.payBlinds();
+		int actor = cm.waitingFor();
+		cm.call(actor); // 5
+		actor = cm.waitingFor();
+		cm.call(actor); // 0
+		actor = cm.waitingFor();
+		cm.betTo(actor, 40); // 2
+		actor = cm.waitingFor();
+		cm.call(actor);// 3
+		actor = cm.waitingFor();
+		cm.call(actor); // 5
+		actor = cm.waitingFor();
+		cm.call(actor); // 0
+		
+	}
+	
+	
 
 	public void newRound() {
 		highestBid = BB;
+		raises = 0;
 		aggressor = -1;
+		dealer = next(dealer);
 		for (Entry<Integer, PlayerState> entry : pss.entrySet()) {
 			entry.getValue().isActive = true;
 			actives.add(entry.getKey());
 		}
 
+	}
+	
+	public int getHighestBid(){
+		return highestBid;
+	}
+	
+	public int numberOfRaises(){
+		return raises;
+	}
+	
+	public boolean bettingRoundDone(){
+		return aggressor == actor;
 	}
 
 	public int amountToCall(int seat) {
@@ -42,6 +84,8 @@ public class ChipManager {
 
 	public void commit() {
 		ArrayList<Pot> roundPot = new ArrayList<Pot>();
+		raises = 0;
+		aggressor = dealer;
 		int totalPot = 0;
 		Pot p = test(0);
 		while (p != null) {
@@ -129,7 +173,7 @@ public class ChipManager {
 
 	private int next(int seat) {
 		for (int i = 1; i < GameSettings.TABLE_SEATS; i++) {
-			int nextSeat = seat + i % GameSettings.TABLE_SEATS;
+			int nextSeat = (seat + i) % GameSettings.TABLE_SEATS;
 
 			if (pss.containsKey(nextSeat) && pss.get(nextSeat).isActive) {
 				return nextSeat;
@@ -143,7 +187,7 @@ public class ChipManager {
 		actives.remove(seat);
 	}
 
-	public void payBlinds(int dealer) {
+	public void payBlinds() {
 		// next player
 		int player = next(dealer);
 		if (hasMoreThan(player, BB / 2))
@@ -152,8 +196,8 @@ public class ChipManager {
 			allIn(player);
 		}
 		player = next(player);
-		if (hasMoreThan(player, BB / 2))
-			betTo(player, BB / 2);
+		if (hasMoreThan(player, BB))
+			betTo(player, BB);
 		else {
 			allIn(player);
 		}
@@ -187,6 +231,15 @@ public class ChipManager {
 
 		public PlayerState(int chips) {
 			this.chips = chips;
+		}
+		
+		public String toString(){
+			if(isActive){
+				return "b:" +  bet + " c:" + chips + " active";
+			}
+			else{
+				return "b:" +  bet + " c:" + chips;
+			}
 		}
 
 	}

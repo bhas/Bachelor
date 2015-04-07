@@ -33,7 +33,7 @@ public class Graph extends JComponent {
 	private ArrayList<GraphData> datasets;
 	private Color[] colors = new Color[] { Color.RED, Color.BLUE, Color.GREEN,
 			new Color(50, 50, 50), Color.ORANGE, Color.PINK };
-	private Color expColor = Color.ORANGE;
+	private Color expColor = new Color(0, 150, 0);
 	private double expVal;
 	private boolean drawExp, drawLines, drawRanges;
 

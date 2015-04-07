@@ -3,12 +3,33 @@ package montecarlo;
 import game.essentials.Card;
 import game.essentials.Deck;
 import game.essentials.Hand;
+import graph.Graph;
+import graph.GraphData;
+import graph.GraphWindow;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProbabilityCalc {
-	public static final int CALCULATIONS = 5000;
+	public static final int CALCULATIONS = 50000;
+
+	public static void main(String[] args) {
+		GraphData gd = new GraphData();
+		Probability result = new Probability(0, 0, 0);
+		for (int i = 1; i < 50; i++) {
+			result = getProbability("4s 4d", null, 1);
+			gd.addEntry(CALCULATIONS * i, result.percent());
+		}
+
+		Graph g = new Graph(gd);
+		//g.setDescriptions("Monte Carlo tests", "Probability");
+		g.drawLines(true);
+		g.setViewY(0.5, 0.6);
+		g.setViewX(0, 50*CALCULATIONS);
+		g.setExpectedVal(0.5625);
+
+		new GraphWindow(g);
+	}
 
 	public static Probability getProbability(List<Card> hand,
 			List<Card> community, int opponents) {
@@ -37,6 +58,16 @@ public class ProbabilityCalc {
 				loses++;
 		}
 		return new Probability(wins, draws, loses);
+	}
+	
+	public static Probability getProbability(String hand, String cc, int opponents){
+		List<Card> h = Card.createMultiple(hand);
+		List<Card> c2 = null;
+		if(cc != null){
+			c2 = Card.createMultiple(cc);
+		}
+		return getProbability(h, c2, opponents);
+		 
 	}
 
 	// -1 = lose, 0 = draw, 1 = win
