@@ -22,5 +22,7 @@ public interface IPlayer {
     public PokerAction act(int minBet, int currentBet, Set<PokerAction> allowedActions);
     
     public void gameEnded(IPlayer winner, int balance);
+    
+    public String getName();
 
 }
