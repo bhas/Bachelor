@@ -82,24 +82,24 @@ public class DataReader {
 
 	public static void main(String[] args) {
 		try {
-			String player = "Candy";
+			String player = "Bar";
 			
 			Graph preFlop = scanPlayer(player, PREFLOP);
 			preFlop.setDescriptions("preflop", "");
 			new GraphWindow(preFlop);
 			
-			Graph flop = scanPlayer(player, FLOP);
-			flop.setDescriptions("flop", "");
-			new GraphWindow(flop);
-			
-			Graph turn = scanPlayer(player, TURN);
-			turn.setDescriptions("turn", "");
-			new GraphWindow(turn);
-			
-			
-			Graph river = scanPlayer(player, RIVER);
-			river.setDescriptions("river", "");
-			new GraphWindow(river);
+//			Graph flop = scanPlayer(player, FLOP);
+//			flop.setDescriptions("flop", "");
+//			new GraphWindow(flop);
+//			
+//			Graph turn = scanPlayer(player, TURN);
+//			turn.setDescriptions("turn", "");
+//			new GraphWindow(turn);
+//			
+//			
+//			Graph river = scanPlayer(player, RIVER);
+//			river.setDescriptions("river", "");
+//			new GraphWindow(river);
 			
 			
 		} catch (IOException e) {
