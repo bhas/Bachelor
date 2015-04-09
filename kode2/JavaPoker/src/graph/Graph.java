@@ -38,7 +38,6 @@ public class Graph extends JComponent {
 	private boolean drawExp, drawLines, drawRanges;
 
 	public Graph() {
-		// setSize(500,700);
 		vxMin = 0;
 		vxMax = 10;
 		vyMin = 0;

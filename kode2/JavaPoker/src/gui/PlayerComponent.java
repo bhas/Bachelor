@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 public class PlayerComponent extends JComponent {
 	private JLabel betLabel, chipsLabel, nameLabel;
 	private CardIcon ci1, ci2;
+	private boolean isDealer;
 
 	public PlayerComponent(String name, int x, int y) {
 		initComponents();
@@ -36,6 +37,12 @@ public class PlayerComponent extends JComponent {
 		ci2.setCard(c2);
 		ci1.setVisible(true);
 		ci2.setVisible(true);
+	}
+	
+	public void setDealer(boolean d) {
+		if(d) {
+			
+		}
 	}
 
 	public void clearHand() {
