@@ -7,7 +7,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 public class GraphData {
-	private static final double NOISE = 0.03;
+	private static final double NOISE = 0.;
 	private TreeSet<Entry> entries;
 
 	public GraphData() {

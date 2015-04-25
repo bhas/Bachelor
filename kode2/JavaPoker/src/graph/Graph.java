@@ -10,6 +10,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
+import java.awt.Stroke;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.text.DecimalFormat;
@@ -22,7 +23,7 @@ public class Graph extends JComponent {
 	private static final float LINE_SIZE = 1.4f;
 	private static final int DOT_SIZE = 6;
 	private static final DecimalFormat DF_X = new DecimalFormat("0");
-	private static final DecimalFormat DF_Y = new DecimalFormat("0.00");
+	private static final DecimalFormat DF_Y = new DecimalFormat("0.000");
 	private static final int VER_SECTIONS = 10;
 	private static final int HOR_SECTIONS = 5;
 
@@ -33,7 +34,7 @@ public class Graph extends JComponent {
 	private ArrayList<GraphData> datasets;
 	private Color[] colors = new Color[] { Color.RED, Color.BLUE, Color.GREEN,
 			new Color(50, 50, 50), Color.ORANGE, Color.PINK };
-	private Color expColor = new Color(0, 150, 0);
+	private Color indicatorColor = new Color(0, 0, 0);
 	private double expVal;
 	private boolean drawExp, drawLines, drawRanges;
 
@@ -42,7 +43,7 @@ public class Graph extends JComponent {
 		vxMax = 10;
 		vyMin = 0;
 		vyMax = 100;
-		gbox = new Rectangle2D.Double(100, 10, 1000, 400);
+		gbox = new Rectangle2D.Double(100, 10, 600, 300);
 
 		datasets = new ArrayList<GraphData>();
 	}
@@ -95,7 +96,7 @@ public class Graph extends JComponent {
 
 		drawGraphContainer(g2);
 		if (drawExp)
-			drawIndicator(g2, expColor, expVal);
+			drawIndicator(g2, expVal);
 		for (int i = 0; i < datasets.size(); i++) {
 			drawDataset((Graphics2D) g2.create(), datasets.get(i), colors[i]);
 		}
@@ -111,7 +112,7 @@ public class Graph extends JComponent {
 		g.fill(gbox);
 
 		// horizontal value lines
-		g.setColor(new Color(0,0,0,60));
+		g.setColor(new Color(0, 0, 0, 60));
 		for (int i = 1; i <= VER_SECTIONS; i++) {
 			int y = (int) (y2 - (gbox.getHeight() * i / VER_SECTIONS));
 			g.drawLine(x1, y, x2, y);
@@ -156,8 +157,11 @@ public class Graph extends JComponent {
 		}
 	}
 
-	private void drawIndicator(Graphics2D g, Color c, double val) {
-		g.setColor(c);
+	private void drawIndicator(Graphics2D g, double val) {
+		g.setColor(indicatorColor);
+		Stroke dashed = new BasicStroke(1.5f, BasicStroke.CAP_BUTT,
+				BasicStroke.JOIN_BEVEL, 0, new float[] { 8, 15 }, 0);
+		g.setStroke(dashed);
 		int y = getYCoord(val);
 		g.drawLine((int) gbox.getX() + 1, y, (int) gbox.getMaxX() - 1, y);
 		int x = (int) gbox.getMaxX() + 5;
@@ -182,8 +186,8 @@ public class Graph extends JComponent {
 	private void drawDataset(Graphics2D g, GraphData data, Color c) {
 		if (drawRanges) {
 			Range r = data.getRange();
-			drawIndicator(g, c, r.min);
-			drawIndicator(g, c, r.max);
+			drawIndicator(g, r.min);
+			drawIndicator(g, r.max);
 		}
 
 		g.setClip(gbox);

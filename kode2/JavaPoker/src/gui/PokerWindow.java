@@ -2,6 +2,7 @@ package gui;
 
 import game.GameSettings;
 import game.essentials.Card;
+import game.essentials.PokerAction;
 import game.observer.IObserver;
 
 import java.awt.Color;
@@ -11,9 +12,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
@@ -26,6 +27,7 @@ public class PokerWindow extends JFrame implements IObserver {
 	private Point[] playerPos = setPlayerPos();
 	private HashMap<Integer, PlayerComponent> pcs;
 	private BoardComponent board = new BoardComponent(275, 250);
+	private int actor = -1, dealer = -1;
 
 	public PokerWindow() {
 		pane.setBackground(new Color(0, 120, 0));
@@ -35,7 +37,7 @@ public class PokerWindow extends JFrame implements IObserver {
 	private Point[] setPlayerPos() {
 		int m = 20;
 		int dx = 250;
-		int dy = 200;
+		int dy = 180;
 		Point[] pos = new Point[GameSettings.TABLE_SEATS];
 		pos[0] = new Point(m + dx, m);
 		pos[1] = new Point(m + 2 * dx, m);
@@ -77,18 +79,21 @@ public class PokerWindow extends JFrame implements IObserver {
 
 	@Override
 	public void gameFinished(int winner) {
-		
+
 	}
 
 	@Override
 	public void boardUpdated(List<Card> cc, int pot) {
 		board.setCards(cc);
 		board.setPot(pot);
+
+		for (Entry<Integer, PlayerComponent> e : pcs.entrySet()) {
+			e.getValue().setAction(null);
+		}
 	}
 
 	@Override
-	public void playerUpdated(int seat, List<Card> hand, int bet, int chips,
-			boolean dealer) {
+	public void playerUpdated(int seat, List<Card> hand, int bet, int chips) {
 		PlayerComponent pc = pcs.get(seat);
 		pc.setMoney(chips, bet);
 		if (hand == null)
@@ -150,5 +155,32 @@ public class PokerWindow extends JFrame implements IObserver {
 		public void setPot(int i) {
 			potLabel.setText(i + " $");
 		}
+	}
+
+	@Override
+	public void actorChanged(int seat) {
+		if (actor != -1)
+			pcs.get(actor).setActor(false);
+
+		actor = seat;
+		pcs.get(actor).setActor(true);
+	}
+
+	@Override
+	public void roundStarted(int dealer) {
+		if (this.dealer != -1)
+			pcs.get(this.dealer).setDealer(false);
+
+		this.dealer = dealer;
+		pcs.get(dealer).setDealer(true);
+
+		for (Entry<Integer, PlayerComponent> e : pcs.entrySet()) {
+			e.getValue().setAction(null);
+		}
+	}
+
+	@Override
+	public void playerActed(int seat, PokerAction pa) {
+		pcs.get(seat).setAction(pa);
 	}
 }
