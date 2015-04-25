@@ -11,25 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProbabilityCalc {
-	public static final int CALCULATIONS = 50000;
-
-	public static void main(String[] args) {
-		GraphData gd = new GraphData();
-		Probability result = new Probability(0, 0, 0);
-		for (int i = 1; i < 50; i++) {
-			result = getProbability("4s 4d", null, 1);
-			gd.addEntry(CALCULATIONS * i, result.percent());
-		}
-
-		Graph g = new Graph(gd);
-		//g.setDescriptions("Monte Carlo tests", "Probability");
-		g.drawLines(true);
-		g.setViewY(0.5, 0.6);
-		g.setViewX(0, 50*CALCULATIONS);
-		g.setExpectedVal(0.5625);
-
-		new GraphWindow(g);
-	}
+	public static final int CALCULATIONS = 1000;
 
 	public static Probability getProbability(List<Card> hand,
 			List<Card> community, int opponents) {
