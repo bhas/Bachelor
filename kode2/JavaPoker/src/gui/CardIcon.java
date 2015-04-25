@@ -33,6 +33,7 @@ public class CardIcon extends JLabel {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		repaint();
 	}
 
 	@Override

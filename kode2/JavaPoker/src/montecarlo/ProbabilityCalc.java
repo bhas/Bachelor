@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProbabilityCalc {
-	public static final int CALCULATIONS = 5000;
+	public static final int CALCULATIONS = 50000;
 
 	public static void main(String[] args) {
 		GraphData gd = new GraphData();

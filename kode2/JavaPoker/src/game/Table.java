@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Set;
 
 public class Table implements Runnable {
+	
+	private IPlayer
+	
 	private List<IPlayer> players;
 	private int BB;
 	private int startMoney;
@@ -29,7 +32,7 @@ public class Table implements Runnable {
 		hands = new HashMap<IPlayer, List<Card>>();
 	}
 
-	private HashSet<PokerAction> possibleActions(IPlayer p) {
+	private Set<PokerAction> possibleActions(IPlayer p) {
 		int seat = -1;
 		HashSet<PokerAction> pa = new HashSet<PokerAction>();
 		for (int i = 0; i < players.size(); i++) {
@@ -78,20 +81,20 @@ public class Table implements Runnable {
 		for (IPlayer p : players) {
 			p.gameStarted(players);
 		}
+		Thread thread = new Thread(this);
+		thread.start();
 	}
 
 	public void run() {
-		// for (IPlayer player : players) {
-		// player.getClient().joinedTable(tableType, bigBlind, players);
-		// }
+		System.out.println("Started Game");
 
 		while (true) {
 			int noOfActivePlayers = 0;
-			// for (IPlayer player : players) {
-			// if (player.getCash() >= bigBlind) {
-			// noOfActivePlayers++;
-			// }
-			// }
+			for (IPlayer player : players) {
+				if (player.getCash() >= bigBlind) {
+					noOfActivePlayers++;
+				}
+			}
 			if (noOfActivePlayers > 1) {
 				newRound();
 			} else {
