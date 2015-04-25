@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProbabilityCalc {
-	public static final int CALCULATIONS = 1000;
+	public static final int CALCULATIONS = 50000;
 
 	public static Probability getProbability(List<Card> hand,
 			List<Card> community, int opponents) {

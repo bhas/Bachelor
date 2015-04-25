@@ -23,8 +23,8 @@ public class Graph extends JComponent {
 	private static final float LINE_SIZE = 1.4f;
 	private static final int DOT_SIZE = 6;
 	private static final DecimalFormat DF_X = new DecimalFormat("0");
-	private static final DecimalFormat DF_Y = new DecimalFormat("0.000");
-	private static final int VER_SECTIONS = 10;
+	private static final DecimalFormat DF_Y = new DecimalFormat("0.00");
+	private static final int VER_SECTIONS = 5;
 	private static final int HOR_SECTIONS = 5;
 
 	// view dimensions
@@ -43,7 +43,7 @@ public class Graph extends JComponent {
 		vxMax = 10;
 		vyMin = 0;
 		vyMax = 100;
-		gbox = new Rectangle2D.Double(100, 10, 600, 300);
+		gbox = new Rectangle2D.Double(100, 10, 500, 220);
 
 		datasets = new ArrayList<GraphData>();
 	}
