@@ -1,22 +1,10 @@
-\contentsline {part}{I\hspace {1em}Theoretic part}{5}
-\contentsline {section}{\numberline {1}Theory overview}{6}
-\contentsline {subsection}{\numberline {1.1}Bayes theorem}{6}
-\contentsline {subsection}{\numberline {1.2}Monte Carlo simulation}{6}
-\contentsline {section}{\numberline {2}Determine the strength of a poker hand}{6}
-\contentsline {subsection}{\numberline {2.1}Monte Carlo method}{6}
-\contentsline {subsection}{\numberline {2.2}Determine the number of simulations}{7}
-\contentsline {subsection}{\numberline {2.3}Nash equilibrium}{8}
-\contentsline {subsection}{\numberline {2.4}Neural network}{9}
-\contentsline {subsection}{\numberline {2.5}Perceptron}{10}
-\contentsline {subsection}{\numberline {2.6}Multi-Layer-Perceptron}{11}
-\contentsline {section}{\numberline {3}What did we use?}{11}
-\contentsline {section}{\numberline {4}Neural network}{11}
-\contentsline {part}{II\hspace {1em}Experimental part}{11}
-\contentsline {section}{\numberline {5}Method}{11}
-\contentsline {section}{\numberline {6}Data}{11}
-\contentsline {section}{\numberline {7}Experiments}{11}
-\contentsline {subsection}{\numberline {7.1}Call bot}{11}
-\contentsline {subsection}{\numberline {7.2}Simple bot}{11}
-\contentsline {subsection}{\numberline {7.3}Advanced bot}{11}
-\contentsline {subsection}{\numberline {7.4}Ultimate Extreme Titanium Deluxe bot}{11}
-\contentsline {section}{\numberline {8}Conclusion}{11}
+\contentsline {part}{I\hspace {1em}Design}{4}
+\contentsline {section}{\numberline {1}Design overview}{4}
+\contentsline {section}{\numberline {2}Player Modeling}{4}
+\contentsline {subsection}{\numberline {2.1}Why use player-modeling?}{4}
+\contentsline {subsection}{\numberline {2.2}Neural Network}{5}
+\contentsline {section}{\numberline {3}Determine the strength of a poker hand}{6}
+\contentsline {subsection}{\numberline {3.1}Monte Carlo method}{7}
+\contentsline {subsection}{\numberline {3.2}Determine the number of simulations}{7}
+\contentsline {part}{II\hspace {1em}Implementation}{8}
+\contentsline {section}{\numberline {4}Conclusion}{9}
