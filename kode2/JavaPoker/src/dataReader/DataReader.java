@@ -30,8 +30,8 @@ public class DataReader {
 	}
 
 	public static Probability getProb(String hand) {
-		return ProbabilityCalc.getProbability(
-				Card.createMultiple(hand), null, 1);
+		return ProbabilityCalc.getProbability(Card.createMultiple(hand), null,
+				1);
 	}
 
 	public static Graph scanPlayer(String name, int state) throws IOException {
@@ -50,15 +50,17 @@ public class DataReader {
 			while (sc.hasNextLine()) {
 				i1++;
 				if (i1 % 100 == 0)
-					System.out.println("loaded "+i1+" lines");
+					System.out.println("loaded " + i1 + " lines");
 				String line = sc.nextLine().replaceAll("\\s+", " ");
 				String[] data = line.split(" ");
 				if (data.length == FULL_DATA) {
 					if (isAggressive(data[state])) {
-						Probability res = getProb(data[CARD1] + " " + data[CARD2]);
+						Probability res = getProb(data[CARD1] + " "
+								+ data[CARD2]);
 						gda.addEntry(i1, res.percent());
 					} else if (isDefensive(data[state])) {
-						Probability res = getProb(data[CARD1] + " " + data[CARD2]);
+						Probability res = getProb(data[CARD1] + " "
+								+ data[CARD2]);
 						gdd.addEntry(i1, res.percent());
 					}
 				}
@@ -69,7 +71,7 @@ public class DataReader {
 			g.setViewY(0, 1);
 			g.drawRanges(true);
 			return g;
-			
+
 		} finally {
 			if (inputStream != null) {
 				inputStream.close();
@@ -80,28 +82,38 @@ public class DataReader {
 		}
 	}
 
-	public static void main(String[] args) {
+	private static void plotPreflop(String player) {
 		try {
-			String player = "Bar";
-			
 			Graph preFlop = scanPlayer(player, PREFLOP);
 			preFlop.setDescriptions("preflop", "");
 			new GraphWindow(preFlop);
-			
-//			Graph flop = scanPlayer(player, FLOP);
-//			flop.setDescriptions("flop", "");
-//			new GraphWindow(flop);
-//			
-//			Graph turn = scanPlayer(player, TURN);
-//			turn.setDescriptions("turn", "");
-//			new GraphWindow(turn);
-//			
-//			
-//			Graph river = scanPlayer(player, RIVER);
-//			river.setDescriptions("river", "");
-//			new GraphWindow(river);
-			
-			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public static void main(String[] args) {
+		try {
+			String player = "Bar";
+
+			Graph preFlop = scanPlayer(player, PREFLOP);
+			preFlop.setDescriptions("preflop", "");
+			new GraphWindow(preFlop);
+
+			// Graph flop = scanPlayer(player, FLOP);
+			// flop.setDescriptions("flop", "");
+			// new GraphWindow(flop);
+			//
+			// Graph turn = scanPlayer(player, TURN);
+			// turn.setDescriptions("turn", "");
+			// new GraphWindow(turn);
+			//
+			//
+			// Graph river = scanPlayer(player, RIVER);
+			// river.setDescriptions("river", "");
+			// new GraphWindow(river);
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
