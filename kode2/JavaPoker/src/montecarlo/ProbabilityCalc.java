@@ -3,9 +3,6 @@ package montecarlo;
 import game.essentials.Card;
 import game.essentials.Deck;
 import game.essentials.Hand;
-import graph.Graph;
-import graph.GraphData;
-import graph.GraphWindow;
 
 import java.util.ArrayList;
 import java.util.List;
