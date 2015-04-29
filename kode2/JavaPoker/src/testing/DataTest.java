@@ -1,9 +1,15 @@
 package testing;
 
-import dataReader.DataRefactorer;
+import java.io.IOException;
+
+import data.refac.DataRefactorer;
 
 public class DataTest {
 	public static void main(String[] args) {
-		DataRefactorer.start();
+		try {
+			DataRefactorer.refactor();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

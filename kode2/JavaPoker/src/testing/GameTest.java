@@ -9,7 +9,6 @@ public class GameTest {
 		String[] players = new String[] { "Michael", "Poker-John", null, "Flash Bob", null, null };
 		cm.newGame(players);
 		cm.newRound();
-		cm.payBlinds();
 		int actor = cm.waitingFor();
 		cm.call(actor); // 5
 		actor = cm.waitingFor();
