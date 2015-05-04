@@ -8,9 +8,9 @@ import montecarlo.ProbabilityCalc;
 
 public class MonteCarloTester {
 	
-	public static void main(String[] args) {
-		preflop("Jd Jh");
-	}
+//	public static void main(String[] args) {
+//		preflop("Jd Jh");
+//	}
 
 	private static void preflop(String hand) {
 		int calcs = 50;
@@ -29,7 +29,7 @@ public class MonteCarloTester {
 		new GraphWindow(g);
 	}
 	
-//	public static void main(String[] args) {
+	public static void main(String[] args) {
 //		printProb("Ac Ad", 1);
 //		printProb("Qc Kc", 1);
 //		printProb("Js Qd", 1);
@@ -39,7 +39,10 @@ public class MonteCarloTester {
 //		printProb("7d 2s", 1);
 //		printProb("Ah 8s", 1);
 //		printProb("9d 3s", 1);
-//	}
+		printProb("4d 5h", 1);
+		printProb("2h 3h", 1);
+		printProb("2d 7d", 1);
+	}
 	
 	private static void printProb(String hand, int opps) {
 		System.out.print(hand + " - ");
