@@ -1,4 +1,4 @@
-\section{Determine the strength of a poker hand}
+\section{Determine the strength of a poker hand} \label{sec:monte}
 Our first step towards developing an adaptive poker is to finding a way to determine the strength of any given hand in any game state. In this chapter we will answer the question: 
 
 \begin{center}
@@ -35,6 +35,7 @@ The Monte Carlo method can be used to calculate a distribution of results for a 
 To test if our subsystem calculates the correct probabilities we find the probability of a number of different pre-flop scenarios and compare the result to the results of caniwin. Every test have been preformed with 50.000 simulations against one opponent. The result can be seen in table \ref{tab:pre-flop-test}.
 
 \vspace{4mm}
+\def\arraystretch{1.5}
 \begin{table}
   \center
   \begin{tabular}{ | l | l | l | l | }
