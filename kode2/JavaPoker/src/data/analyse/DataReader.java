@@ -10,6 +10,7 @@ public class DataReader {
 	private final static String DATA_FILE = "data/refactored-data.txt";
 	FileReader fr;
 	BufferedReader br;
+	DataHolder dataHolder = new DataHolder();
 
 	public DataReader() {
 		try {
@@ -34,7 +35,6 @@ public class DataReader {
 
 	// finds a specific round
 	public DataHolder find(String id) throws IOException {
-		DataHolder dataHolder = new DataHolder();
 		dataHolder.id = Integer.parseInt(id);
 		String line;
 		String nextLine;
@@ -106,6 +106,7 @@ public class DataReader {
 		return null;
 	}
 	
+	
 	public int getPot(String nextLine){
 		return Integer.parseInt(nextLine
 				.replace(" ", "").split(";")[1].substring(2));
@@ -131,8 +132,25 @@ public class DataReader {
 	}
 
 	// returns object of next round
-	public DataHolder next() {
+	public DataHolder next() throws IOException {
+		
+		String line;
+		String nextLine;
+		int num = 1;
+		while ((line = br.readLine()) != null) {
+			if (line.contains("#")) {
+				closeConnection();
+				openConnection(DATA_FILE);
+				return find(line.substring(1, 10));
+			}
+		}
 		return null;
+		
+	}
+
+	private void closeConnection() throws IOException {
+		br.close();
+		fr.close();
 	}
 
 	// object containing the data of a round
