@@ -4,36 +4,38 @@
 % official frontpage
 
 % our frontpage
-\input{pre-content/frontpage.tex}
+\input{other/pre/frontpage.tex}
 
 % abstract
-\input{pre-content/abstract.tex}
+\input{other/pre/abstract.tex}
 
 % preface
-\section*{Preface}
-\input{pre-content/preface.tex}
+\input{other/pre/preface.tex}
 
 % introduction
-\input{pre-content/introduction.tex}
-
+\input{other/pre/introduction.tex}
 \newpage
+
 % table of contents
 \tableofcontents
 \newpage
 
-% design part
-\input{design-part/design-part.tex}
+% Part 1 - Determine hand strength
+\input{part1/monte-carlo.tex}
 
-% implementation part
-\input{implementation-part/implementation-part.tex}
+% Part 2 - Learning default play style
+\input{part2/default-play-style.tex}
 
-% testing part
-\input{test-part/test-part.tex}
+% Part 3 - Adapting using player modelling
+\input{part3/player-modeling.tex}
 
 % discussion
 \section{Discussion}
 
 % conclusion
 \section{Conclusion}
+
+% bibliography
+\input{other/post/bibliography.tex}
 
 \end{document}
