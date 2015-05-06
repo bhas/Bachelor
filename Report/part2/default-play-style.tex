@@ -1,7 +1,23 @@
 \section{Learning default play style}
 \label{sec:part2}
-As we cannot have a bot which can outplay the opponents from first round we will have to create a default player. The default player will have the task of lowering our costs while the system gathers information about the opponent so the system can adapt to his style of play. There are different ways of how to achieve this, firstly we could simply just hardcore a decent way of playing into the game and make decisions based on the cards only. The other method is to implement a neural network and train it till we are satisfied with the results. The neural network seemed like the best idea for further development so this will be our way to go.
+In the previous chapter we created a calculator which can calculate the probability of winning with any hole cards in any game state. We will use the calculator in this section to estimate the strength of our hole cards.\\
+
+Before we can learn our poker bot to adapt to opponents strategy we first need it to learn a default strategy. When the poker bot first joins a poker game it has no information about the opponent. In this case it must have a default strategy until it gathers more information.
+In this chapter we will find a solution to the problem statement:
+
+\vspace{4mm}
+\begin{statementBox}
+Can the computer learn to play poker by observing humans playing poker, and if so how can we implement it?
+\end{statementBox}
+\vspace{4mm}
+
+In this thesis the focus of the default strategy is not to make the poker bot win, although that would be preferable, but instead to reduce the loses while it gather information about the opponent.
+
+We want to learn a default strategy by observing actions by human players. The University of Alberta have observed  real life poker games and collected the data about the games. We will use this data to develop the default strategy for our poker bot.
+
 \subsection{Design}
+
+
 \subsection{Test}
 \subsection{Discussion}
 When our artificial intelligence starts out by playing the games of poker it doesn't have any kind of information about the opponents. So to make sure that the bot wont just go keep throwing away the bank roll. Instead we wanted the bot to minimizes our losses so that we would still have a decent bank roll when we have gathered information about the opponents so that the bot could make qualified guesses at what move would be the most appropriate in terms of the current opponent. The default player was never meant to be on the same level as a human player, but humans are only in a slightly better position than the default bot. The human player can like the bot only see the hole and community cards, but a human is also able to make a profile of the bot in their head. This means that they can learn how the bot decides and exploit this. 

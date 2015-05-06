@@ -1,9 +1,12 @@
 \section{Determine the strength of a poker hand}
 \label{sec:part1}
 Our first step towards developing an adaptive poker bot is to find a way to determine the strength of any given hand in any game state. In this chapter we will answer the question: 
-\begin{quotation}
+
+\vspace{4mm}
+\begin{statementBox}
 How can we predict the probability of ending up with the winning hand?
-\end{quotation}
+\end{statementBox}
+\vspace{4mm}
 
 Since we don't know the outcome of the community cards during a round of poker we have to estimate your odds of winning based on the possible outcomes. The problem is that there are more than 250 millions different outcomes of community cards alone. Additionally the poker rules are quite complex when it comes to determining the wining hand so it's almost impossible to make a formula to calculate the exact probability. So how do you find the probability without having to check the outcome of 250 millions hands? 
 The solution is to find an estimate instead of an exact probability.
@@ -35,7 +38,7 @@ The Monte Carlo method can be used to calculate a distribution of results for a 
 \subsection{Test}
 To test if our subsystem calculates the correct probabilities we find the probability of a number of different pre-flop scenarios and compare the result to the results of caniwin. Every test have been preformed with 50.000 simulations against one opponent. The result can be seen in table \ref{tab:pre-flop-test}. From the results we can see that for all hole cards the error percentage is less than one.
 
-We also test the accuracy of our calculator using different numbers of simulations. Each test is performed with a pair of jacks in pre-flop with one opponent. Caniwin found the probability to be 77,1 \%. Figure~\ref{fig:mc1}, \ref{fig:mc10} and \ref{fig:mc50} shows the distribution of results from 50 tests. In figure~\ref{fig:mc1} we can see the results ranges from 74,4 \% to 79,6 \% (5,2 \%). In figure~\ref{fig:mc10} the range is only 75,7 \% to 77,9 \% (2,2 \%) and finally in figure~\ref{fig:mc50} the range is down to 76,4 \% to 77,3 \% (0,9 \%).
+We also test the accuracy of our calculator using different numbers of simulations. Each test is performed with a pair of jacks in pre-flop with one opponent. Caniwin found the probability to be 77,1 \%. Figure~\ref{fig:mc1}, \ref{fig:mc10} and \ref{fig:mc50} shows the distribution of results from 50 tests. Each test result is indicated with a red dot. In figure~\ref{fig:mc1} we can see the results ranges from 74,4 \% to 79,6 \% (5,2 \%). In figure~\ref{fig:mc10} the range is only 75,7 \% to 77,9 \% (2,2 \%) and finally in figure~\ref{fig:mc50} the range is down to 76,4 \% to 77,3 \% (0,9 \%).
 
 In table \ref{tab:mc-total} you can see the combined result. The range is the difference between the lowest and highest result and the max error is the maximum deviation from caniwin.
 

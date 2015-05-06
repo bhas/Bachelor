@@ -5,3 +5,10 @@
 \usepackage{verbatim}
 \usepackage{hyperref}
 \usepackage{float}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+
+\definecolor{statementBG}{rgb}{0.93,0.93,1}
+\definecolor{statementFG}{rgb}{0.3,0.6,1}
+\newtcolorbox{statementBox}{colback=statementBG,colframe=statementFG}
+\newtcolorbox{statementBox2}[1]{colback=statementBG,colframe=statementFG,fonttitle=\bfseries,title=#1}
