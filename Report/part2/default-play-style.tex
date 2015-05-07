@@ -1,7 +1,28 @@
 \section{Learning default play style}
-\subsection{Introduction}
-\subsection{Neural Network}
+\label{sec:part2}
+In the previous chapter we created a calculator which can calculate the probability of winning with any hole cards in any game state. We will use the calculator in this section to estimate the strength of our hole cards.\\
+
+Before we can learn our poker bot to adapt to opponents strategy we first need it to learn a default one. When the poker bot first joins a poker game it has no information about the opponent. In this case it must use a default strategy while it gathers more information.
+In this chapter we will find a solution to the problem statement:
+
+\vspace{4mm}
+\begin{statementBox}
+Can the computer learn to play poker by observing humans playing poker, and if so how can we implement it?
+\end{statementBox}
+\vspace{4mm}
+
+Because the default strategy has to work against any type of opponent, we don't expect it to be able to win against every type of opponent. The focus of the default strategy is not to make the poker bot win, although that would be preferable, but instead to reduce the loses while it gathers information about the opponent.
+
+We want to learn a default strategy by observing actions by human players. The University of Alberta have observed real life poker players and collected the data throughout the games. We will use this data to develop the default strategy for our poker bot.
+
 \subsection{Design}
+The first step to learning from the poker data is to understand the poker data. 
+There are multiple ways our bot can learn from the poker data. 
+
 \subsection{Test}
 \subsection{Discussion}
+When our artificial intelligence starts out by playing the games of poker it doesn't have any kind of information about the opponents. So to make sure that the bot wont just go keep throwing away the bank roll. Instead we wanted the bot to minimizes our losses so that we would still have a decent bank roll when we have gathered information about the opponents so that the bot could make qualified guesses at what move would be the most appropriate in terms of the current opponent. The default player was never meant to be on the same level as a human player, but humans are only in a slightly better position than the default bot. The human player can like the bot only see the hole and community cards, but a human is also able to make a profile of the bot in their head. This means that they can learn how the bot decides and exploit this. 
+This is one of the reasons that we chose to go with a neural network. In a neural network we are able to of course train the network to make correct decisions based on the targeted output that we give it.
+But as the game proceeds the neural network has an input which will weight when we have enough information about the opponents to shift our gameplay from the default play style to a more adaptive one.
+The time that it takes a human player to learn about the bot and adapt to it, should be the same for the bot. So if we imagine a human player who is good enough to decipher the way the bot is playing and adapt to it. When the human player does that, the bot should also have started to change its ways. Slowly as the bot learn it will adapt more and more to the opponent so when we have enough information the bot will shift completely and disregard the default play style.
 \subsection{Conclusion}
