@@ -1,68 +1,103 @@
 package data.analyse;
 
-import montecarlo.Probability;
-import montecarlo.ProbabilityCalc;
-
 public class DataAnalyser {
-	private static final String INPUT_FILE = "data/refactored-data.txt";
+	private int pi;
+	private int ai;
+	private int players;
 
-	private static boolean isAggressive(String s) {
-		return s.contains("b") || s.contains("r");
+	public State[] getStates(int playerId, String[] actions, int preProfit,
+			int preBalance) {
+		players = actions.length;
+		int remainingOpps = getOpponents(actions);
+		int expStates = actions[playerId].replaceAll("B", "").length();
+		State[] states = new State[expStates];
+		int[] payments = new int[actions.length];
+		int max = 0;
+		pi = 0;
+		ai = 0;
+
+		// blind
+		if (actions[0].startsWith("B")) {
+			payments[0] = 5;
+			payments[1] = 10;
+			max = 10;
+			increase();
+			increase();
+		}
+		// for each state
+		int i = 0;
+		while (i < expStates) {
+			String action = actions[pi];
+
+			// is looking at the player we track
+			if (pi == playerId) {
+				State s = new State();
+				for (int p : payments) {
+					s.profit += p;
+				}
+				s.profit += preProfit;
+				s.cost = max - payments[pi];
+				s.numOfOpponents = remainingOpps;
+				s.aggressive = isAggressive(action, ai);
+				s.preBal = preBalance - payments[pi];
+				s.postBal = s.preBal - (s.cost + (s.aggressive ? 10 : 0));
+				states[i] = s;
+				i++;
+			}
+
+			// check if there is an action
+			if (action.length() > ai && !action.equals("-")) {
+				// aggressive action
+				if (isAggressive(action, ai)) {
+					max += 10;
+					payments[pi] = max;
+				} else if (isDefensive(action, ai)) {
+					payments[pi] = max;
+				} else {
+					remainingOpps--;
+				}
+			}
+			increase();
+		}
+
+		return states;
 	}
 
-	private static boolean isDefensive(String s) {
-		return !(isAggressive(s) || s.contains("f"));
+	private void increase() {
+
+		if (pi + 1 == players) {
+			pi = 0;
+			ai++;
+
+		} else {
+			pi++;
+		}
 	}
 
-	private static Probability prob(String hand) {
-		return ProbabilityCalc.getProbability(hand, null, 1);
+	private int getOpponents(String[] actions) {
+		int players = -1;
+		for (String s : actions) {
+			if (!s.equals("-")) {
+				players++;
+			}
+		}
+		return players;
 	}
 
-//	public static Graph scanPlayer(String name, int state) throws IOException {
-//		FileInputStream inputStream = null;
-//		Scanner sc = null;
-//
-//		String path = "data/players/pdb." + name;
-//
-//		try {
-//			inputStream = new FileInputStream(path);
-//			sc = new Scanner(inputStream, "UTF-8");
-//
-//			GraphData gda = new GraphData();
-//			GraphData gdd = new GraphData();
-//			int i1 = 0, i2 = 0;
-//			while (sc.hasNextLine()) {
-//				i1++;
-//				if (i1 % 100 == 0)
-//					System.out.println("loaded " + i1 + " lines");
-//				String line = sc.nextLine().replaceAll("\\s+", " ");
-//				String[] data = line.split(" ");
-//				if (data.length == FULL_DATA) {
-//					if (isAggressive(data[state])) {
-//						Probability res = getProb(data[CARD1] + " "
-//								+ data[CARD2]);
-//						gda.addEntry(i1, res.percent());
-//					} else if (isDefensive(data[state])) {
-//						Probability res = getProb(data[CARD1] + " "
-//								+ data[CARD2]);
-//						gdd.addEntry(i1, res.percent());
-//					}
-//				}
-//			}
-//			Graph g = new Graph(gda);
-//			g.addDataset(gdd);
-//			g.setViewX(0, Math.max(i1, i2) + 1);
-//			g.setViewY(0, 1);
-//			g.drawRanges(true);
-//			return g;
-//
-//		} finally {
-//			if (inputStream != null) {
-//				inputStream.close();
-//			}
-//			if (sc != null) {
-//				sc.close();
-//			}
-//		}
-//	}
+	private boolean isAggressive(String s, int index) {
+		String c = s.charAt(index) + "";
+		return c.equals("b") || c.equals("r");
+	}
+
+	private boolean isDefensive(String s, int index) {
+		String c = s.charAt(index) + "";
+		return c.equals("c") || c.equals("k");
+	}
+
+	public class State {
+		// balance
+		public int preBal, postBal;
+		public int cost, profit, numOfOpponents;
+		public boolean aggressive;
+	}
 }

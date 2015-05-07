@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProbabilityCalc {
-	public static final int CALCULATIONS = 50000;
+	private static final int CALCULATIONS = 50000;
+	private static final int THREADS = 20;
 
 	public static Probability getProbability(List<Card> hand,
 			List<Card> community, int opponents) {
@@ -19,34 +20,61 @@ public class ProbabilityCalc {
 		if (community == null)
 			community = new ArrayList<Card>();
 
-		int wins = 0;
-		int loses = 0;
-		int draws = 0;
 		ArrayList<Card> excludes = new ArrayList<Card>(hand);
 		excludes.addAll(community);
-		Deck deck = new Deck(excludes);
+		Probability result = new Probability(0, 0, 0);
 
-		// do the simulations
-		for (int i = 0; i < CALCULATIONS; i++) {
-			int result = simulate(deck, hand, community, opponents);
-			if (result == 1)
-				wins++;
-			else if (result == 0)
-				draws++;
-			else
-				loses++;
+		// creates the threads
+		Thread[] threads = new Thread[THREADS];
+		for (int i = 0; i < THREADS; i++) {
+			threads[i] = createThread(hand, community, excludes, opponents,
+					result);
+			threads[i].start();
 		}
-		return new Probability(wins, draws, loses);
+
+		// waits for the threads
+		for (int i = 0; i < THREADS; i++) {
+			try {
+				threads[i].join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return result;
 	}
-	
-	public static Probability getProbability(String hand, String cc, int opponents){
+
+	private static Thread createThread(List<Card> hand, List<Card> cc,
+			List<Card> excludes, int opps, Probability finalResult) {
+		Thread th = new Thread() {
+			public void run() {
+				Deck d = new Deck(excludes);
+				int wins = 0, loses = 0, draws = 0;
+				// simulates the games
+				for (int i = 0; i < CALCULATIONS / THREADS; i++) {
+					int result = simulate(d, hand, cc, opps);
+					if (result == 1)
+						wins++;
+					else if (result == 0)
+						draws++;
+					else
+						loses++;
+				}
+				finalResult.add(wins, draws, loses);
+			};
+		};
+		return th;
+	}
+
+	public static Probability getProbability(String hand, String cc,
+			int opponents) {
 		List<Card> h = Card.createMultiple(hand);
 		List<Card> c2 = null;
-		if(cc != null){
+		if (cc != null) {
 			c2 = Card.createMultiple(cc);
 		}
 		return getProbability(h, c2, opponents);
-		 
+
 	}
 
 	// -1 = lose, 0 = draw, 1 = win
