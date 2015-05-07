@@ -1,0 +1,33 @@
+\def\layersep{2.5cm}
+
+\begin{figure}
+\center
+\begin{tikzpicture}[shorten >=1pt,->,line width=0.2mm,draw=black!60, node distance=\layersep]
+    \tikzstyle{every pin edge}=[<-,shorten <=1pt]
+    \tikzstyle{neuron}=[circle,fill=black!25,minimum size=17pt,inner sep=0pt]
+    \tikzstyle{input neuron}=[neuron, fill=green!70];
+    \tikzstyle{output neuron}=[neuron, fill=red!70];
+    \tikzstyle{hidden neuron}=[neuron, fill=blue!70];
+    \tikzstyle{annot} = [text width=4em, text centered]
+
+    % Draw the input layer nodes
+    \node[input neuron, pin=left:win probability] (I-1) at (0,-1) {};
+    \node[input neuron, pin=left:opponents] (I-2) at (0,-2) {};
+
+    % Draw the output layer node
+    \node[output neuron,pin={[pin edge={->}]right:Passive}] (O-1) at (\layersep,-1) {};
+    \node[output neuron,pin={[pin edge={->}]right:Aggressive}] (O-2) at (\layersep,-2) {};
+
+    % Connect every node in the input layer with every node in the
+    % hidden layer.
+    \path (I-1) edge (O-1);
+    \path (I-2) edge (O-1);
+    \path (I-1) edge (O-2);
+    \path (I-2) edge (O-2);
+
+    % Annotate the layers
+    \node[annot,above of=I-1, node distance=1cm] (il) {Input layer};
+    \node[annot,right of=il] {Output layer};
+\end{tikzpicture}
+\caption{Neural network 1 \label{fig:nn1}}
+\end{figure}
