@@ -7,17 +7,29 @@ In this chapter we will find a solution to the problem statement:
 
 \vspace{4mm}
 \begin{statementBox}
-Can the computer learn to play poker by observing humans playing poker, and if so how can we implement it?
+How can we make a default strategy without having information about the opponents?
 \end{statementBox}
 \vspace{4mm}
 
-Because the default strategy has to work against any type of opponent, we don't expect it to be able to win against every type of opponent. The focus of the default strategy is not to make the poker bot win, although that would be preferable, but instead to reduce the loses while it gathers information about the opponent.
+Because the default strategy has to work against any type of opponent, we don't expect it to be able to win against every type of opponent. The focus of the default strategy is not to make the poker bot win, although that would be preferable, its goal is instead to reduce the loses while the system gathers information about the opponent. But how can we make sure that we create a bot that plays on a sufficient level that it wont loose unnecessary?
 
-We want to learn a default strategy by observing actions by human players. The University of Alberta have observed real life poker players and collected the data throughout the games. We will use this data to develop the default strategy for our poker bot.
 
 \subsection{Design}
-The first step to learning from the poker data is to understand the poker data. 
-There are multiple ways our bot can learn from the poker data. 
+To create a default strategy we have two options which satisfies our requirements.
+
+One way use a professional players guideline on how to handle every situation that our bot could reach. This could be achieved by hard coding the decisions into the program and take every scenario into account, so the bot wont ever have to think for itself.
+
+Another way is make the a bot who is able to read, understand and learn from the poker data.
+The poker data provided by the University of Alberta real life poker players have been observed and the data throughout the game have been collected. 
+This data will be used to develop the default strategy, by making the bot learn from the real life players choices.
+In our case this seems like the best way to go, as the default strategy there will be hybrid as it learns many different ways of 
+playing the game by various players and putting them together as one. 
+If we were to hardcore every situation this would both be time consuming but also make the strategy valuable as an intelligent opponent
+would be able to some extend predict which choices that our bot would make. 
+
+
+To solve our problem statement we developed a system that is able to learn from a dataset with information about a number of poker games with different players.
+
 
 \subsection{Test}
 \subsection{Discussion}

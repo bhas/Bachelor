@@ -127,8 +127,8 @@ public class DefaultPlayer {
 					s.preBal, s.cost, s.profit, totalChips);
 			double[] outputData = s.aggressive ? new double[] { 0, 1 }
 					: new double[] { 1, 0 };
-//			System.out.println(Arrays.toString(inputData) + " "
-//					+ Arrays.toString(outputData));
+			System.out.println(Arrays.toString(inputData) + " "
+					+ Arrays.toString(outputData));
 			dataset.addRow(inputData, outputData);
 		}
 
