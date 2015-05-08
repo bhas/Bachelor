@@ -12,7 +12,7 @@
 \contentsline {section}{\numberline {3}Adapt to opponents}{14}{section.3}
 \contentsline {subsection}{\numberline {3.1}Introduction}{14}{subsection.3.1}
 \contentsline {subsection}{\numberline {3.2}What is player-modeling?}{14}{subsection.3.2}
-\contentsline {subsection}{\numberline {3.3}How can we model a player dynamically?}{14}{subsection.3.3}
+\contentsline {subsection}{\numberline {3.3}How can we model a player dynamically?}{15}{subsection.3.3}
 \contentsline {subsubsection}{\numberline {3.3.1}Neural Network}{15}{subsubsection.3.3.1}
 \contentsline {subsection}{\numberline {3.4}Test}{17}{subsection.3.4}
 \contentsline {subsection}{\numberline {3.5}Discussion}{17}{subsection.3.5}
