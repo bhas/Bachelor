@@ -1,0 +1,78 @@
+\section*{Texas hold'em poker}
+Poker is arguably one of the most popular gambling games. It combines psychology, statistic, and luck into a single game with simple rules. Even though the rules of poker are simple, the game itself is hard to master. It is played with a standard deck of 52 cards. There are multiple variances of poker but this section only describes the basic rules of Texas hold'em limit poker. For a more in-depth description of the rules see \cite{poker-rules}.
+
+\subsubsection*{Player actions}
+\begin{tabular}{ p{0.1\linewidth} p{0.9\linewidth} }
+  \textbf{Fold} & The player gives up and the player is out until the start of the next round. This action is always possible.\\
+  \textbf{Check} & The player does not bet any chips. This action is only possible if no other player has placed a bet.\\
+  \textbf{Bet} & The player bets an amount equal to the blind. All opponents have to match his bid in order to stay in the game.\\
+  \textbf{Call} & The player place a bet that matches the highest bid of the opponents.\\
+  \textbf{Raise} & The player place bet higher than the bet of the opponents. All opponents have to match this bid in order to stay in the game. This action is only possible if another player has placed a bet.\\
+  \textbf{All-in} & The player bets all his chips. The player is still in the game but he will not be able to act any more. This action is only possible if you cannot afford to call, bet or raise.\\
+\end{tabular}
+
+\subsubsection*{Keywords}
+
+\begin{tabular}{ p{0.18\linewidth} p{0.82\linewidth} }
+\textbf{Dealer} & The players takes turn being the dealer in the beginning of each round. The player to the left of the dealer is always the first to take action in the bidding round.\\
+\textbf{Blind} & A fixed amount that the two players has to pay in the start of each round.\\
+\textbf{Hole cards} & A pair of private cards that is dealt to each player. \\
+\textbf{Community cards} & The five public cards that are dealt to the table and are shared between all players.\\
+\textbf{Bidding round} & In the bidding round the players takes turn performing an action. A bidding round will occur in every game state.\\
+\textbf{Action} & An action can be performed when it is the players turn to act during the bidding round.\\
+\textbf{Pot} & The sum of all the bids that have been placed in the round. The winner of the round wins the pot.\\
+\textbf{Chips} & The amount of money a player has.\\
+\textbf{Round} & A round consists of 4 game states: pre-flop, flop, turn, and river. In the beginning of each round the blind are paid.\\
+\textbf{Pre-flop} & The first game state. In this state the hole cards are dealt.\\
+\textbf{Flop} & The second game state. In this state the first three community cards are dealt.\\
+\textbf{Turn} & The third game state. In this state the fourth community card is dealt.\\
+\textbf{River} & The final game state. In this state the fifth community card is dealt. After the bidding round a showdown will take place.\\
+\textbf{Showdown} & The phase where all players who have not folded show their whole cards and the winner is determined.\\
+\textbf{Hand} & The best combination of the players hole cards and the community cards. See table \ref{tab:poker-ranks}.
+\end{tabular}
+
+\subsubsection*{Game play}
+A Texas hold`em poker game consists of multiple rounds. A round consists of four game states: pre-flop, flop, turn and river. Each game state starts with cards being dealt and then a bidding round begins. In the bidding round the players will take turn performing their actions. If only one player is left after a bidding round that player wins the pot, otherwise the game continues to the next game state. If multiple players are still left after the river a showdown will start. During showdown each player left will reveal their hole cards and a winner will be found. The winner wins the pot. In case of a draw the pot is split between the winners.
+
+The amount of chips is the main indicator of how well the player is doing. The main goal for the players is to increase their amount of chips.
+
+\subsubsection*{The bidding round}
+The bidding round is where the players in turn perform their actions. The actions include: call, bet, raise, fold, check, all-in. The player to the left of the dealer is always the first to act.
+
+A player can play aggressively by betting or raising which will increase the cost for the other players. Likewise a player can also play defensively by calling or checking which won't increase the cost for other players. If a player decides to fold he will lose what he betted that round. Whenever a player chooses to play aggressively all other players must either fold or call in order for the bidding round to stop. The bidding round continues until all players have called the aggressor or folded.
+
+\subsubsection*{Rules for determining the winner}
+The rules for finding the best hand is quite simple. We refer to the rank of a card (2-A) as the card rank and the rank of the hand (see table \ref{tab:poker-ranks}) as the rank. First the rank of the hand is found. The order of the cards is insignificant. In case two players has the same rank the winner will be determined by the card ranks of the given hand. For instance a pair of kings is better than a pair of jacks. No card suit is better than another. \\
+
+Starting from the top (the best hand) in table \ref{tab:poker-ranks} we have the explanations:\\
+\textbf{Royal Flush} is having a straight all in the same suit. The highest card also have to be an ace.\\
+\textbf{Straight Flush} is the same as a royal flush except there is no requirement for the highest card.\\
+\textbf{Four of a kind} is having four cards with the same card rank \\
+\textbf{Full house} is having three of a kind and a pair\\
+\textbf{Flush} is having five cards with the same suit\\
+\textbf{Straight} is having five cards in a row (e.g 10-A or 4-9)\\
+\textbf{Three of a kind} is having three cards with the same card rank \\
+\textbf{Two pairs} is having two pairs\\
+\textbf{One pairs} is having two cards with the same card rank. \\
+\textbf{High card} is the highest card. \\
+
+\begin{table}[H]
+  \center
+  \begin{tabular}{ | l | l | l | }
+  	\hline
+  	rank & name & example hand \\
+  	\hline                       
+    1 & Royal flush & A\clubsuit ~ K\clubsuit ~ Q\clubsuit ~ J\clubsuit ~ 10\clubsuit \\
+    2 & Straight flush & 7\clubsuit ~ 6\clubsuit ~ 5\clubsuit ~ 4\clubsuit ~ 3\clubsuit \\
+    3 & Four of a kind & K\clubsuit ~ K\spadesuit ~ K\diamondsuit ~ K\heartsuit ~ 10\clubsuit \\
+    4 & Full house & K\clubsuit ~ K\spadesuit ~ K\diamondsuit ~ Q\heartsuit ~ Q\clubsuit \\
+    5 & Flush & K\heartsuit ~ Q\heartsuit ~ 5\heartsuit ~ 3\heartsuit ~ 2\heartsuit \\
+    6 & Straight & A\clubsuit ~ K\spadesuit ~ Q\diamondsuit ~ J\heartsuit ~ 10\clubsuit \\
+    7 & Three of a kind & A\clubsuit ~ A\diamondsuit ~ A\spadesuit ~ J\clubsuit ~ 10\clubsuit \\
+    8 & Two pairs & A\clubsuit ~ A\diamondsuit ~ 5\spadesuit ~ 5\clubsuit ~ 4\clubsuit \\
+    9 & One pair & A\clubsuit ~ A\heartsuit ~ J\clubsuit ~ 9\spadesuit ~ 2\heartsuit \\
+    10 & High card & A\clubsuit ~ K\diamondsuit ~ 6\heartsuit ~ 5\heartsuit ~ 3\heartsuit~ \\
+  	\hline   	
+  \end{tabular}
+  \caption{Ranks of different hands in Texas hold'em poker sorted best to worst. \label{tab:poker-ranks}}
+\end{table}
