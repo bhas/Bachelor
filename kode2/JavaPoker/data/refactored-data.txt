@@ -8034,13 +8034,6 @@ Jh 9d 2d 2h 7h; [Jc As, -, Kh Th, -, -, -, -]; [90/0/2248, 10/0/64125, 90/210/27
 [-, b, -, c, -, -, -]; 2/180
 Qc As 8d Ad 2c; [-, Kh Ah, -, Jc Tc, -, -, -]; [20/0/64115, 70/180/2852, 0/0/1583, 70/0/1112, 0/0/2822, 0/0/2624, 20/0/2158]
 
-#975835296; [kfish, Spade, roket88, PokiSimA, FreddySR, Kishi-san]
-[Bf, cc, cc, f, f, r]; 3/70
-[-, b, c, -, -, c]; 3/100
-[-, b, c, -, -, c]; 3/160
-[-, b, c, -, -, f]; 2/200
-3d Ks 4s Ac 6s; [-, 2h As, Td Kh, -, -, -]; [10/0/2822, 70/200/2504, 70/0/2108, 0/0/64065, 0/0/3042, 50/0/1613]
-
 #975835335; [kfish, Spade, roket88, PokiSimA, FreddySR, Kishi-san]
 [Bf, Bc, f, r, c, f]; 3/65
 [-, b, -, f, c, -]; 2/85
@@ -8285,13 +8278,6 @@ Ad Jc 8c 6h 3c; [-, -, As Td, -, -, 8s 8h, Ac Tc]; [40/0/810, 80/0/7319, 240/0/6
 [k, k, k, -, k, -, k]; 5/50
 [k, k, k, -, k, -, k]; 5/50
 Td Ac 5h 7h 4h; [3c 7c, Js 5s, Kc Jc, -, Qc 2c, -, 4s 8s]; [10/50/7239, 10/0/63810, 10/0/2872, 0/0/1453, 10/0/1973, 0/0/3232, 10/0/770]
-
-#975837066; [Kishi-san, dreyton00, kfish, Spade, SidDeuced, PokiSimA]
-[Bcc, cr, f, cc, f, rc]; 4/120
-[kcc, krc, -, kcc, -, br]; 4/240
-[kf, kc, -, kc, -, b]; 3/300
-[-, b, -, f, -, c]; 2/340
-8d 5c Th 9s Qc; [-, 6c Kc, -, -, -, Tc Ah]; [60/0/1478, 100/0/1963, 0/0/3232, 80/0/760, 0/0/7269, 100/340/63795]
 
 #975837150; [Kishi-san, dreyton00, kfish, Spade, SidDeuced, PokiSimA]
 [Bf, Br, f, cc, cc, f]; 3/65

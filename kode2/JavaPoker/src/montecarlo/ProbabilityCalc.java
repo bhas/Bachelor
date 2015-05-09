@@ -9,7 +9,7 @@ import java.util.List;
 
 public class ProbabilityCalc {
 	private static final int CALCULATIONS = 50000;
-	private static final int THREADS = 20;
+	private static final int THREADS = 10;
 
 	public static Probability getProbability(List<Card> hand,
 			List<Card> community, int opponents) {

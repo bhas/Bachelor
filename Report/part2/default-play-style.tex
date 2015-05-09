@@ -17,21 +17,42 @@ Because the default strategy has to work against any type of opponent, we don't 
 \subsection{Design}
 To create a default strategy we have two options which satisfies our requirements.
 
-One way use a professional players guideline on how to handle every situation that our bot could reach. This could be achieved by hard coding the decisions into the program and take every scenario into account, so the bot wont ever have to think for itself.
-
-Another way is make the a bot who is able to read, understand and learn from the poker data.
-The poker data provided by the University of Alberta real life poker players have been observed and the data throughout the game have been collected. 
-This data will be used to develop the default strategy, by making the bot learn from the real life players choices.
-In our case this seems like the best way to go, as the default strategy there will be hybrid as it learns many different ways of 
-playing the game by various players and putting them together as one. 
-If we were to hardcore every situation this would both be time consuming but also make the strategy valuable as an intelligent opponent
-would be able to some extend predict which choices that our bot would make. 
+One way is to use a professional players guideline on how to handle every situation that our bot could reach. This could be achieved by hard coding the decisions into the program and take every scenario into account, so the bot wont ever have to think for itself. If we were to hardcore every situation this would both be time consuming compared to implementing a self learning bot, but it would also make the strategy vulnerable as an intelligent opponent to some extend predict the future behaviour of the bot.
 
 
-To solve our problem statement we developed a system that is able to learn from a dataset with information about a number of poker games with different players.
+To implement a self learning bot, we would have to create a system that is able to read, understand, and learn from the poker data that were provided by University of Alberta. The University of Alberta has a research group that specializes in computer poker players.  Real life poker players have been observed and the data regarding the players behaviours throughout the game have been collected and inserted into that dataset. 
+This data will be used to develop the default strategy, by making the bot learn from the real life players behaviours.
+In our case this seems like the best way to go, as the default strategy will be hybrid as it learns many different ways of 
+playing the game by various players and putting them together as one creating a more general player.
+
+
+There are various ways to implement artificial intelligence in a game of poker but they are all imperfect as there is a lot of imperfect information in a game of poker. The way that was chosen to be used in this thesis is a neural network. A supervised neural network is when the neural network has a targeted output. This means that when the neural network is trying to learn from the dataset we know what the system should output. Given the data from our dataset has the action of the players, a supervised learning neural network can be created, by targeting the output to the given action the player performed. To create a neural network a framework called Neuroph. Neuroph was used as it was well documented.\\
+
+
+A perceptron is a simple neural network which has inputs and outputs, but no hidden layers in which calculations could be made. Each neuron has a weight that is an indicator on how much a given input means for the output of the network. The sum of each neurons weight is passed into a transfer function, that is a mathematical representation for constructing the curve that fits the data points best.
+To see if a a simple neural network could solve our problem statement, a simple perceptron was created. The perceptron takes two inputs, and gives two outputs. The inputs are given by looking at each hand in the dataset that is visible and following that given players behaviour.
+The first input being the probability, that the current player who the perceptron is looking at in the dataset, has the winning hand. The second input being how many opponents the current player are playing against. 
+The two outputs tell us if the strategy of the current player is aggressive or defensive. 
+The perceptron uses a sigmoid transfer function to give us us the desired output 1 or 0 as to whether the strategy of the current player is aggressive or defensive.
+\input{unused/nn1.tex}
+This approach did not seem to suit our needs as after training the neural network it did not make reasonable decisions. The neural network somewhat found a context between the number of opponents versus as to if we should be aggressive or not. The probability of the player having the winning hand did not weight as much as the number of opponents did. Therefore we chose to implement a more complex neural network as the results from the perceptron perhaps were not the most preferable decisions in the given situations.\\
+
+
+A multi-layer-perceptron(will be refereed to as MLP) is closely related to our first described perceptron. The most simple structure is almost identical, but instead only having 2 layers, the input and output layers. The MLP can have multiple hidden layers inbetween the two layers of inputs and outputs.
+The inputs in the MLP is taking the same as the earlier discussed perceptron, but also the chips the current player has, how much it will cost the player to call the current bid, and the total pot(a.k.a the profit) for that game state.
+The MLP has 1 hidden layer with 2 hidden neurons. One hidden neuron for the probability of having the winning hand and the number of opponents. The second hidden neuron is for the chips, the cost and the pot.
+As with the perceptron the sum of each weight in the MLP will be passed into a transfer function. In this case we chose to use a STEP function.
+
+\input{unused/nn2.tex}
+
 
 
 \subsection{Test}
+To test our first simple neural network a.k.a the perceptron, we ran through x games in the dataset. The neural network is not able to get particular smarter when running through an additional set of entries as the data is from different players and x games should be sufficient for the neural network to gain some kind of knowledge on how to play as the goal of this strategy is not to have a bot that can beat the opponents but minimize the loses.
+The neural network now had to learn from the dataset 
+ 
+
+
 \subsection{Discussion}
 When our artificial intelligence starts out by playing the games of poker it doesn't have any kind of information about the opponents. So to make sure that the bot wont just go keep throwing away the bank roll. Instead we wanted the bot to minimizes our losses so that we would still have a decent bank roll when we have gathered information about the opponents so that the bot could make qualified guesses at what move would be the most appropriate in terms of the current opponent. The default player was never meant to be on the same level as a human player, but humans are only in a slightly better position than the default bot. The human player can like the bot only see the hole and community cards, but a human is also able to make a profile of the bot in their head. This means that they can learn how the bot decides and exploit this. 
 This is one of the reasons that we chose to go with a neural network. In a neural network we are able to of course train the network to make correct decisions based on the targeted output that we give it.

@@ -25,9 +25,13 @@ public class DefaultPlayer {
 	private NeuralNetwork neural;
 	private DataSet dataset;
 	public static String datasetFile = "nn-dataset";
+	public static String neuralNetwork = "nn-trained";
 	private SupervisedLearning learning;
 
 	public static void main(String[] args) throws IOException {
+		long startTime = System.nanoTime();
+		//code
+
 		DefaultPlayer dp = new DefaultPlayer();
 		dp.designNN1();
 		dp.loadData();
@@ -53,7 +57,9 @@ public class DefaultPlayer {
 		dp.test("Ac Ad", "5d 9s Kc", 3); //d
 		dp.test("Ac Ad", "5d 9s Kc 2h", 3); //a
 		dp.test("Ac Ad", "5d 9s Kc 2h", 2); //d
-		dp.test("Ac Ad", "5d 9s Kc 2h 7c", 9);//d
+		dp.test("Ad Kd", "Qd Jd Td 2h 7c", 9);//d
+		long endTime = System.nanoTime();
+		System.out.println("Took "+ (endTime - startTime )/1000000000.0 + " seconds"); 
 		
 		//aggressive
 		
@@ -70,7 +76,7 @@ public class DefaultPlayer {
 		try {
 			int a = 0;
 			DataHolder data = dr.next();
-			while (data != null && a < 225) {
+			while (data != null ) {
 				System.out.println("Game: " + data.id);
 				int totalChips = 0;
 				for (int[] i : data.profits) {
@@ -111,6 +117,7 @@ public class DefaultPlayer {
 				a++;
 				data = dr.next();
 				System.out.println("done with " + a);
+				dataset.save(datasetFile);
 			}
 			dataset.save(datasetFile);
 
@@ -127,8 +134,8 @@ public class DefaultPlayer {
 					s.preBal, s.cost, s.profit, totalChips);
 			double[] outputData = s.aggressive ? new double[] { 0, 1 }
 					: new double[] { 1, 0 };
-			System.out.println(Arrays.toString(inputData) + " "
-					+ Arrays.toString(outputData));
+//			System.out.println(Arrays.toString(inputData) + " "
+//					+ Arrays.toString(outputData));
 			dataset.addRow(inputData, outputData);
 		}
 
@@ -149,6 +156,7 @@ public class DefaultPlayer {
 		DataSet dataset = DataSet.load(datasetFile);
 		neural.setLearningRule(learning);
 		neural.learn(dataset);
+		neural.save(neuralNetwork);
 		System.out.println("finished learning");
 	}
 
@@ -206,7 +214,7 @@ public class DefaultPlayer {
 		dataset = new DataSet(2, 2);
 
 		learning = new PerceptronLearning();
-		learning.setMaxIterations(800000);
+		learning.setMaxIterations(10000);
 		learning.setMaxError(0.001);
 		learning.setLearningRate(0.5);
 	}

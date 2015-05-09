@@ -6,16 +6,16 @@
 \contentsline {subsection}{\numberline {1.4}Conclusion}{11}{subsection.1.4}
 \contentsline {section}{\numberline {2}Learning default play style}{12}{section.2}
 \contentsline {subsection}{\numberline {2.1}Design}{12}{subsection.2.1}
-\contentsline {subsection}{\numberline {2.2}Test}{12}{subsection.2.2}
-\contentsline {subsection}{\numberline {2.3}Discussion}{12}{subsection.2.3}
-\contentsline {subsection}{\numberline {2.4}Conclusion}{13}{subsection.2.4}
-\contentsline {section}{\numberline {3}Adapt to opponents}{14}{section.3}
-\contentsline {subsection}{\numberline {3.1}Introduction}{14}{subsection.3.1}
-\contentsline {subsection}{\numberline {3.2}What is player-modeling?}{14}{subsection.3.2}
-\contentsline {subsection}{\numberline {3.3}How can we model a player dynamically?}{15}{subsection.3.3}
-\contentsline {subsubsection}{\numberline {3.3.1}Neural Network}{15}{subsubsection.3.3.1}
-\contentsline {subsection}{\numberline {3.4}Test}{17}{subsection.3.4}
-\contentsline {subsection}{\numberline {3.5}Discussion}{17}{subsection.3.5}
-\contentsline {subsection}{\numberline {3.6}Conclusion}{17}{subsection.3.6}
-\contentsline {section}{\numberline {4}Discussion}{17}{section.4}
-\contentsline {section}{\numberline {5}Conclusion}{17}{section.5}
+\contentsline {subsection}{\numberline {2.2}Test}{14}{subsection.2.2}
+\contentsline {subsection}{\numberline {2.3}Discussion}{15}{subsection.2.3}
+\contentsline {subsection}{\numberline {2.4}Conclusion}{16}{subsection.2.4}
+\contentsline {section}{\numberline {3}Adapt to opponents}{17}{section.3}
+\contentsline {subsection}{\numberline {3.1}Introduction}{17}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}What is player-modeling?}{17}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}How can we model a player dynamically?}{17}{subsection.3.3}
+\contentsline {subsubsection}{\numberline {3.3.1}Neural Network}{18}{subsubsection.3.3.1}
+\contentsline {subsection}{\numberline {3.4}Test}{20}{subsection.3.4}
+\contentsline {subsection}{\numberline {3.5}Discussion}{20}{subsection.3.5}
+\contentsline {subsection}{\numberline {3.6}Conclusion}{20}{subsection.3.6}
+\contentsline {section}{\numberline {4}Discussion}{20}{section.4}
+\contentsline {section}{\numberline {5}Conclusion}{20}{section.5}
