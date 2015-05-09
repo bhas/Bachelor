@@ -29,7 +29,19 @@ To implement the self-learning algorithm we use an artificial neural networks (A
 
 \subsection{Artificial neural network}
 \label{sec:nn}
-An artificial neural network (ANN) inspired by the human brain. It consists of neurons that are connected into a network. Each neuron takes a set of inputs and give one output. An ANN can take any number of inputs and return any number of outputs. The network consists of three types of layers as shown in figure. An ANN will always have an input layer and an output layer but it can have any number of hidden layers. The input layer takes the inputs fed to the neural network. 
+An artificial neural network (ANN) inspired by the human brain. An ANN can take any number of inputs and return any number of outputs. 
+
+An ANN is made up of neurons that are connected into a network. Each neuron takes a set of inputs and give one output. Each input has a weight that determines influence of the input. The neuron uses an input function to calculate the net input, usually the sum of all weighted inputs. A transfer function takes the net input as argument and produces the output.
+
+\begin{figure}[H]
+  \center
+    \includegraphics[scale=0.5]{images/nn/neuron.png}
+  \caption{Model of a neuron. \label{fig:neuron}}
+\end{figure}
+
+The network consists of three types of layers as shown in figure. An ANN will always have an input layer and an output layer but it can have any number of hidden layers.
+
+The ANN can be trained using a training set of inputs and expected outputs (depending of the learning rule). The ANN starts with random values for all the weights. For each input and expected output it will then adjust the weight in order to get closer to the expected result.   
 
 A supervised neural network is when the neural network has a targeted output. This means that when the neural network is trying to learn from the dataset we know what the system should output. Given the data from our dataset has the action of the players, a supervised learning neural network can be created, by targeting the output to the given action the player performed. To create a neural network a framework called Neuroph. Neuroph was used as it was well documented.\\
 
