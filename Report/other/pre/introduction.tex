@@ -7,21 +7,19 @@ Another big element of poker is statistics. Since the players do not know the ca
 
 
 In the field of artificial intelligence research games are interesting because of their well-defined game rules and success criteria.
-Computers have already mastered some of the popular games. One example is the chess bot Deep Blue which won against Garry Kasparov, the world champion of chess at that time.
+Computers have already mastered some of the popular games, one example is the chess computer Deep Blue which won against Garry Kasparov, the world champion of chess at the time.
 Chess is a game of perfect information, as no information is hidden from the players.
-Since then the interest of the artificial intelligence research has shifted towards games with imperfect information. These types of games presents new challenges such as deception and hidden information. 
+Since then the interest of the artificial intelligence research has shifted towards games with imperfect information. These types of games presents new challenges such as deception and hidden information. Poker is an example of a game with imperfect information.
 
-Developing an algorithm capable of playing poker is not only limited to the domain of poker but can end up having a future applications in other domains as well. In essence a game presents a challenge for the players to solve. How the player approaches the challenge and what strategy uses to solve it, are what determines the players success. Likewise in any other domain a person will be presented with a number of challenges which each requires the person to develop a strategy.\\
+Developing an algorithm capable of playing poker is not only limited to the domain of poker but can have future applications in other domains as well. In essence a game presents a challenge for the players to solve. How the player approaches the challenge and what strategy uses to solve it, is what determines the players success. Likewise in any other domain a person will be presented with a number of challenges which each requires the person to develop a strategy to solve it.\\
 
-
-The goal of this thesis is to see if it is possible to train a computer to play poker and adapt to its opponents strategy. In order to achieve this goal we first need to solve the following problem statements:
-
+The goal of this thesis is to see if it is possible to train a computer to play poker and adapt to its opponents strategy. In order to achieve this goal we have created the following problem statements that we will answer:
 
 \vspace{4mm}
 \begin{statementBox2}{Problem statements}
 \begin{enumerate}
-    \item \label{itm:q1} How can we predict the probability of ending up with the winning hand? 
-    \item \label{itm:q2} Can the computer learn to play poker by observing humans playing poker, and if so how can we implement it? 
+    \item \label{itm:q1} How can we calculate the probability of ending up with the winning hand? 
+    \item \label{itm:q2} How can we develop a default strategy without having information about the opponents? 
     \item \label{itm:q3} How can the computer adapt to the opponents strategies?
   \end{enumerate}
 \end{statementBox2}
@@ -29,7 +27,7 @@ The goal of this thesis is to see if it is possible to train a computer to play 
 
 Our thesis is divided into three sections each of which focuses on one problem statement.
 
-In section~\ref{sec:part1} we develop a subsystem which is able to estimate the probability of winning for any set of hole cards in any poker state. The subsystem can calculate the probability of winning with an error percentage of one percent and it takes less than a second on average.
+In section~\ref{sec:part1} we find a solution to problem statement one. We develop a subsystem which is able to estimate the probability of winning for any set of hole cards in any poker state. The subsystem can calculate the probability of winning with an error percentage of one percent and it takes less than a second on average.
 
 In section~\ref{sec:part2} ...
 

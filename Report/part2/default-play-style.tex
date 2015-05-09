@@ -1,34 +1,37 @@
-\section{Learning default play style}
+\section{Learning a default strategy}
 \label{sec:part2}
 In the previous chapter we created a calculator which can calculate the probability of winning with any hole cards in any game state. We will use the calculator in this section to estimate the strength of our hole cards.\\
 
 Before we can learn our poker bot to adapt to opponents strategy we first need it to learn a default one. When the poker bot first joins a poker game it has no information about the opponent. In this case it must use a default strategy while it gathers more information.
+
 In this chapter we will find a solution to the problem statement:
 
 \vspace{4mm}
-\begin{statementBox}
-How can we make a default strategy without having information about the opponents?
-\end{statementBox}
+\begin{statementBox2}{Problem statement 2}
+How can we develop a default strategy without having information about the opponents?
+\end{statementBox2}
 \vspace{4mm}
 
 Because the default strategy has to work against any type of opponent, we don't expect it to be able to win against every type of opponent. The focus of the default strategy is not to make the poker bot win, although that would be preferable, its goal is instead to reduce the loses while the system gathers information about the opponent. But how can we make sure that we create a bot that plays on a sufficient level that it wont loose unnecessary?
 
-
 \subsection{Design}
-To create a default strategy we have two options which satisfies our requirements.
+To develop a default strategy we have two options.
 
-One way is to use a professional players guideline on how to handle every situation that our bot could reach. This could be achieved by hard coding the decisions into the program and take every scenario into account, so the bot wont ever have to think for itself. If we were to hardcore every situation this would both be time consuming compared to implementing a self learning bot, but it would also make the strategy vulnerable as an intelligent opponent to some extend predict the future behaviour of the bot.
+The first option is to directly program how the computer shall act in all situations. In this case the programmers need a deep insight in how to play poker in order to decide what decisions are optimal in the different situations. One can also use the expertise of professional poker players in case one lack the insight.
 
+The second option is to develop an self-learning algorithm for the computer. Such an algorithm uses the concept \textit{watch and learn} by observing other players playing poker and trying to learn the strategy behind the decisions. This method requires that the computer has something to observe.
 
-To implement a self learning bot, we would have to create a system that is able to read, understand, and learn from the poker data that were provided by University of Alberta. The University of Alberta has a research group that specializes in computer poker players.  Real life poker players have been observed and the data regarding the players behaviours throughout the game have been collected and inserted into that
- dataset. 
-This data will be used to develop the default strategy, by making the bot learn from the real life players behaviours.
-In our case this seems like the best way to go, as the default strategy will be hybrid as it learns many different ways of 
-playing the game by various players and putting them together as one creating a more general player.
+Since we do not have any particular insight in how to play poker and do not have expertise from any pro poker players, we will implement a self-learning algorithm. Another advantage by using this method is that the computer is not limited by our understanding of the game instead it might end up learning things we did not know beforehand.
 
+The University of Alberta has a research group that specializes in field of artificial intelligence in poker. They have released a dataset containing data from ~18.000 real-life rounds of Texas hold'em limit poker. The dataset only contains the hole cards of the players who make it to the showdown, so there is no data about the hole cards of the players who folds. This data will be used to develop the default strategy.\\
 
-There are various ways to implement artificial intelligence in a game of poker but they are all imperfect as there is a lot of imperfect information in a game of poker. The way that was chosen to be used in this thesis is a neural network. A supervised neural network is when the neural network has a targeted output. This means that when the neural network is trying to learn from the dataset we know what the system should output. Given the data from our dataset has the action of the players, a supervised learning neural network can be created, by targeting the output to the given action the player performed. To create a neural network a framework called Neuroph. Neuroph was used as it was well documented.\\
+To implement the self-learning algorithm we use an artificial neural networks (ANN), see section \ref{sec:nn}. Our algorithm needs to recognise patterns in the players decisions and ANNs are very good at this. 
 
+\subsection{Artificial neural network}
+\label{sec:nn}
+An artificial neural network (ANN) inspired by the human brain. It consists of neurons that are connected into a network. Each neuron takes a set of inputs and give one output. An ANN can take any number of inputs and return any number of outputs. The network consists of three types of layers as shown in figure. An ANN will always have an input layer and an output layer but it can have any number of hidden layers. The input layer takes the inputs fed to the neural network. 
+
+A supervised neural network is when the neural network has a targeted output. This means that when the neural network is trying to learn from the dataset we know what the system should output. Given the data from our dataset has the action of the players, a supervised learning neural network can be created, by targeting the output to the given action the player performed. To create a neural network a framework called Neuroph. Neuroph was used as it was well documented.\\
 
 A perceptron is a simple neural network which has inputs and outputs, but no hidden layers in which calculations could be made. Each neuron has a weight that is an indicator on how much a given input means for the output of the network. The sum of each neurons weight is passed into a transfer function, that is a mathematical representation for constructing the curve that fits the data points best.
 To see if a a simple neural network could solve our problem statement, a simple perceptron was created. The perceptron takes two inputs, and gives two outputs. The inputs are given by looking at each hand in the dataset that is visible and following that given players behaviour.
