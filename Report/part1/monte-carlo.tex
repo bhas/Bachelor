@@ -8,19 +8,19 @@ How can we predict the probability of ending up with the winning hand?
 \end{statementBox2}
 \vspace{4mm}
 
-Since a player do not know the outcome of the community cards during a round of poker we have to estimate odds of winning based on the possible outcomes of the community cards. It would be too time consuming to check every outcome as there are more than 250 millions different outcomes of community cards alone. Additionally, the poker rules are quite complex when it comes to determining the wining hand, therefore it is almost impossible to make a formula to calculate the exact probability. In order to find the probability without having to check the outcome of 250 million hands we need to find an estimate rather than an exact probability. 
+Since a player do not know the outcome of the community cards during a round of poker we have to estimate odds of winning based on the possible outcomes of the community cards. It would be too time consuming to check every outcome as there are more than 250 millions different outcomes of community cards alone. In order to find the probability without having to check all possible outcomes, we need to find an estimate rather than an true probability. 
 
 \subsection{Design}
 When trying to find an estimate we have two options.
 
-One option is to create a simplified formula to estimate the strength of the hand. The Chen formula is an example of this. This method is straight forward but the disadvantage is that it can only be used for preflop and would limit the implementation further in the project.
+One option is to create a simplified formula to estimate the strength of the hand. This method is straight forward but the disadvantage is that it can only be used for pre-flop and would limit the implementation further in the project.
 
-Another option is to use the Monte Carlo method to simulate a lot of games and get an estimate of the probability. The Monte Carlo method is also considered to be more precise than methods similar to the it. 
+Another option is to use the Monte Carlo method to simulate a lot of games and get the distribution of outcomes. This distribution can then be used to find the probability for any of the outcomes.
 
-For a human player the simplified formula would work best but in our case the Monte Carlo method is best suited. This is because, a computer has no problem performing calculating thousand of games, but a human would struggle to keep track of the different results from each simulation of a game. Not to mention, that a computer can calculate mathematical formulas many times faster than a human. This method also gives a trade-off between accuracy and computations which allows us to decide how accurate an estimate we need. The major poker sites also use this method to calculate the probability of ending up with the winning hand.\\
+For a human player a simplified formula would work best but in our case the Monte Carlo method is best suited. This is because, a computer can perform thousands of simulations in no time. This method also gives a trade-off between accuracy and the number of simulations. This allows us to decide how accurate an estimate we need by regulating the number of simulations. The major poker sites also use the Monte Carlo method to determine each players probability of winning.\\
 
-The Monte Carlo method has been implemented in as a subsystem in a playable poker game to perform the simulations and return the probability of winning given a set of hole cards. We will refer to this subsystem as the calculator. The calculator takes three arguments: the hole cards of the player, the community cards (optional) and the number of opponents. The calculator then performs the simulations and returns an object containing the distribution of outcomes.
-Caniwin~\cite{caniwin} is a website that has calculated the probability of winning with each of the 169 different hole cards combination. We consider caniwins results to be the actual probability of winning with a given combination of hole cards. This sites results is limted to the preflop game state, but is still a good indicator to prove that the Monte Carlo method has been implemented correctly.
+The solution is implemented as a subsystem that uses the Monte Carlo method. We will refer to this subsystem as the calculator. The calculator takes three arguments: the hole cards of the player, the community cards (optional) and the number of opponents. The calculator then performs the simulations and returns an object containing the distribution of outcomes.
+Caniwin~\cite{caniwin} is a website that has calculated the true probability by simulating every possible outcome. We will compare the results from the calculator with the ones from caniwin. Caniwin's results are limited to the pre-flop game state, so we can only test the calculator for this game.
 
 Requirements for the calculator:
 \begin{itemize}
@@ -34,13 +34,11 @@ Requirements for the calculator:
 The Monte Carlo method can be used to calculate a distribution of results for any given set of hole cards. The system developed were given a specific combination of hole cards to calculate an estimate, on what the probability of winning with that hand was. The Monte Carlo simulation then ran x number of games with the same hand, each time giving the opponents a random set of hole cards. The distribution of results we get can be used to find the likelihood of possible outcomes by looking at how many wins and loses compared to the number of games. The more simulations that are performed the more accurate the probabilities will get when comparing to caniwins results.
 
 \subsection{Test}
-To test if the calculator can calculates the correct probabilities we find the probability of a number of different pre-flop scenarios and compare the result with the results of caniwin. Every test have been preformed with 50.000 simulations against one opponent. The result can be seen in table \ref{tab:pre-flop-test}. From the results we can see that for all hole cards the error percentage is less than one.
+To test if the calculator can calculates the correct probabilities we find the probability of a number of different pre-flop scenarios and compare the result with the results by caniwin. Every test have been preformed with 50.000 simulations against one opponent. The result can be seen in table \ref{tab:pre-flop-test}. From the results we can see that for all hole cards the error percentage is less than one.
 
-To test the accuracy of the calculator we try to find a number of simulations that fulfil the requirements. This is done by comparing the error percentage we get with a different number of simulations. Each test is performed with a pair of jacks in pre-flop with one opponent. Caniwin found the probability to be 77,1 \%. Figure~\ref{fig:mc1}, \ref{fig:mc10} and \ref{fig:mc50} shows the distribution of results from 50 tests. Each test result is indicated with a red dot. In figure~\ref{fig:mc1} we can see the results ranges from 74,4 \% to 79,6 \% (5,2 \%). In figure~\ref{fig:mc10} the range is only 75,7 \% to 77,9 \% (2,2 \%) and finally in figure~\ref{fig:mc50} the range is down to 76,4 \% to 77,3 \% (0,9 \%).
+To test the accuracy of the calculator we try to find a number of simulations that fulfil the requirements. This is done by comparing the error percentage we get with a different number of simulations. Each test is performed with a pair of jacks in pre-flop with one opponent. The true probability is 77,1 \%. Figure~\ref{fig:mc1}, \ref{fig:mc10} and \ref{fig:mc50} shows the distribution of results from 50 tests. Each test result is indicated with a red dot. In figure~\ref{fig:mc1} we can see the results ranges from 74,4 \% to 79,6 \% (5,2 \%). In figure~\ref{fig:mc10} the range is only 75,7 \% to 77,9 \% (2,2 \%) and finally in figure~\ref{fig:mc50} the range is down to 76,4 \% to 77,3 \% (0,9 \%).
 
 In table \ref{tab:mc-total} you can see the combined result. The range is the difference between the lowest and highest result and the max error is the maximum deviation from caniwin.
-
-
 
 \begin{figure}[H]
   \center
@@ -60,8 +58,8 @@ In table \ref{tab:mc-total} you can see the combined result. The range is the di
   \caption{Result of the calculator with 50.000 simulations \label{fig:mc50}}
 \end{figure}
 
-The three graphs clearly states that when using a higher amount of simulations, the more accurate the probability will become.
-The error percentage in table 2 have been calculate by comparing the calculators results to caniwin: \[Our result - caniwin\]
+The three graphs clearly shows that when using a higher amount of simulations, the more accurate the probability becomes.
+The error percentage in table \ref{tab:pre-flop-test} is found using the formula: $P_{O} - P_{T}$. Here $P_{O}$ is the probability found by the calculator and $P_{T} $ is the true probability. 
 We settled for 50.000 as the number of simulations for our calculator. This satisfies our requirements..
 
 \vspace{4mm}
@@ -70,7 +68,7 @@ We settled for 50.000 as the number of simulations for our calculator. This sati
   \center
   \begin{tabular}{ | l | l | l | l | }
   	\hline
-  	hole cards & our result (\%) & caniwin (\%) & error (\%) \\
+  	hole cards & $P_{O}$ (\%) & $P_{T}$ (\%) & error (\%) \\
   	\hline                       
     A\clubsuit ~ A\diamondsuit & 85,2 & 84,9 & 0,3 \\
     8\clubsuit ~ 8\diamondsuit & 67,9 & 68,7 & 0,8 \\
@@ -96,7 +94,7 @@ The pair of fives in this table have a zero percent chance of winning at the riv
   \center
   \begin{tabular}{ | l | l | l | l | l | l | }
   	\hline
-  	hole cards & community cards & preflop (\%) & flop (\%) & turn (\%) & river (\%) \\
+  	hole cards & community cards & pre-flop (\%) & flop (\%) & turn (\%) & river (\%) \\
   	\hline 
   	A\clubsuit ~ K\diamondsuit & 3\spadesuit ~ 7\clubsuit ~ T\clubsuit ~ 8\diamondsuit ~ 2\spadesuit & 64,5 & 54,4 & 41,7 & 35,6\\
   	\hline                     
@@ -123,7 +121,7 @@ Despite a pair of aces is a good hand, the number of opponents makes the chances
   	win probability (\%) & 85,2 & 73,4 & 64,0 & 56,1 & 49,5 & 43,9 & 39,1 & 35,0 & 31,6 \\
   	\hline                       	
   \end{tabular}
-    \caption{Chance of winning with the hole cards A\spadesuit A\clubsuit in preflop \label{tab:winchance}}
+    \caption{Chance of winning with the hole cards A\spadesuit ~ A\clubsuit in pre-flop \label{tab:winchance}}
 \end{table}
 
 The time have been calculated by finding an average of 100 calculations of the same hole cards.
