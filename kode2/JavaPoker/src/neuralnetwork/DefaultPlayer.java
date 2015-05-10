@@ -34,7 +34,7 @@ public class DefaultPlayer {
 
 		DefaultPlayer dp = new DefaultPlayer();
 		dp.designNN1();
-		//dp.loadData();
+		dp.loadData();
 		dp.train();
 		
 		// defensive
@@ -76,7 +76,7 @@ public class DefaultPlayer {
 		try {
 			int a = 0;
 			DataHolder data = dr.next();
-			while (data != null ) {
+			while (data != null) {
 				System.out.println("Game: " + data.id);
 				int totalChips = 0;
 				for (int[] i : data.profits) {
@@ -119,8 +119,6 @@ public class DefaultPlayer {
 				System.out.println("done with " + a);
 				dataset.save(datasetFile);
 			}
-			dataset.save(datasetFile);
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
