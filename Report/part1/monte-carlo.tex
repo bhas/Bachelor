@@ -89,6 +89,44 @@ We settled for 50.000 as the number of simulations for our calculator. This sati
 \end{table}
 \vspace{4mm} 
 
+The pair of fives in this table have a zero percent chance of winning at the river, because the monte carlo does not count a draw as a win.
+\vspace{4mm}
+\def\arraystretch{1.5}
+\begin{table}[H]
+  \center
+  \begin{tabular}{ | l | l | l | l | l | l | }
+  	\hline
+  	hole cards & community cards & preflop (\%) & flop (\%) & turn (\%) & river (\%) \\
+  	\hline 
+  	A\clubsuit ~ K\diamondsuit & 3\spadesuit ~ 7\clubsuit ~ T\clubsuit ~ 8\diamondsuit ~ 2\spadesuit & 64,5 & 54,4 & 41,7 & 35,6\\
+  	\hline                     
+    2\diamondsuit ~ 5\spadesuit & 3\spadesuit ~ 6\diamondsuit ~ K\diamondsuit ~ 4\heartsuit ~ 7\spadesuit & 29,7 & 28,2 & 92,8 & 94,2 \\
+    \hline
+    8\spadesuit ~ 9\spadesuit & 2\diamondsuit ~ K\spadesuit ~ 3\spadesuit ~ A\clubsuit ~ T\spadesuit & 49,1 & 53,5 & 38,5 & 99,7 \\    
+    \hline
+    5\spadesuit ~ 5\clubsuit & A\diamondsuit ~ K\heartsuit ~ Q\spadesuit ~ J\diamondsuit ~ T\heartsuit & 58,5 & 48,0 & 34,4 & 0,0 \\    
+  	\hline   	
+  \end{tabular}
+    \caption{Test results for different hole cards in pre-flop, flop, turn, and river with one opponent \label{tab:monte}}
+\end{table}
+\vspace{4mm} 
+
+Despite a pair of aces is a good hand, the number of opponents makes the chances of winning a lot less
+\vspace{4mm}
+\def\arraystretch{1.5}
+\begin{table}[H]
+  \center
+  \begin{tabular}{ | l | l | l | l | l | l | l | l | l | l |}
+  	\hline
+  	opponents & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\
+  	\hline 
+  	win probability (\%) & 85,2 & 73,4 & 64,0 & 56,1 & 49,5 & 43,9 & 39,1 & 35,0 & 31,6 \\
+  	\hline                       	
+  \end{tabular}
+    \caption{Chance of winning with the hole cards A\spadesuit A\clubsuit in preflop \label{tab:winchance}}
+\end{table}
+
+The time have been calculated by finding an average of 100 calculations of the same hole cards.
 \vspace{4mm}
 \begin{table}[H]
   \center
@@ -96,9 +134,9 @@ We settled for 50.000 as the number of simulations for our calculator. This sati
     \hline
     simulations & range (\%) & max error (\%) & time (seconds) \\
     \hline                       
-    1000 & 5,2 & 2,7 & 0,03 \\
-    10.000 & 2,2 & 1,5 & 0,22\\
-    50.000 & 0,9 & 0,7 & 0,82\\
+    1000 & 5,2 & 2,7 & \textasciitilde{ 0,01} \\
+    10.000 & 2,2 & 1,5 & \textasciitilde{ 0.04}\\
+    50.000 & 0,9 & 0,7 & \textasciitilde{ 0.15}\\
   \hline  
   \end{tabular}
   \caption{Combined test results from running the calculator with different numbers of simulations. \label{tab:mc-total}}
@@ -106,7 +144,7 @@ We settled for 50.000 as the number of simulations for our calculator. This sati
 \vspace{4mm}
 
 \subsection{Discussion}
-For the implementation of the calculator the Monte Carlo method was. This method works well for the needs. The calculator can calculate the probability with an error percentage of less than one percent when using 50.000 simulations. This solution can be used for any poker state with up to ten players. At first it did not seem necessary to optimise the calculator any further, as the running time is acceptable. But in regards to later use or if were to scale the project, we decided to make an obvious optimisation by making it multi-threaded which speeded up the calculations by..................
+For the implementation of the calculator the Monte Carlo method was. This method works well for the needs. The calculator can calculate the probability with an error percentage of less than one percent when using 50.000 simulations. This solution can be used for any poker state with up to ten players. At first it did not seem necessary to optimise the calculator any further, as the running time is acceptable. But in regards to later use or if were to scale the project, we decided to make an obvious optimisation by making it multi-threaded which speeded up the calculations by roughly 3 times.	
 
 Alternatively we could have created our own formula to calculate a rank, or used an existing one, for instance the Chen formula. By using this method we will get a less accurate result but it will be easier to calculate. We would also have to create a formula for each game state which would cause even more work. Since performance is not a problem for our calculator we chose to use the Monte Carlo method.
 

@@ -30,15 +30,32 @@ public class MonteCarloTester {
 	}
 	
 	public static void main(String[] args) {
-		printProb("Ac Ad", 1);
-		printProb("8d 8c", 1);
-		printProb("Qd Kd", 1);
-		printProb("Ah 8d", 1);
+//		long startTime = System.nanoTime();
+//		for(int i = 0; i<100; i++){
+			printProb("As Ac", 2);
+			printProb("As Ac", 3);
+			printProb("As Ac", 4);
+			printProb("As Ac", 5);
+			printProb("As Ac", 6);
+			printProb("As Ac", 7);
+			printProb("As Ac", 8);
+			printProb("As Ac", 9);
+			
+//		}
+//		long endTime = System.nanoTime();
+//		double approx = ((endTime-startTime)/1000000000.0);
+//		System.out.println("Took "+ approx/100 + " seconds"); 
+
 	}
 	
 	private static void printProb(String hand, int opps) {
+		double st = 0.0;
+		for(int i = 0; i<100; i++){
+			Probability prob = ProbabilityCalc.getProbability(hand, null, opps);
+			st += prob.percent();
+
+		}
 		System.out.print(hand + " - ");
-		Probability prob = ProbabilityCalc.getProbability(hand, null, opps);
-		System.out.println(prob.percent());
+		System.out.println(st/100.0);
 	}
 }

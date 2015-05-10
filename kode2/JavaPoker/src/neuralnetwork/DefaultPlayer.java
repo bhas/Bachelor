@@ -34,7 +34,7 @@ public class DefaultPlayer {
 
 		DefaultPlayer dp = new DefaultPlayer();
 		dp.designNN1();
-		dp.loadData();
+		//dp.loadData();
 		dp.train();
 		
 		// defensive
