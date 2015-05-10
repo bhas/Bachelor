@@ -1,6 +1,6 @@
 \def\layersep{2.5cm}
 
-\begin{figure}
+\begin{figure}[H]
 \center
 \begin{tikzpicture}[shorten >=1pt,->,line width=0.2mm,draw=black!60, node distance=\layersep]
     \tikzstyle{every pin edge}=[<-,shorten <=1pt]
@@ -11,12 +11,12 @@
     \tikzstyle{annot} = [text width=4em, text centered]
 
     % Draw the input layer nodes
-    \node[input neuron, pin=left:win probability] (I-1) at (0,-1) {};
+    \node[input neuron, pin=left:hand strength] (I-1) at (0,-1) {};
     \node[input neuron, pin=left:opponents] (I-2) at (0,-2) {};
 
     % Draw the output layer node
-    \node[output neuron,pin={[pin edge={->}]right:Defensive}] (O-1) at (\layersep,-1) {};
-    \node[output neuron,pin={[pin edge={->}]right:Aggressive}] (O-2) at (\layersep,-2) {};
+    \node[output neuron,pin={[pin edge={->}]right:defensive}] (O-1) at (\layersep,-1) {};
+    \node[output neuron,pin={[pin edge={->}]right:aggressive}] (O-2) at (\layersep,-2) {};
 
     % Connect every node in the input layer with every node in the
     % hidden layer.
@@ -29,5 +29,5 @@
     \node[annot,above of=I-1, node distance=1cm] (il) {Input layer};
     \node[annot,right of=il] {Output layer};
 \end{tikzpicture}
-\caption{Neural network 1 \label{fig:nn1}}
+\caption{First ANN design \label{fig:nn1}}
 \end{figure}

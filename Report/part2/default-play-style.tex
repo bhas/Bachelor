@@ -25,49 +25,56 @@ Since we do not have any particular insight in how to play poker and do not have
 
 The University of Alberta has a research group that specializes in field of artificial intelligence in poker. They have released a dataset containing data from ~18.000 real-life rounds of Texas hold'em limit poker. The dataset only contains the hole cards of the players who make it to the showdown, so there is no data about the hole cards of the players who folds. This data will be used to develop the default strategy.\\
 
-To implement the self-learning algorithm we use an artificial neural networks (ANN), see section \ref{sec:nn}. Our algorithm needs to recognise patterns in the players decisions and ANNs are very good at this. 
+To implement the self-learning algorithm we use an artificial neural networks (ANN), see section \ref{sec:nn}. Our algorithm needs to recognise patterns in the players decisions and ANNs are very good at this. \\
 
-\subsection{Artificial neural network}
+We use an iterative development method to design the ANN for the algorithm. We start by designing a simple ANN and then move on to more complex ANNs.
+
+\subsubsection{Artificial neural network (ANN)}
 \label{sec:nn}
-An artificial neural network (ANN) inspired by the human brain. An ANN can take any number of inputs and return any number of outputs. 
+An artificial neural network (ANN) inspired by the human brain. It is well suited for finding an approximation to a non-linear function. An ANN can take any number of inputs and return any number of outputs. 
 
-An ANN is made up of neurons that are connected into a network. Each neuron takes a set of inputs and give one output. Each input has a weight that determines influence of the input. The neuron uses an input function to calculate the net input, usually the sum of all weighted inputs. A transfer function takes the net input as argument and produces the output.
+An ANN is made up of neurons that are connected into a network. Each neuron takes a set of inputs and give one output. The output of a neuron is sent to the connected neurons. Each input has a weight that determines influence of the input. The neuron uses an input function to calculate the net input, usually the sum of all weighted inputs, and pass it on to the transfer function. The type of transfer function determines the output. A step function return zero or one if the net input is above a certain threshold. This is useful for logical functions. If one need a value between zero and one a sigmoid function can be used instead.
 
 \begin{figure}[H]
   \center
-    \includegraphics[scale=0.5]{images/nn/neuron.png}
+    \includegraphics[scale=0.4]{images/nn/neuron.png}
   \caption{Model of a neuron. \label{fig:neuron}}
 \end{figure}
 
-The network consists of three types of layers as shown in figure. An ANN will always have an input layer and an output layer but it can have any number of hidden layers.
+An ANN consists of three types of layers as shown in figure \ref{fig:mlp}. The coloured circles are neurons and the arrows shows the connections between the neurons. It will always contain an input layer and an output layer but it can contain any number of hidden layers. The simplest type of ANN is the perceptron and is used for a single calculation. It consists of only an input layer and an output layer but no hidden layers. A multilayer perceptron also includes hidden layers and is used for more complex domains with multiple layers of computations.
 
-The ANN can be trained using a training set of inputs and expected outputs (depending of the learning rule). The ANN starts with random values for all the weights. For each input and expected output it will then adjust the weight in order to get closer to the expected result.   
+\input{other/models/perceptron.tex}
+\vspace{4mm}
+\input{other/models/multi-perceptron.tex}
 
-A supervised neural network is when the neural network has a targeted output. This means that when the neural network is trying to learn from the dataset we know what the system should output. Given the data from our dataset has the action of the players, a supervised learning neural network can be created, by targeting the output to the given action the player performed. To create a neural network a framework called Neuroph. Neuroph was used as it was well documented.\\
+The ANN can be trained using a training set of inputs. Using supervised learning, in contrast to unsupervised learning, one must also supply an expected output. The ANN starts with random values for all the weights. Backpropagation is the most common supervised learning method. For each input it will adjust the weights in order to get closer to the expected output. It will continue doing this until the outputs are close enough to the expected outputs.
 
-A perceptron is a simple neural network which has inputs and outputs, but no hidden layers in which calculations could be made. Each neuron has a weight that is an indicator on how much a given input means for the output of the network. The sum of each neurons weight is passed into a transfer function, that is a mathematical representation for constructing the curve that fits the data points best.
-To see if a a simple neural network could solve our problem statement, a simple perceptron was created. The perceptron takes two inputs, and gives two outputs. The inputs are given by looking at each hand in the dataset that is visible and following that given players behaviour.
-The first input being the probability, that the current player who the perceptron is looking at in the dataset, has the winning hand. The second input being how many opponents the current player are playing against. 
-The two outputs tell us if the strategy of the current player is aggressive or defensive. 
-The perceptron uses a sigmoid transfer function to give us us the desired output 1 or 0 as to whether the strategy of the current player is aggressive or defensive.
-\input{unused/nn1.tex}
+The ANN can be validated afterwards. This is done using a test set different from the training set.
+
+\subsubsection{First ANN design}
+For our first attempt we design a simple perceptron. The perceptron takes two inputs, and gives two outputs. 
+
+The first input is the hand strength. We use the calculator from section \ref{sec:part1} to calculate the probability of winning from the hole cards and community cards against one opponent. The reason we always find the probability against a single opponent is because the probability of winning decreases drastically as the number of opponents increases. We use the absolute hand strength rather than a hand strength relative to the number of players. 
+This makes it easier to compare the hands strengths in situations with a different number of players. The number of players is instead the second input.
+
+The first output is whether or not to be defensive by checking or calling. The second output is whether or not to be aggressive by betting or calling. The outputs will both be zero in case it is best to fold. 
+The perceptron uses a step function as transfer function in both output neurons.
+
+\input{other/models/default-nn1.tex}
+
 This approach did not seem to suit our needs as after training the neural network it did not make reasonable decisions. The neural network somewhat found a context between the number of opponents versus as to if we should be aggressive or not. The probability of the player having the winning hand did not weight as much as the number of opponents did. Therefore we chose to implement a more complex neural network as the results from the perceptron perhaps were not the most preferable decisions in the given situations.\\
 
-
+\subsubsection{Second ANN design}
 A multi-layer-perceptron(will be refereed to as MLP) is closely related to our first described perceptron. The most simple structure is almost identical, but instead only having 2 layers, the input and output layers. The MLP can have multiple hidden layers inbetween the two layers of inputs and outputs.
 The inputs in the MLP is taking the same as the earlier discussed perceptron, but also the chips the current player has, how much it will cost the player to call the current bid, and the total pot(a.k.a the profit) for that game state.
 The MLP has 1 hidden layer with 2 hidden neurons. One hidden neuron for the probability of having the winning hand and the number of opponents. The second hidden neuron is for the chips, the cost and the pot.
 As with the perceptron the sum of each weight in the MLP will be passed into a transfer function. In this case we chose to use a STEP function.
 
-\input{unused/nn2.tex}
-
-
+\input{other/models/default-nn2.tex}
 
 \subsection{Test}
 To test our first simple neural network a.k.a the perceptron, we ran through x games in the dataset. The neural network is not able to get particular smarter when running through an additional set of entries as the data is from different players and x games should be sufficient for the neural network to gain some kind of knowledge on how to play as the goal of this strategy is not to have a bot that can beat the opponents but minimize the loses.
 The neural network now had to learn from the dataset 
- 
-
 
 \subsection{Discussion}
 When our artificial intelligence starts out by playing the games of poker it doesn't have any kind of information about the opponents. So to make sure that the bot wont just go keep throwing away the bank roll. Instead we wanted the bot to minimizes our losses so that we would still have a decent bank roll when we have gathered information about the opponents so that the bot could make qualified guesses at what move would be the most appropriate in terms of the current opponent. The default player was never meant to be on the same level as a human player, but humans are only in a slightly better position than the default bot. The human player can like the bot only see the hole and community cards, but a human is also able to make a profile of the bot in their head. This means that they can learn how the bot decides and exploit this. 
