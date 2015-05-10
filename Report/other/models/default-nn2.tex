@@ -1,6 +1,6 @@
 \def\layersep{2.5cm}
 
-\begin{figure}
+\begin{figure}[H]
 \center
 \begin{tikzpicture}[shorten >=1pt,->,line width=0.2mm,draw=black!60, node distance=\layersep]
     \tikzstyle{every pin edge}=[<-,shorten <=1pt]
@@ -13,7 +13,7 @@
     % Draw the input layer nodes
     %\foreach \name / \y in {1,...,4}
     % This is the same as writing \foreach \name / \y in {1/1,2/2,3/3,4/4}
-    \node[input neuron, pin=left:win probability] (I-1) at (0,-1) {};
+    \node[input neuron, pin=left:hand strength] (I-1) at (0,-1) {};
     \node[input neuron, pin=left:opponents] (I-2) at (0,-2) {};
     \node[input neuron, pin=left:chips] (I-3) at (0,-3) {};
     \node[input neuron, pin=left:cost] (I-4) at (0,-4) {};
@@ -46,5 +46,5 @@
     \node[annot,right of=il] (hl) {Hidden layer};
     \node[annot,right of=hl] {Output layer};
 \end{tikzpicture}
-\caption{Neural network 2 \label{fig:nn2}}
+\caption{Second ANN design. \label{fig:nn2}}
 \end{figure}

@@ -15,8 +15,8 @@
     \node[input neuron, pin=left:opponents] (I-2) at (0,-2) {};
 
     % Draw the output layer node
-    \node[output neuron,pin={[pin edge={->}]right:defensive}] (O-1) at (\layersep,-1) {};
-    \node[output neuron,pin={[pin edge={->}]right:aggressive}] (O-2) at (\layersep,-2) {};
+    \node[output neuron,pin={[pin edge={->}]right:defensive action}] (O-1) at (\layersep,-1) {};
+    \node[output neuron,pin={[pin edge={->}]right:aggressive action}] (O-2) at (\layersep,-2) {};
 
     % Connect every node in the input layer with every node in the
     % hidden layer.
@@ -29,5 +29,5 @@
     \node[annot,above of=I-1, node distance=1cm] (il) {Input layer};
     \node[annot,right of=il] {Output layer};
 \end{tikzpicture}
-\caption{First ANN design \label{fig:nn1}}
+\caption{First ANN design. \label{fig:nn1}}
 \end{figure}
