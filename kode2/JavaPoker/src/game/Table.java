@@ -13,12 +13,10 @@ import java.util.Set;
 
 public class Table implements Runnable {
 	
-	private IPlayer
-	
 	private List<IPlayer> players;
 	private int BB;
 	private int startMoney;
-	private ChipManager cm;
+	private GameStateManager cm;
 	private Deck deck;
 	private ArrayList<Card> cc = new ArrayList<Card>();
 	private HashMap<IPlayer, List<Card>> hands;
@@ -26,7 +24,7 @@ public class Table implements Runnable {
 	public Table(int BB, int startMoney) {
 		this.BB = BB;
 		this.startMoney = startMoney;
-		cm = new ChipManager(BB);
+		cm = new GameStateManager();
 		players = new ArrayList<IPlayer>();
 		deck = new Deck();
 		hands = new HashMap<IPlayer, List<Card>>();

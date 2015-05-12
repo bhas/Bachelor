@@ -1,13 +1,10 @@
 package game;
 
 import game.essentials.PokerAction;
-import game.player.IPlayer;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Map.Entry;
 
 public class GameStateManager {
 
@@ -66,16 +63,14 @@ public class GameStateManager {
 			} else {
 				pa.add(PokerAction.ALL_IN);
 			}
-		}
-		else { // some higher bids
+		} else { // some higher bids
 			if (chips >= toCall) {
 				pa.add(PokerAction.CALL);
 
 				if (chips >= toCall + GameSettings.BIG_BLIND) {
 					pa.add(PokerAction.RAISE);
 				}
-			}
-			else {
+			} else {
 				pa.add(PokerAction.ALL_IN);
 			}
 		}
@@ -83,8 +78,6 @@ public class GameStateManager {
 		return pa;
 	}
 
-	
-	
 	/*
 	 * Find the position of the next player -1 if no player is found
 	 */
@@ -113,15 +106,18 @@ public class GameStateManager {
 	private void payBlinds() {
 		// next player
 		int player = next(dealer);
-		if (hasMoreThan(player, GameSettings.BIG_BLIND / 2))
-			betTo(player, GameSettings.BIG_BLIND / 2);
-		else {
+		if (hasMoreThan(player, GameSettings.BIG_BLIND / 2)) {
+			pay(player, GameSettings.BIG_BLIND / 2);
+			actor = nextActive(actor);
+		} else {
 			allIn(player);
 		}
+
 		player = next(player);
-		if (hasMoreThan(player, GameSettings.BIG_BLIND))
-			betTo(player, GameSettings.BIG_BLIND);
-		else {
+		if (hasMoreThan(player, GameSettings.BIG_BLIND)) {
+			pay(player, GameSettings.BIG_BLIND);
+			actor = nextActive(actor);
+		} else {
 			allIn(player);
 		}
 	}
@@ -147,12 +143,6 @@ public class GameStateManager {
 		return highestBid - pss[seat].bet;
 	}
 
-	
-	
-	
-	
-	
-	
 	public void commit() {
 		ArrayList<Pot> roundPot = new ArrayList<Pot>();
 		int totalPot = 0;
@@ -160,10 +150,10 @@ public class GameStateManager {
 		while (p != null) {
 			roundPot.add(p);
 			totalPot += p.amountPerPlayer;
-			p = test(totalPot);
+			p = getPot(totalPot);
 		}
 		for (Pot pot : roundPot) {
-			for (PlayerState ps : pss.values()) {
+			for (PlayerState ps : pss) {
 				if (ps.bet == 0) {
 					continue;
 				}
@@ -180,16 +170,16 @@ public class GameStateManager {
 	}
 
 	/*
-	 * Returns the 
+	 * Returns the
 	 */
 	public Pot getPot(int min) {
 		ArrayList<Integer> players = new ArrayList<Integer>();
 		int minBid = -1;
 
 		for (int seat : players) {
-			PlayerState ps = pss.get(seat);
+			PlayerState ps = pss[seat];
 			if (ps.bet > min) {
-				if (ps.bet < minBid ||  nminBid == -1) {
+				if (ps.bet < minBid || minBid == -1) {
 					minBid = ps.bet;
 				}
 				players.add(seat);
@@ -206,10 +196,10 @@ public class GameStateManager {
 	}
 
 	public void call(int seat) {
-		PlayerState ps = pss.get(seat);
+		PlayerState ps = pss[seat];
 		ps.chips -= amountToCall(seat);
 		ps.bet = highestBid;
-		actor = next(actor);
+		actor = nextActive(actor);
 	}
 
 	public int waitingFor() {
@@ -220,47 +210,54 @@ public class GameStateManager {
 		return aggressor;
 	}
 
-	public void betTo(int seat, int amount) {
-		PlayerState pc = pss.get(seat);
-		int toPay = amount - pc.bet;
-		pc.chips -= toPay;
-		pc.bet = amount;
-		highestBid = amount;
+	public void setWinner() {
+
+	}
+
+	public void raise(int seat) {
+		int toPay = amountToCall(seat) + GameSettings.BIG_BLIND;
+		pay(seat, toPay);
 		aggressor = seat;
-		actor = next(seat);
+		actor = nextActive(seat);
+	}
+
+	private void pay(int seat, int amount) {
+		PlayerState pc = pss[seat];
+		pc.chips -= amount;
+		pc.bet += amount;
 	}
 
 	public void allIn(int seat) {
-		PlayerState pc = pss.get(seat);
+		PlayerState pc = pss[seat];
 		pc.bet += pc.chips;
 		pc.chips = 0;
-		pc.isActive = false;
+		pc.active = false;
 		if (pc.bet > highestBid) {
 			highestBid = pc.bet;
 			aggressor = seat;
 		}
-		actor = next(seat);
+		actor = nextActive(seat);
 	}
 
 	public void fold(int seat) {
-		pss.get(seat).isActive = false;
-		actives.remove(seat);
+		pss[seat].active = false;
+		actor = nextActive(seat);
 	}
 
 	public int getChips(int seat) {
-		return pss.get(seat).chips;
+		return pss[seat].chips;
 	}
 
 	public int getBet(int seat) {
-		return pss.get(seat).bet;
+		return pss[seat].bet;
 	}
 
 	public int chipsToCall(int seat) {
-		return highestBid - pss.get(seat).bet;
+		return highestBid - pss[seat].bet;
 	}
 
 	public void removePlayer(int seat) {
-		pss.remove(seat);
+		pss[seat] = null;
 	}
 
 	private class PlayerState {
