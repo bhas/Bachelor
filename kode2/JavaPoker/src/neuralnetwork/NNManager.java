@@ -159,7 +159,7 @@ public class NNManager {
 			int chips, int cost, int profit, int totalChips) {
 		// String s = "input: wc:" + wc + " cc:" + cc + " opps:" + opponents
 		// + " chips:" + chips + " cost:" + cost + " profit:" + profit;
-		double[] inputData = new double[2];
+		double[] inputData = new double[5];
 		inputData[0] = ProbabilityCalc.getProbability(wc, cc, 1).percent();
 		inputData[1] = opponents / 9.0;
 		inputData[2] = chips / (double) totalChips;
