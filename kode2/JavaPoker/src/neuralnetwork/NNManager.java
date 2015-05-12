@@ -1,7 +1,12 @@
 package neuralnetwork;
 
+import graph.Graph;
+import graph.GraphData;
+import graph.GraphWindow;
+
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Random;
 
 import montecarlo.ProbabilityCalc;
 
@@ -9,10 +14,10 @@ import org.neuroph.core.NeuralNetwork;
 import org.neuroph.core.Neuron;
 import org.neuroph.core.learning.DataSet;
 import org.neuroph.core.learning.SupervisedLearning;
-import org.neuroph.core.transfer.Sigmoid;
 import org.neuroph.core.transfer.Step;
 import org.neuroph.nnet.MultiLayerPerceptron;
 import org.neuroph.nnet.Perceptron;
+import org.neuroph.nnet.learning.BackPropagation;
 import org.neuroph.nnet.learning.PerceptronLearning;
 import org.neuroph.util.TransferFunctionType;
 
@@ -21,62 +26,34 @@ import data.analyse.DataAnalyser.State;
 import data.analyse.DataReader;
 import data.analyse.DataReader.DataHolder;
 
-public class DefaultPlayer {
+public class NNManager {
+	private final String datasetFile, nnFile;
 	private NeuralNetwork neural;
 	private DataSet dataset;
-	public static String datasetFile = "nn-dataset";
-	public static String neuralNetwork = "nn-trained";
 	private SupervisedLearning learning;
 
-	public static void main(String[] args) throws IOException {
-		long startTime = System.nanoTime();
-		//code
-
-		DefaultPlayer dp = new DefaultPlayer();
-		dp.designNN1();
-		dp.loadData();
-		dp.train();
-		
-		// defensive
-		dp.test("Ac Ad", null, 1); //d
-		dp.test("Qh 9d", null, 1); //d
-		dp.test("2h 5h", null, 1); //d
-		
-		dp.test("Ac Ad", null, 3); //d
-		dp.test("Qh 9d", null, 3); //d
-		dp.test("2h 5h", null, 3); //d
-		
-		dp.test("Ac Ad", null, 6); //d
-		dp.test("Qh 9d", null, 6); //d
-		dp.test("2h 5h", null, 6); //d
-		
-		dp.test("Ac Ad", null, 9); //d
-		dp.test("Qh 9d", null, 9); //d
-		dp.test("2h 5h", null, 9); //d
-		
-		dp.test("Ac Ad", "5d 9s Kc", 3); //d
-		dp.test("Ac Ad", "5d 9s Kc 2h", 3); //a
-		dp.test("Ac Ad", "5d 9s Kc 2h", 2); //d
-		dp.test("Ad Kd", "Qd Jd Td 2h 7c", 9);//d
-		long endTime = System.nanoTime();
-		System.out.println("Took "+ (endTime - startTime )/1000000000.0 + " seconds"); 
-		
-		//aggressive
-		
+	public NNManager(int version) {
+		datasetFile = "nn/default-data" + version;
+		nnFile = "nn/default-nn" + version;
+		if (version == 1) {
+			designNN1();
+		} else if (version == 2) {
+			designNN2();
+		}
 	}
 
 	private Neuron getNeuron(int layer, int index) {
 		return neural.getLayerAt(layer).getNeuronAt(index);
 	}
 
-	private void loadData() {
+	public void createDataset(int maxRounds) {
 		DataReader dr = new DataReader();
 		DataAnalyser da = new DataAnalyser();
 
 		try {
-			int a = 0;
-			DataHolder data = dr.next();
-			while (data != null) {
+			int round = 0;
+			DataHolder data = dr.find("976266642");
+			while (data != null && round < maxRounds) {
 				System.out.println("Game: " + data.id);
 				int totalChips = 0;
 				for (int[] i : data.profits) {
@@ -114,14 +91,16 @@ public class DefaultPlayer {
 						saveStates(data.hands[i], data.cc, states, totalChips);
 					}
 				}
-				a++;
+				round++;
 				data = dr.next();
-				System.out.println("done with " + a);
-				dataset.save(datasetFile);
+				System.out.println("done with " + round);
 			}
+
+			System.out.println("Data loaded!");
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
+			dataset.saveAsTxt(datasetFile + ".txt", ",");
 			dr.closeConnection();
 		}
 	}
@@ -132,29 +111,47 @@ public class DefaultPlayer {
 					s.preBal, s.cost, s.profit, totalChips);
 			double[] outputData = s.aggressive ? new double[] { 0, 1 }
 					: new double[] { 1, 0 };
-//			System.out.println(Arrays.toString(inputData) + " "
-//					+ Arrays.toString(outputData));
 			dataset.addRow(inputData, outputData);
 		}
 
 	}
 
-	private void test(String wc, String cc, int opponents) {
-		double[] inputData = toInputData(wc, cc, opponents, 0, 0,
-				0, 0);
+	public void test(String wc, String cc, int opponents) {
+		double[] inputData = toInputData(wc, cc, opponents, 0, 0, 0, 0);
 		neural.setInput(inputData);
 		neural.calculate();
 		double[] networkOutput = neural.getOutput();
-		System.out.println(Arrays.toString(inputData) + " -> " + Arrays.toString(networkOutput));
+		System.out.println(Arrays.toString(inputData) + " -> "
+				+ Arrays.toString(networkOutput));
 
 	}
 
-	private void train() {
-		System.out.println("learning");
-		DataSet dataset = DataSet.load(datasetFile);
-		neural.setLearningRule(learning);
-		neural.learn(dataset);
-		neural.save(neuralNetwork);
+	public void loadDataset(String file) {
+		dataset = DataSet.load(file);
+	}
+
+	public void save() {
+		neural.save(nnFile);
+	}
+
+	public void train(double maxErr, int maxIte) {
+		System.out.println("Learning started");
+		GraphData gd = new GraphData();
+		int epoch = 1;
+		double err = 0;
+
+		do {
+			learning.doLearningEpoch(dataset);
+			err = learning.getTotalNetworkError();
+			System.out.println("Epoch " + epoch + ", error=" + err);
+			gd.addEntry(epoch, err);
+			epoch++;
+
+		} while (learning.getTotalNetworkError() > maxErr && epoch < maxIte);
+		System.out.println();
+		System.out.println("Neural Network Results: " + err);
+		Graph g = new Graph(gd);
+		new GraphWindow(g);
 		System.out.println("finished learning");
 	}
 
@@ -165,45 +162,23 @@ public class DefaultPlayer {
 		double[] inputData = new double[2];
 		inputData[0] = ProbabilityCalc.getProbability(wc, cc, 1).percent();
 		inputData[1] = opponents / 9.0;
-		// inputData[2] = chips / (double) totalChips;
-		// inputData[3] = cost / (double) totalChips;
-		// inputData[4] = profit / (double) totalChips;
+		inputData[2] = chips / (double) totalChips;
+		inputData[3] = cost / (double) totalChips;
+		inputData[4] = profit / (double) totalChips;
 		// System.out.println(s + " -> " + Arrays.toString(inputData));
 		return inputData;
-
 	}
 
 	public void designNN2() {
 		// create new neural network
 		neural = new MultiLayerPerceptron(5, 2, 2);
-
-		Neuron n = getNeuron(1, 0);
-
-		n.removeAllConnections();
-		n.addInputConnection(getNeuron(0, 0));
-		n.addInputConnection(getNeuron(0, 1));
-		n.addInputConnection(getNeuron(0, 5));
-
-		n = getNeuron(1, 1);
-		n.removeAllConnections();
-		n.addInputConnection(getNeuron(0, 2));
-		n.addInputConnection(getNeuron(0, 3));
-		n.addInputConnection(getNeuron(0, 4));
-		n.addInputConnection(getNeuron(0, 5));
-
-		n = getNeuron(2, 0);
-		n.setTransferFunction(new Step());
-		n.removeAllConnections();
-		n.addInputConnection(getNeuron(1, 0));
-		n.addInputConnection(getNeuron(1, 1));
-		n.addInputConnection(getNeuron(1, 2));
-
-		n = getNeuron(2, 1);
-		n.setTransferFunction(new Step());
-		n.removeAllConnections();
-		n.addInputConnection(getNeuron(1, 0));
-		n.addInputConnection(getNeuron(1, 1));
-		n.addInputConnection(getNeuron(1, 2));
+		dataset = new DataSet(5, 2);
+		learning = new BackPropagation();
+		learning.setMaxIterations(500);
+		learning.setMaxError(0.001);
+		learning.setLearningRate(0.5);
+		learning.setNeuralNetwork(neural);
+		neural.setLearningRule(learning);
 	}
 
 	public void designNN1() {
@@ -212,9 +187,10 @@ public class DefaultPlayer {
 		dataset = new DataSet(2, 2);
 
 		learning = new PerceptronLearning();
-		learning.setMaxIterations(10000);
+		learning.setMaxIterations(500);
 		learning.setMaxError(0.001);
 		learning.setLearningRate(0.5);
+		learning.setNeuralNetwork(neural);
+		neural.setLearningRule(learning);
 	}
-
 }
