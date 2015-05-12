@@ -32,14 +32,14 @@ public class MonteCarloTester {
 	public static void main(String[] args) {
 //		long startTime = System.nanoTime();
 //		for(int i = 0; i<100; i++){
-			printProb("As Ac", 2);
-			printProb("As Ac", 3);
-			printProb("As Ac", 4);
-			printProb("As Ac", 5);
-			printProb("As Ac", 6);
-			printProb("As Ac", 7);
-			printProb("As Ac", 8);
-			printProb("As Ac", 9);
+			printProb("Js 8s", 9);
+//			printProb("As Ac", 3);
+//			printProb("As Ac", 4);
+//			printProb("As Ac", 5);
+//			printProb("As Ac", 6);
+//			printProb("As Ac", 7);
+//			printProb("As Ac", 8);
+//			printProb("As Ac", 9);
 			
 //		}
 //		long endTime = System.nanoTime();
