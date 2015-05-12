@@ -9,7 +9,7 @@ public class NNTest {
 
 		NNManager dp = new NNManager(2);
 //		dp.loadDataset("nn/default-data1");
-		dp.createDataset(20);
+		dp.createDataset(200);
 //		dp.train(0, 100);
 //		dp.test("Ac Kc", "Qc Tc Jd", 9);
 
