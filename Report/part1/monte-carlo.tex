@@ -1,6 +1,6 @@
 \section{Determine the strength of a poker hand}
 \label{sec:part1}
-Our first step towards developing an adaptive poker bot is to find a way to determine the strength of any given hand in any game state. In this section we will answer the question: 
+Our first step towards developing an adaptive poker bot is to find a way to determine the strength of any given hand in any game state. In this section we will answer the following problem statement: 
 
 \vspace{4mm}
 \begin{statementBox2}{Problem statement 1}
@@ -8,40 +8,73 @@ How can one determine the strength of a poker hand?
 \end{statementBox2}
 \vspace{4mm}
 
-Since the player does not know the outcome of the community cards during a round of poker we have to calculate the strength of the hand based on the possible outcomes of the community cards. It is too time consuming to check every outcome as there are more than 250 millions different outcomes of community cards alone. In order to find the probability without having to check all possible outcomes, we need to find an estimate rather than an true probability. 
+The strength of a hand reflects the probability of winning so the stronger a hand is the more likely one are to win. Since the player does not know the outcome of the community cards during a round of poker, the player has to calculate the probability of winning based on the possible outcomes of the community cards. It is too time consuming to check every outcome as there are more than 250 millions different outcomes of community cards alone. In order to find the probability of winning without having to check all possible outcomes, one can instead make an estimate rather than calculating the true probability. 
 
 \subsection{Design}
-When trying to calculate the strength of a hand we have two options.
+When trying to estimate the strength of a hand, two options exist.
 
-The first option is to create a simplified formula to estimate the strength of the hand. This method is straight forward but the disadvantage is that it can only be used for pre-flop and would limit the implementation further in the project.
+The first option is to create a simplified formula. Such formulas already exist, but since they are very simple they tend to be rather inaccurate. This option is straight forward, but the disadvantage is, that it is hard to make a formula that is accurate for every game state.
 
 The second option is to use the Monte Carlo method to simulate a large amount of games and get the distribution of outcomes. This distribution can then be used to find the probability for any of the outcomes.
 
-For a human player a simplified formula would work best but in our case the Monte Carlo method is best suited. This is because, a computer can perform thousands of simulations in no time. This method also gives a trade-off between accuracy and the number of simulations. This allows us to decide how accurate an estimate we need by regulating the number of simulations. The major poker sites also use the Monte Carlo method to determine the strength of each players hand. The strength of a hand comes down to the chances of that hand winning.\\
+For a human player a simplified formula is necessary but due to the computational power of a computer the Monte Carlo method is optimal for the APC. The computer can perform thousands of simulations in no time. This method also gives a trade-off between accuracy and the number of simulations. This allows one to adjust the accuracy of the probability by adjusting the number of simulations. The major poker sites also use the Monte Carlo method to determine each players probability of winning.
 
-The solution is implemented as a subsystem that uses the Monte Carlo method. We will refer to this subsystem as the calculator. The calculator takes three arguments: the hole cards of the player, the community cards (optional) and the number of opponents. The calculator then performs the simulations and returns an object containing the distribution of outcomes.
+The solution is implemented as a subsystem that uses the Monte Carlo method. We will refer to this subsystem as the calculator.
 
-The true probability is found by simulating every possible outcome. The results from the calculator will be compared to the true probability.
+\RestyleAlgo{boxruled}
+\LinesNumbered
+\vspace{4mm}
+\begin{algorithm}[H]
+  \KwData{Hole cards, number of opponents, community cards (optional)}
+  \KwResult{win = 1, draw = 0, lose = -1}
+Random missing community cards\;
+Determine rank of players hand\;
+  \ForEach{opponent} {
+    Determine rank of opponents hand\;
+    \If{opponent has stronger hand}{\Return ~-1\;}
+    \ElseIf{opponent has same hand}{\Return 0\;}
+  }
+  \Return 1\;
+\caption{Pseudo-code for a single simulation}
+\end{algorithm}
+\vspace{4mm}
 
-In order to ensure the quality of the calculator we have the following requirements:
+The calculator takes three arguments: the hole cards of the player, the number of opponents, and the community cards (optional). The calculator simulates a pre-defined number of rounds and returns an object containing the distribution of wins, draws, and loses.
+
+The calculator considers it a win only if the hand beats every other hand of the opponents.
+
+In order to ensure the quality of the calculator, we have the following requirements:
 \begin{itemize}
 \item It must be able to return the probability of winning with a given hand in any game state with up to ten players.
 \item It must have a maximum error percentage of one percent. (deviation from the true probability)
 \item It must calculate the probability in less than three seconds.
 \end{itemize}
 
-10 players were chosen because a normal texas hold'em poker game can have up to ten players.
-The maximum error percentage was set to one percent as we found this a reasonable deviation from the true probability as we did not run through every possible outcome.
-Even though we want a realistic estimate of the probability we will not comprise with the runtime. Three seconds seems to be reasonable given the error percentage has a maximum of one percent. 
-
+For requirement one we chose ten players because ten is the maximum number of players in a single round.
+For requirement two we chose an error percentage of one because we found it adequate.
+For requirement three we chose three second as it seemed fast enough since most players usually have 20-30 seconds for each decision making.
 
 \subsubsection{Monte Carlo method}
-The Monte Carlo method is used to find the distribution of outcomes for a domain. Given a set of user defined inputs the monte carlo method performs the simulation to find the outcome. For each simulation the method tracks the outcomes and as the number of simulations increases, so will the accuracy of the distribution. This distribution can help to get a better understanding of the domain.
-
-The Monte Carlo method is used to find the distribution of outcomes for a domain. The system developed were given a specific combination of hole cards to calculate an estimate, on what the probability of winning with that hand was. The Monte Carlo simulation then ran x number of games with the same hand, each time giving the opponents a random set of hole cards. The distribution of results we get can be used to find the likelihood of possible outcomes by looking at how many wins and loses compared to the number of games. The more simulations that are performed the more accurate the probabilities will get when comparing to caniwins results.
+The Monte Carlo method is used to find the distribution of outcomes for a domain. Given a set of user defined inputs the Monte Carlo method performs the simulation to find the outcome. For each simulation the method tracks the outcomes and as the number of simulations increases, so will the accuracy of the distribution. This distribution can help to get a better understanding of the domain.
 
 \subsection{Test}
-To test the accuracy of the calculator we try to find a number of simulations that fulfil the requirements. This is done by comparing the error percentage we get with a different number of simulations. Each test is performed with a pair of jacks in pre-flop with one opponent. The true probability is 77,1 \%. Figure~\ref{fig:mc1}, \ref{fig:mc10} and \ref{fig:mc50} shows the distribution of results from 50 tests. Each test result is indicated with a red dot. In figure~\ref{fig:mc1} we can see the results ranges from 74,4 \% to 79,6 \% (5,2 \%). In figure~\ref{fig:mc10} the range is only 75,7 \% to 77,9 \% (2,2 \%) and finally in figure~\ref{fig:mc50} the range is down to 76,4 \% to 77,3 \% (0,9 \%).
+As mentioned earlier the number of simulations affects the accuracy of the result. First we test what number of simulations is needed to fulfil the requirements. 
+In order to find the accuracy of the probabilities we first need to know the true probabilities. For this we use caniwin \ref{caniwin}. Caniwin is a website that has simulated all possible outcomes of any pre-flop hands. Caniwin's results are limited to the pre-flop game state, so we can only test the calculator for this game state.\\
+
+After we find an optimal number of simulations we will test the accuracy of the calculator in different game states using this number of simulations.
+
+\subsubsection{Number of simulations}
+To find the optimal number of simulations for the calculator we test 
+a single hand with a different number of simulations. The calculator calculates the probability 50 times for each test. Each test is performed with the hand J\clubsuit ~ J\diamondsuit ~ in pre-flop with one opponent and the true probability of this is 77,1~\%. We then find the absolute max error and the average computation time of all calculations. The error percentage in table \ref{tab:pre-flop-test} is found using the formula: 
+
+\[err = P_{O} - P_{T}\]
+
+Here $P_{O}$ is the probability found by the calculator and $P_{T} $ is the true probability. 
+
+We plotted the results of each test in a graph, see figure \ref{fig:mc1}, \ref{fig:mc10}, and \ref{fig:mc50}. 
+Each test result is indicated with a red dot. The three graphs clearly shows that when using a higher amount of simulations, the more accurate the probability becomes.
+
+The error percentage can be seen in table \ref{tab:mc-total}.
 
 
 \begin{figure}[H]
@@ -62,14 +95,9 @@ To test the accuracy of the calculator we try to find a number of simulations th
   \caption{Result of the calculator with 50.000 simulations \label{fig:mc50}}
 \end{figure}
 
+We settled for 50.000 as the number of simulations for our calculator. This satisfies our requirements.
 
-Caniwin~\cite{caniwin} is a website that has calculated the true probability.
-Caniwin's results are limited to the pre-flop game state, so we can only test the calculator for this game.
-The three graphs clearly shows that when using a higher amount of simulations, the more accurate the probability becomes.
-The error percentage in table \ref{tab:pre-flop-test} is found using the formula: $P_{O} - P_{T}$. Here $P_{O}$ is the probability found by the calculator and $P_{T} $ is the true probability. 
-We settled for 50.000 as the number of simulations for our calculator. This satisfies our requirements..
-
-
+\subsubsection{Accuracy of the calculator}
 To test if the calculator can calculate the correct probabilities we find the probability of a number of different pre-flop scenarios and compare the result with the results by caniwin. Every test have been preformed with 50.000 simulations against one opponent. The result can be seen in table \ref{tab:pre-flop-test}. From the results we can see that for all hole cards the error percentage is less than one.
 \vspace{4mm}
 \def\arraystretch{1.5}
@@ -92,7 +120,7 @@ To test if the calculator can calculate the correct probabilities we find the pr
     2\diamondsuit ~ 7\heartsuit & 31,9 & 31,7 & 0,2 \\
   	\hline   	
   \end{tabular}
-  \caption{Test results for different hole cards in pre-flop with one opponent \label{tab:pre-flop-test}}
+  \caption{Test results for different hole cards in pre-flop with one opponent. \label{tab:pre-flop-test}}
 \end{table}
 \vspace{4mm} 
 
