@@ -14635,13 +14635,6 @@ Ts Qs 4h 6s 3c; [Kd Kh, -, -, -, -, Ks Ad, -, -, -]; [160/480/2840, 80/0/2958, 0
 [-, -, b, -, -, -, c, f]; 2/250
 Ad 7c 4c 9s 6c; [-, -, Ac 2d, -, -, -, 7d Td, -]; [20/0/1200, 10/0/22441, 70/250/2238, 30/0/790, 0/0/2173, 0/0/1263, 70/0/1210, 50/0/2873]
 
-#975922367; [NastyNate, Patoot, Apus, kfish, PokiSimA, Bar, AAAdealer, Rahl]
-[Bf, r, f, f, f, f, c, c]; 3/70
-[-, k, -, -, -, -, k, k]; 3/70
-[-, kc, -, -, -, -, b, c]; 3/130
-[-, kc, -, -, -, -, b, c]; 3/190
-Qc Qs Js Qd 4d; [-, Ah 6c, -, -, -, -, Jh 7h, 8c 9c]; [10/0/2418, 60/0/760, 0/0/2173, 0/0/1263, 0/0/64185, 0/0/1140, 60/190/2823, 60/0/1180]
-
 #975922470; [Patoot, Apus, kfish, PokiSimA, Bar, Muck, AAAdealer, Rahl, NastyNate]
 [Brc, Bcc, f, ccc, ccc, ccc, cr, rc, cc]; 8/320
 [br, rc, -, f, f, cc, cc, rc, cc]; 6/560

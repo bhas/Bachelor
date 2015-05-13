@@ -7,10 +7,10 @@ import neuralnetwork.NNManager;
 public class NNTest {
 	public static void main(String[] args) throws IOException {
 
-		NNManager dp = new NNManager(2);
+	//	NNManager dp = new NNManager(2);
 //		dp.loadDataset("nn/default-data1");
-		dp.createDataset(200);
-//		dp.train(0, 100);
+//		dp.createDataset(200);
+//		dp.train();
 //		dp.test("Ac Kc", "Qc Tc Jd", 9);
 
 		// dp.train();

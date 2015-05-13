@@ -5,6 +5,7 @@ import graph.GraphData;
 import graph.GraphWindow;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -32,13 +33,20 @@ public class NNManager {
 	private DataSet dataset;
 	private SupervisedLearning learning;
 
-	public NNManager(int version) {
+	public NNManager(int version, int r, ArrayList<String> games) {
 		datasetFile = "nn/default-data" + version;
 		nnFile = "nn/default-nn" + version;
 		if (version == 1) {
 			designNN1();
+			// createDataset(100);
 		} else if (version == 2) {
 			designNN2();
+			// createDataset(400);
+			loadDataset(datasetFile);
+			// test2();
+		} else if (version == 3) {
+			designNN1();
+			createDataset(r, games);
 		}
 	}
 
@@ -46,63 +54,69 @@ public class NNManager {
 		return neural.getLayerAt(layer).getNeuronAt(index);
 	}
 
-	public void createDataset(int maxRounds) {
+	public void createDataset(int maxRounds, ArrayList<String> games) {
 		DataReader dr = new DataReader();
 		DataAnalyser da = new DataAnalyser();
 
 		try {
 			int round = 0;
-			DataHolder data = dr.find("976266642");
-			while (data != null && round < maxRounds) {
-				System.out.println("Game: " + data.id);
-				int totalChips = 0;
-				for (int[] i : data.profits) {
-					totalChips += i[2];
-				}
+			for (int e = 0; e < maxRounds; e++) {
 
-				for (int i = 0; i < data.hands.length; i++) {
-					if (!data.hands[i].equals("-")) {
-						// found a player with a hand
-
-						// pre-flop
-						State[] states = da.getStates(i, data.preflopActs, 0,
-								data.profits[i][2]);
-						saveStates(data.hands[i], null, states, totalChips);
-						// balance after preflop
-						int postBal = states[states.length - 1].postBal;
-
-						// flop
-						states = da.getStates(i, data.flopActs,
-								data.preflopPot, postBal);
-						saveStates(data.hands[i], data.cc.substring(0, 8),
-								states, totalChips);
-						postBal = states[states.length - 1].postBal;
-
-						// turn
-						states = da.getStates(i, data.turnActs, data.flopPot,
-								postBal);
-						saveStates(data.hands[i], data.cc.substring(0, 11),
-								states, totalChips);
-						postBal = states[states.length - 1].postBal;
-
-						// river
-						states = da.getStates(i, data.riverActs, data.turnPot,
-								postBal);
-						saveStates(data.hands[i], data.cc, states, totalChips);
+				DataHolder data = dr.find(games.get(e));
+				while (data != null && round < maxRounds) {
+					System.out.println("Game: " + data.id);
+					int totalChips = 0;
+					for (int[] i : data.profits) {
+						totalChips += i[2];
 					}
+
+					for (int i = 0; i < data.hands.length; i++) {
+						if (!data.hands[i].equals("-")) {
+							// found a player with a hand
+
+							// pre-flop
+							State[] states = da.getStates(i, data.preflopActs,
+									0, data.profits[i][2]);
+							saveStates(data.hands[i], null, states, totalChips);
+							// balance after preflop
+							int postBal = states[states.length - 1].postBal;
+
+							// flop
+							states = da.getStates(i, data.flopActs,
+									data.preflopPot, postBal);
+							saveStates(data.hands[i], data.cc.substring(0, 8),
+									states, totalChips);
+							postBal = states[states.length - 1].postBal;
+
+							// turn
+							states = da.getStates(i, data.turnActs,
+									data.flopPot, postBal);
+							saveStates(data.hands[i], data.cc.substring(0, 11),
+									states, totalChips);
+							postBal = states[states.length - 1].postBal;
+
+							// river
+							states = da.getStates(i, data.riverActs,
+									data.turnPot, postBal);
+							saveStates(data.hands[i], data.cc, states,
+									totalChips);
+						}
+					}
+					round++;
+					data = dr.next();
+					System.out.println("done with " + round);
 				}
-				round++;
-				data = dr.next();
-				System.out.println("done with " + round);
 			}
 
 			System.out.println("Data loaded!");
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-			dataset.saveAsTxt(datasetFile + ".txt", ",");
+			dataset.saveAsTxt("nn/datasetFile" + ".txt", ",");
+			// dataset.save(datasetFile + "test");
 			dr.closeConnection();
 		}
+
 	}
 
 	private void saveStates(String wc, String cc, State[] states, int totalChips) {
@@ -126,6 +140,22 @@ public class NNManager {
 
 	}
 
+	//
+	// public void test2() {
+	// double[] inputData = new double[5];
+	// for (int i = 0; i < 20; i++) {
+	// for (int j = 0; j < 5; j++) {
+	// inputData[i] = dataset.getRowAt(i).getInput()[j];
+	// }
+	// }
+	// neural.setInput(inputData);
+	// neural.calculate();
+	// double[] networkOutput = neural.getOutput();
+	// System.out.println(Arrays.toString(inputData) + " -> " +
+	// Arrays.toString(networkOutput));
+	//
+	// }
+
 	public void loadDataset(String file) {
 		dataset = DataSet.load(file);
 	}
@@ -134,24 +164,10 @@ public class NNManager {
 		neural.save(nnFile);
 	}
 
-	public void train(double maxErr, int maxIte) {
+	public void train() {
 		System.out.println("Learning started");
-		GraphData gd = new GraphData();
-		int epoch = 1;
-		double err = 0;
+		neural.learn(dataset);
 
-		do {
-			learning.doLearningEpoch(dataset);
-			err = learning.getTotalNetworkError();
-			System.out.println("Epoch " + epoch + ", error=" + err);
-			gd.addEntry(epoch, err);
-			epoch++;
-
-		} while (learning.getTotalNetworkError() > maxErr && epoch < maxIte);
-		System.out.println();
-		System.out.println("Neural Network Results: " + err);
-		Graph g = new Graph(gd);
-		new GraphWindow(g);
 		System.out.println("finished learning");
 	}
 
@@ -159,12 +175,12 @@ public class NNManager {
 			int chips, int cost, int profit, int totalChips) {
 		// String s = "input: wc:" + wc + " cc:" + cc + " opps:" + opponents
 		// + " chips:" + chips + " cost:" + cost + " profit:" + profit;
-		double[] inputData = new double[5];
+		double[] inputData = new double[2];
 		inputData[0] = ProbabilityCalc.getProbability(wc, cc, 1).percent();
 		inputData[1] = opponents / 9.0;
-		inputData[2] = chips / (double) totalChips;
-		inputData[3] = cost / (double) totalChips;
-		inputData[4] = profit / (double) totalChips;
+		// inputData[2] = chips / (double) totalChips;
+		// inputData[3] = cost / (double) totalChips;
+		// inputData[4] = profit / (double) totalChips;
 		// System.out.println(s + " -> " + Arrays.toString(inputData));
 		return inputData;
 	}

@@ -3,12 +3,17 @@ package data.analyse;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import neuralnetwork.NNManager;
 
 public class DataReader {
 	private final static String DATA_FILE = "data/refactored-data.txt";
 	FileReader fr;
 	BufferedReader br;
 	DataHolder dataHolder = new DataHolder();
+	ArrayList<String> games = new ArrayList<String>();
 
 	public DataReader() {
 		try {
@@ -17,6 +22,58 @@ public class DataReader {
 			e.printStackTrace();
 		}
 	}
+	
+	public void runIt(String name) throws IOException{
+		findHands(name);
+		NNManager nn = new NNManager(3, games.size(), games);
+//		ArrayList<DataHolder> drs = new ArrayList<DataHolder>();
+//		openConnection(DATA_FILE);
+//		for(int i = 0; i<games.size(); i++){
+//			drs.add(find(games.get(i)));
+//
+//		}
+	}
+	
+	public void findHands(String name) throws IOException{
+		String PLAYER = "data/players/pdb." + name;
+		openConnection(PLAYER);		
+		String line;
+		
+		while((line = br.readLine()) != null){
+			line = line.trim().replaceAll("\\s+", " ");
+			if(line.split(" ").length > 11){
+				games.add(line.split(" ")[1].substring(0, 9));
+			}
+		}
+		closeConnection();
+	}
+
+//	public DataHolder findGamesForPlayer(String name) throws IOException {
+//		String line;
+//		String extraLine;
+//		int num = 0;
+//		while ((line = br.readLine()) != null) {
+//			if (line.contains(name)) {
+//				String[] lineData = line.split("; ");
+//				for (int i = 0; i < lineData.length; i++) {
+//					if (lineData[i].contains(name)) {
+//						num = i;
+//					}
+//				}
+//				extraLine = br.readLine();
+//				extraLine = br.readLine();
+//				extraLine = br.readLine();
+//				extraLine = br.readLine();
+//				extraLine = br.readLine();
+//				String[] lineData2 = extraLine.split("; ");
+//				String[] handsArr = lineData2[1].toString().split(", ");
+//				if (!handsArr[num].contains("-")) {
+//					return readData(line);
+//				}
+//			}
+//		}
+//		return null;
+//	}
 
 	public void openConnection(String file) throws IOException {
 		this.fr = new FileReader(file);
