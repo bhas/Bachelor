@@ -45,7 +45,7 @@ public class NNManager {
 			loadDataset(datasetFile);
 			// test2();
 		} else if (version == 3) {
-			designNN1();
+			designNN2();
 			createDataset(r, games);
 		}
 	}
@@ -60,10 +60,10 @@ public class NNManager {
 
 		try {
 			int round = 0;
-			for (int e = 0; e < maxRounds; e++) {
+			for (int e = 0; e < 200; e++) {
 
 				DataHolder data = dr.find(games.get(e));
-				while (data != null && round < maxRounds) {
+				while (data != null && round < 100) {
 					System.out.println("Game: " + data.id);
 					int totalChips = 0;
 					for (int[] i : data.profits) {
@@ -175,12 +175,12 @@ public class NNManager {
 			int chips, int cost, int profit, int totalChips) {
 		// String s = "input: wc:" + wc + " cc:" + cc + " opps:" + opponents
 		// + " chips:" + chips + " cost:" + cost + " profit:" + profit;
-		double[] inputData = new double[2];
+		double[] inputData = new double[5];
 		inputData[0] = ProbabilityCalc.getProbability(wc, cc, 1).percent();
 		inputData[1] = opponents / 9.0;
-		// inputData[2] = chips / (double) totalChips;
-		// inputData[3] = cost / (double) totalChips;
-		// inputData[4] = profit / (double) totalChips;
+		inputData[2] = chips / (double) totalChips;
+		inputData[3] = cost / (double) totalChips;
+		inputData[4] = profit / (double) totalChips;
 		// System.out.println(s + " -> " + Arrays.toString(inputData));
 		return inputData;
 	}
