@@ -1,76 +1,85 @@
 \section{Learning a default strategy}
 \label{sec:part2}
-In the previous chapter we created a calculator which can calculate the probability of winning with any hole cards in any game state. We will use the calculator in this section to estimate the strength of our hole cards.\\
+In the previous chapter we created a calculator that can determine the strength of a hand by calculating the probability of winning. In this chapter we shall use the calculator to calculate the strength of the hands.\\
 
-Before we can learn our poker bot to adapt to opponents strategy we first need it to learn a default one. When the poker bot first joins a poker game it has no information about the opponent and in this case it must use a default strategy while it gathers more information.
+When the APC first joins a poker game it has no information about the opponent, and in this case it must use a default strategy while it gathers more information.
 
 In this chapter we will find a solution to the problem statement:
 
 \vspace{4mm}
 \begin{statementBox2}{Problem statement 2}
-How can we develop a default strategy without having information about the opponents?
+How can one develop a default strategy without having information about the opponents?
 \end{statementBox2}
 \vspace{4mm}
 
-Even though players have different strategies they often have some decisions in common. Most players tend to play more aggressively the better their chances are of winning and likewise most players will fold if they have a weak hand. These tendencies can be used in a default strategy. The more popular decisions are more likely to be good. For instance most players agree that it is unwise to fold a pair of aces in pre-flop. 
+Even though players have different strategies they often have some decisions in common. Most players tend to play more aggressively the better their chances are of winning and likewise most players will fold if they have a weak hand. These tendencies can be used in a default strategy. The popular decisions are more likely to be good. For instance, most players agree that it is unwise to fold a pair of aces in the pre-flop. 
 
-The default strategy has to work against every strategy so it is impossible for it to be better than all of them. The goal is not for the default strategy to win, although that would be preferable, but instead to reduce the loses while it gathers information about the opponent.
+The default strategy has to work against every strategy, therefore it is impossible for it to be better than all of them. The goal for the default strategy is not to win, although that is preferable, but instead to reduce the loses while it gathers information about the opponent.
 
 \subsection{Design}
-To develop a default strategy we have two options.
+To develop a strategy in poker the two most commonly used options are to either directly program the procedures in the code or to create a self-learning algorithm. 
 
-The first option is to directly program how the computer shall act in all situations. In this case the programmers need a deep insight in how to play poker in order to decide which decisions are optimal in the different situations. One can also use the expertise of professional poker players in case one lack the insight.
+Programming the procedures in the code requires the programmer to have a deep insight in how to play poker and how to make the optimal decisions during a game. One can also use the expertise of professional poker players in case one lacks the insight.
 
-The second option is to develop a self-learning algorithm for the computer. Such an algorithm uses the concept \textit{watch and learn} by observing other players playing poker and trying to learn the strategy behind the decisions. This method requires that the computer has something to observe.
+The self-learning algorithm uses the concept watch and learn by observing other players and trying to learn the strategy behind their decisions. This method requires that the algorithm has someone to observe.
 
-Since we do not have any particular insight in how to play poker and do not have expertise from any pro poker players, we will implement a self-learning algorithm. Another advantage by using this method is that the computer is not limited by our understanding of the game.
+Since we do not have any particular insight in how to play poker and do not have expertise from any professional poker players, we will implement a self-learning algorithm. Additionally, by using this method the computer is not limited by our understanding of the game.\\
 
-The University of Alberta has a research group that specializes in the field of artificial intelligence in poker. They have released a dataset containing data from ~18.000 real-life rounds of Texas hold'em limit poker. The dataset only contains the hole cards of the players who make it to the showdown, so there is no data about the hole cards of the players who fold. This data will be used to develop the default strategy.\\
+The University of Alberta has a research group that specializes in the field of artificial intelligence in poker \cite{alberta}. They have released a dataset containing data from $\sim$18.000 real-life rounds of Texas hold'em limit poker. The dataset contains all data except the hole cards of the players who fold. This dataset will be used to develop the default strategy.\\
 
-To implement the self-learning algorithm we use an artificial neural networks (ANN), see section \ref{sec:nn}. The algorithm needs to recognise patterns in the players decisions and ANNs are very good at this.
+To implement the self-learning algorithm we use an artificial neural network (ANN), see section \ref{sec:nn}. The ANN is well suited for finding patterns of the players decisions. 
 
-We use an iterative development method to design the ANN for the algorithm. We start by designing a simple ANN and then move on to more complex ANNs.
+Our goal is to design an ANN with a total network error (TNE) of five percent or less. We find five percent to be acceptable as players often take irrational decisions and the ANN only tries to find an approximation of the results. 
+
+We use an iterative development method to design the ANN. We start by designing a simple ANN and then move on to more complex ANN's.\\
+
+All our ANN's have exactly two outputs. The first output is whether or not to be defensive by checking or calling and the second output is whether or not to be aggressive by betting or raising. The closer an output is to the value one, the more certain the ANN is, that it is the correct decision. 
+
+All our ANN's use normalised inputs and a sigmoid function as transfer function. The reason we settle for a sigmoid function rather than a step function is because the sigmoid function allows us to see how certain the ANN is of each decision being correct.
 
 \subsubsection{Artificial neural network (ANN)}
 \label{sec:nn}
-An artificial neural network (ANN) is inspired by the human brain. It is well suited for finding an approximation to a non-linear function. An ANN can take any number of inputs and return any number of outputs. 
+An artificial neural network (ANN) is inspired by the human brain. It can be used for pattern recognition or classification among other things. An ANN can take any number of inputs and return any number of outputs. 
 
-An ANN is made up of neurons that are connected into a network. Each neuron takes a set of inputs and give one output. The output of a neuron is sent to the connected neurons. Each input has a weight that determines influence of the input. The neuron uses an input function to calculate the net input, usually the sum of all weighted inputs, and pass it on to the transfer function. The type of transfer function determines the output. A step function returns zero or one if the net input is above a certain threshold. This is useful for logical functions. If one needs a value between zero and one a sigmoid function can be used instead.
+An ANN is made up of neurons that are connected into a network. Each neuron takes a set of inputs and returns a single output. The output of a neuron is sent to all the connected neurons. Each input has a weight that determines influence of the input. The neuron uses an input function to calculate the net input, usually the sum of all weighted inputs, and pass it on to the transfer function. The type of transfer function determines the output. A step function returns zero or one if the net input is above a certain threshold. This is useful for logical functions. If one needs a value between zero and one a sigmoidal function can be used instead.
+
+Figure \ref{fig:neuron} models a neuron. Here the weighted inputs $w_{i1}$, $w_{i2}$, and $w_{i3}$ are all send to the input function $\sum$ which then calculates the net input $net_{i}$. The transfer function $f$ then calculates the output from the net input.
 
 \begin{figure}[H]
   \center
     \includegraphics[scale=0.4]{images/nn/neuron.png}
-  \caption{Model of a neuron. \label{fig:neuron}}
+  \caption{Model of a neuron.\cite{neuron} \label{fig:neuron}}
 \end{figure}
 
-The neurons in an ANN are distributed in layers as shown in figure \ref{fig:mlp}. The coloured circles represents neurons and the arrows represents the connections between the neurons. There are three types of layers, an input layer, a hidden layer, and an output layer. An ANNs consists of one input layer and one output layer but may contain any number of hidden layers. The simplest type of ANN is the perceptron which has no hidden layers. It is used for single calculations. A multilayer perceptron is another type of ANN which contains hidden layers. It is used for more complex domains with multiple layers of computations. 
+The neurons in an ANN are distributed in layers as shown in figure \ref{fig:perceptron} and \ref{fig:mlp}. The coloured circles represents neurons and the arrows represents the connections between the neurons. There are three layers, an input layer, a hidden layer, and an output layer. An ANN consists of one input layer and one output layer but may contain any number of hidden layers. The simplest type of ANN is the perceptron which has no hidden layers, see figure \ref{fig:perceptron}. It is used for single calculations. A multilayer perceptron is another type of ANN which contains hidden layers. It is used for more complex domains with multiple layers of computations. 
 
 \input{other/models/perceptron.tex}
 \vspace{4mm}
 \input{other/models/multi-perceptron.tex}
 
-The ANN can be trained using a training set of inputs. Using supervised learning, in contrast to unsupervised learning, one must also supply an expected output. For each input it will adjust the weights in order to get closer to the expected output. It will continue doing this until the outputs are close enough to the expected outputs. Different algorithms exist for this. 
+The ANN can be trained using a training set of inputs. Using supervised learning, in contrast to unsupervised learning, one must also supply an expected output. For each input it will adjust the weights in order to get closer to the expected output. The TNE indicates the amount of training data that did not produce the expected result. The TNE is calculated during each iteration and the ANN will continue adjusting the weights until the TNE is acceptable. 
 
 Backpropagation is the most common algorithm for supervised ANNs. It adjust the weights from the end (the output neurons) back to the start (the input neurons).
 
 After the training the ANN can be validated to see if it works. This is done using a test set different from the training set and see if the results of the ANN matches the expected results of the test set.
 
 \subsubsection{First ANN design}
-For the first attempt we design a simple perceptron. The perceptron takes two inputs, and gives two outputs. 
-
-The first input is the hand strength. We use the calculator from section \ref{sec:part1} to calculate the probability of winning against a single opponent. The reason we always find the probability against a single opponent is because the probability of winning decreases drastically as the number of opponents increases. We use the absolute hand strength rather than a hand strength relative to the number of players. 
-This makes it easier to compare the hands strengths in situations with different numbers of players. The number of players is instead the second input.
-
-The first output is whether or not to be defensive by checking or calling. The second output is whether or not to be aggressive by betting or calling. The outputs will both be zero in case it is best to fold. 
-The perceptron uses a step function as a transfer function in both output neurons.
+\label{sec:design1}
+For the first attempt we design a simple perceptron that takes two inputs, and returns two outputs, see figure \ref{fig:nn1}. 
 \input{other/models/default-nn1.tex}
 
-The perceptron is more likely to be aggressive the higher the number of opponents is and the stronger the hand is. The problem is that the perceptron almost never acts aggressively. From our test set we expect the perceptron to be more aggressive. 
+The first input is the hand strength. We use the calculator from chapter \ref{sec:part1} to calculate the probability of winning against a single opponent. The reason we always find the probability against a single opponent is because the probability of winning decreases drastically as the number of opponents increases. We use an absolute hand strength rather than a hand strength relative to the number of players. This makes it easier to compare the hands strengths in situations with different numbers of players. 
+
+The second input is the number of opponents. The input is normalized as \[I_{norm} = \frac{Opp}{Opp_{max}}\] 
+Here $Opp$ is the number of opponents and $Opp_{max}$ is the maximum number of opponents (in our case nine).
+
+From the tests we found that this network had a TNE of $\sim$19,9 \%, see section \ref{sec:ann-test1}. This does not fulfil our requirement of a TNE of five percent or less.
 
 \subsubsection{Second ANN design}
-Since the first attempt designing a perceptron did not work properly we try to design a multilayer perceptron (MLP) with more inputs.
+Since the first approach designing a perceptron did not fulfil our requirement we instead design a multilayer perceptron (MLP) with five inputs.
 
-The MLP is taking the same inputs as the earlier discussed perceptron, but it now takes three additional inputs: The chips of the player, the cost for the player to call, and the pot.
+The MLP is taking the same inputs as the perceptron from section \ref{sec:design1}, but now it takes three additional inputs: The chips of the player, the cost for the player to call, and the pot. We normalize the three new inputs as: \[I_{norm} = \frac{I}{chips_{total}}\]. 
+Here $I$ is the input to be normalized and $chips_{total}$ is the total amount of chips in the game, including the pot and the bets.
 
 The MLP has one hidden layer with two hidden neurons. One hidden neuron to calculate the likelihood of winning and another for the economically aspect.
 
@@ -79,8 +88,11 @@ The MLP has one hidden layer with two hidden neurons. One hidden neuron to calcu
 Vi har ikke nået mere så du behøver ikke læse videre :)
 
 \subsection{Test}
-To test our first simple neural network a.k.a the perceptron, we ran through x games in the dataset. The neural network is not able to get particular smarter when running through an additional set of entries as the data is from different players and x games should be sufficient for the neural network to gain some kind of knowledge on how to play as the goal of this strategy is not to have a bot that can beat the opponents but minimize the loses.
-The neural network now had to learn from the dataset 
+We train the ANNs we use data from 
+
+\subsubsection{Test of simple perceptron}
+\label{sec:ann-test1}
+To test the perceptron described in section \ref{sec:design1} we first trained it using 
 
 \subsection{Discussion}
 When artificial intelligence starts out by playing the games of poker it doesn't have any kind of information about the opponents. So to make sure that the bot wont just go keep throwing away the bank roll. Instead we wanted the bot to minimizes our losses so that we would still have a decent bank roll when we have gathered information about the opponents so that the bot could make qualified guesses at what move would be the most appropriate in terms of the current opponent. The default player was never meant to be on the same level as a human player, but humans are only in a slightly better position than the default bot. The human player can like the bot only see the hole and community cards, but a human is also able to make a profile of the bot in their head. This means that they can learn how the bot decides and exploit this. 

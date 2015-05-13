@@ -3,12 +3,13 @@
 \begin{figure}[H]
 \center
 \begin{tikzpicture}[shorten >=1pt,->,line width=0.2mm,draw=black!60, node distance=\layersep]
-    \tikzstyle{every pin edge}=[<-,shorten <=1pt]
+\tikzstyle{every pin edge}=[<-,shorten <=1pt]
     \tikzstyle{neuron}=[circle,fill=black!25,minimum size=17pt,inner sep=0pt]
     \tikzstyle{input neuron}=[neuron, fill=green!70];
     \tikzstyle{output neuron}=[neuron, fill=red!70];
     \tikzstyle{hidden neuron}=[neuron, fill=blue!70];
     \tikzstyle{annot} = [text width=4em, text centered]
+    
 
     % Draw the input layer nodes
     \node[input neuron, pin=left:hand strength] (I-1) at (0,-1) {};
