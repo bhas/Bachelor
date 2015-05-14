@@ -41,7 +41,7 @@ An artificial neural network (ANN) is inspired by the human brain. It can be use
 
 An ANN is made up of neurons that are connected into a network. Each neuron takes a set of inputs and returns a single output. The output of a neuron is sent to all the connected neurons. Each input has a weight that determines influence of the input. The neuron uses an input function to calculate the net input, usually the sum of all weighted inputs, and pass it on to the transfer function. The type of transfer function determines the output. A step function returns zero or one if the net input is above a certain threshold. This is useful for logical functions. If one needs a value between zero and one a sigmoidal function can be used instead.
 
-Figure \ref{fig:neuron} models a neuron. Here the weighted inputs $w_{i1}$, $w_{i2}$, and $w_{i3}$ are all send to the input function $\sum$ which then calculates the net input $net_{i}$. The transfer function $f$ then calculates the output from the net input.
+Figure \ref{fig:neuron} models a neuron. Here the weighted inputs $w_{i1}$, $w_{i2}$, and $w_{i3}$ are all sent to the input function $\sum$ which then calculates the net input $net_{i}$. The transfer function $f$ then calculates the output from the net input.
 
 \begin{figure}[H]
   \center
@@ -73,8 +73,17 @@ Here $Opp$ is the number of opponents and $Opp_{max}$ is the maximum number of o
 
 From the tests we found that this network had a TNE of $\sim$19,9 \%, see section \ref{sec:ann-test1}. This does not fulfil our requirement of a TNE of five percent or less.
 
+In order for a perceptron to be accurate the data have to be linear separable. This means that the outcomes can be separated by a single line if the are plotted in a graph. We plot some of the data in figure \ref{fig:linear-separable} to see if it is linear separable. The figure clearly shows that the data is not linear separable and therefore a single perceptron will not work.
+
+\begin{figure}[H]
+  \center
+    \includegraphics[scale=0.8]{images/nn/default-nn1-plot.png}
+  \caption{Distribution of actions. The x-axis  the number of opponents and the y-axis is the hand strength. Aggressive actions are indicated by red dots and defensive actions by blue dots. \label{fig:linear-separable}}
+\end{figure}
+
 \subsubsection{Second ANN design}
-Since the first approach designing a perceptron did not fulfil our requirement we instead design a multilayer perceptron (MLP) with five inputs.
+\label{sec:design2}
+Since the first approach designing a perceptron did not fulfil our requirement we instead design a multilayer perceptron (MLP) with five inputs, see figure \ref{fig:nn2}.
 
 The MLP is taking the same inputs as the perceptron from section \ref{sec:design1}, but now it takes three additional inputs: The chips of the player, the cost for the player to call, and the pot. We normalize the three new inputs as: \[I_{norm} = \frac{I}{chips_{total}}\]. 
 Here $I$ is the input to be normalized and $chips_{total}$ is the total amount of chips in the game, including the pot and the bets.
@@ -83,7 +92,13 @@ The MLP has one hidden layer with two hidden neurons. One hidden neuron to calcu
 
 \input{other/models/default-nn2.tex}
 
-Vi har ikke nået mere så du behøver ikke læse videre :)
+From the test in section \ref{sec:ann-test2}, we can see that the TNE is $\sim$19,1 \%. This is a small improvement compared to the first ANN but it still does not fulfil the requirement about a TNE of five percent or less.
+
+\subsubsection{Third ANN design}
+\label{sec:design3}
+For our first ANN we use the same structure as the second ANN, see figure \ref{fig:nn2}. We believe that the reason the second ANN did not work is because the data is found of random players. Each player may have a different strategy resulting in different actions. This will make it hard for an ANN to find a pattern. 
+
+Instead we use data of a single player in all games the player is relevant. The test in section \ref{sec:ann-test3}
 
 \subsection{Test}
 \label{sec:default-test}
@@ -92,14 +107,14 @@ The University of Alberta has a research group that specializes in the field of 
 
 The dataset consists of multiple files. The file called \textit{hroster} contains the names of all players at the beginning of the round. The file called \textit{hdb} contains the information about the community cards and the flop after each game state. For each player a file called \textit{pdb.}<playername> exists. This file includes the hole cards (if the player did not fold), chips, profit from round and actions during each game state. 
 
-We have collected all the data from the different files into an single data file called \textit{refactored-data.txt} to make it easier analyse the rounds. We discarded the data for all rounds that has no relevant players. This is because no information about the hole cards exists in such rounds and therefore it is irrelevant for us. 
+We have collected all the data from the different files into an single data file called \textit{refactored-data.txt} to make it easier to analyse the rounds. We discarded the data for all rounds that has no relevant players. This is because no information about the hole cards exists in such rounds and therefore it is irrelevant for us. 
 
 \textit{refactored-data.txt} will be used for training and testing the ANN's throughout this section.\\
 
-For each test we create a new dataset. This dataset contains the information about the game for each action performed by a relevant player. All informations about the game is found for the moment of the action. For instance, an action in the pre-flop will have no information about the community cards.
+For each test we create a new dataset. This dataset contains the information about the game for each action performed by a relevant player. All informations about the game is found in the moment of the action. For instance, an action in the pre-flop will have no information about the community cards.
 Each dataset contains data from 200 random poker rounds, resulting in $\sim$1200 actions distributed across all game states.
 
-To create and test the ANN's we use a framework called Neuroph cite{neuroph}. Neuroph is a neural network framework programmed in java. 
+To create and test the ANN's we use a framework called Neuroph \cite{neuroph}. Neuroph is a neural network framework programmed in java. 
 
 \subsubsection{Find the TNE of the first ANN}
 \label{sec:ann-test1}
@@ -117,12 +132,24 @@ To find the TNE of the perceptron described in section \ref{sec:design1}, we tra
 \label{sec:ann-test2}
 For this test the dataset also includes the normalised data about chips, cost and pot.
 
-We train the MLP from \ref{sec:design1} and get the NTE graph shown in figure \ref{fig:tneg2}. The TNE does not get any lower than $\sim$19,1 \%.
+We train the MLP from \ref{sec:design2} and get the NTE graph shown in figure \ref{fig:tneg2}. The TNE does not get any lower than $\sim$19,1 \%.
 
 \begin{figure}[H]
   \center
     \includegraphics[scale=0.6]{images/nn/default-nn2-err.png}
   \caption{TNE graph from training the second ANN.\label{fig:tneg2}}
+\end{figure}
+
+\subsubsection{Find the TNE of the third ANN}
+\label{sec:ann-test3}
+For this test the dataset contains the same data as the previous test but all data is found for a single player.
+
+We train the MLP from \ref{sec:design3} and get the NTE graph shown in figure \ref{fig:tneg3}. The TNE does not get any lower than $\sim$19,1 \%.
+
+\begin{figure}[H]
+  \center
+    \includegraphics[scale=0.6]{images/nn/default-nn2-err.png}
+  \caption{TNE graph from training the third ANN.\label{fig:tneg3}}
 \end{figure}
 
 \subsection{Discussion}
