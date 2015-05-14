@@ -92,20 +92,20 @@ The University of Alberta has a research group that specializes in the field of 
 
 The dataset consists of multiple files. The file called \textit{hroster} contains the names of all players at the beginning of the round. The file called \textit{hdb} contains the information about the community cards and the flop after each game state. For each player a file called \textit{pdb.}<playername> exists. This file includes the hole cards (if the player did not fold), chips, profit from round and actions during each game state. 
 
-We have collected all the data from the different files into an single file called \textit{refactored-data.txt} to make it easier analyse the rounds. We discarded the data for all rounds that has no relevant players. This is because no information about the hole cards exists in such rounds and therefore it is irrelevant for us. 
+We have collected all the data from the different files into an single data file called \textit{refactored-data.txt} to make it easier analyse the rounds. We discarded the data for all rounds that has no relevant players. This is because no information about the hole cards exists in such rounds and therefore it is irrelevant for us. 
 
-This dataset will be used for training and testing the ANN's throughout this section.\\
+\textit{refactored-data.txt} will be used for training and testing the ANN's throughout this section.\\
+
+For each test we create a new dataset. This dataset contains the information about the game for each action performed by a relevant player. All informations about the game is found for the moment of the action. For instance, an action in the pre-flop will have no information about the community cards.
+Each dataset contains data from 200 random poker rounds, resulting in $\sim$1200 actions distributed across all game states.
 
 To create and test the ANN's we use a framework called Neuroph cite{neuroph}. Neuroph is a neural network framework programmed in java. 
 
 \subsubsection{Find the TNE of the first ANN}
 \label{sec:ann-test1}
-We create a dataset containing the information about the game for each action performed by a relevant player. All informations about the game is found for the moment of the action. For instance, an action in the pre-flop will have no information about the community cards.
-The dataset contains data from $\sim$1300 actions distributed across all game states.
+For this test the dataset only includes the normalized data about the hole cards of the player, the community cards and the number of opponents.
 
-For this test the dataset only includes the hole cards of the player, the community cards and the number of opponents.
-
-To find the TNE of the perceptron described in section \ref{sec:design1}, we train it using our dataset. The graph seen in figure \ref{fig:tneg1} displays the TNE through each iteration of the training. From the graph we can see that the TNE does not get any smaller than $\sim$19,9 \%.
+To find the TNE of the perceptron described in section \ref{sec:design1}, we train it using the dataset. The graph seen in figure \ref{fig:tneg1} displays the TNE through each iteration of the training. From the graph we can see, that the TNE does not get any smaller than $\sim$19,9 \%.
 
 \begin{figure}[H]
   \center
@@ -113,11 +113,17 @@ To find the TNE of the perceptron described in section \ref{sec:design1}, we tra
   \caption{TNE graph from training the first ANN.\label{fig:tneg1}}
 \end{figure}
 
-To see 
-
 \subsubsection{Find the TNE of the second ANN}
 \label{sec:ann-test2}
-some text
+For this test the dataset also includes the normalised data about chips, cost and pot.
+
+We train the MLP from \ref{sec:design1} and get the NTE graph shown in figure \ref{fig:tneg2}. The TNE does not get any lower than $\sim$19,1 \%.
+
+\begin{figure}[H]
+  \center
+    \includegraphics[scale=0.6]{images/nn/default-nn2-err.png}
+  \caption{TNE graph from training the second ANN.\label{fig:tneg2}}
+\end{figure}
 
 \subsection{Discussion}
 When artificial intelligence starts out by playing the games of poker it doesn't have any kind of information about the opponents. So to make sure that the bot wont just go keep throwing away the bank roll. Instead we wanted the bot to minimizes our losses so that we would still have a decent bank roll when we have gathered information about the opponents so that the bot could make qualified guesses at what move would be the most appropriate in terms of the current opponent. The default player was never meant to be on the same level as a human player, but humans are only in a slightly better position than the default bot. The human player can like the bot only see the hole and community cards, but a human is also able to make a profile of the bot in their head. This means that they can learn how the bot decides and exploit this. 
