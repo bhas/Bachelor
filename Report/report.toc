@@ -15,7 +15,7 @@
 \contentsline {subsection}{\numberline {2.2}Test}{24}{subsection.2.2}
 \contentsline {subsubsection}{\numberline {2.2.1}Find the TNE of the first ANN}{25}{subsubsection.2.2.1}
 \contentsline {subsubsection}{\numberline {2.2.2}Find the TNE of the second ANN}{26}{subsubsection.2.2.2}
-\contentsline {subsubsection}{\numberline {2.2.3}Find the TNE of the second ANN}{27}{subsubsection.2.2.3}
+\contentsline {subsubsection}{\numberline {2.2.3}Find the TNE of the third ANN}{27}{subsubsection.2.2.3}
 \contentsline {subsection}{\numberline {2.3}Discussion}{28}{subsection.2.3}
 \contentsline {subsection}{\numberline {2.4}Conclusion}{29}{subsection.2.4}
 \contentsline {section}{\numberline {3}Learning to adapt to opponents}{30}{section.3}
