@@ -34,7 +34,7 @@ public class NNManager {
 	private SupervisedLearning learning;
 
 	public NNManager(int version, int r, ArrayList<String> games) {
-		datasetFile = "nn/default-data" + version;
+		datasetFile = "nn/testdata" + version;
 		nnFile = "nn/default-nn" + version;
 		if (version == 1) {
 			designNN1();
@@ -63,7 +63,7 @@ public class NNManager {
 			for (int e = 0; e < 200; e++) {
 
 				DataHolder data = dr.find(games.get(e));
-				while (data != null && round < 100) {
+				while (data != null && round < 200) {
 					System.out.println("Game: " + data.id);
 					int totalChips = 0;
 					for (int[] i : data.profits) {
