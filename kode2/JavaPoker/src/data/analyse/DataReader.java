@@ -25,7 +25,7 @@ public class DataReader {
 	
 	public void runIt(String name) throws IOException{
 		findHands(name);
-		NNManager nn = new NNManager(3, games.size(), games);
+		NNManager nn = new NNManager(3, games.size(), games, name);
 //		ArrayList<DataHolder> drs = new ArrayList<DataHolder>();
 //		openConnection(DATA_FILE);
 //		for(int i = 0; i<games.size(); i++){

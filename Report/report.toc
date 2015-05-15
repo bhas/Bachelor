@@ -20,10 +20,11 @@
 \contentsline {subsection}{\numberline {2.4}Conclusion}{29}{subsection.2.4}
 \contentsline {section}{\numberline {3}Learning to adapt to opponents}{30}{section.3}
 \contentsline {subsubsection}{\numberline {3.0.1}Player modeling}{30}{subsubsection.3.0.1}
-\contentsline {subsection}{\numberline {3.1}How can we model a player dynamically?}{31}{subsection.3.1}
-\contentsline {subsection}{\numberline {3.2}Test}{31}{subsection.3.2}
-\contentsline {subsection}{\numberline {3.3}Discussion}{31}{subsection.3.3}
-\contentsline {subsection}{\numberline {3.4}Conclusion}{31}{subsection.3.4}
-\contentsline {section}{\numberline {4}Discussion}{32}{section.4}
-\contentsline {section}{\numberline {5}Conclusion}{33}{section.5}
-\contentsline {section}{\numberline {A}\\Glossary}{38}{appendix.A}
+\contentsline {subsection}{\numberline {3.1}How can we model a player?}{31}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}How can we model a player dynamically?}{32}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}Test}{33}{subsection.3.3}
+\contentsline {subsection}{\numberline {3.4}Discussion}{33}{subsection.3.4}
+\contentsline {subsection}{\numberline {3.5}Conclusion}{33}{subsection.3.5}
+\contentsline {section}{\numberline {4}Discussion}{34}{section.4}
+\contentsline {section}{\numberline {5}Conclusion}{35}{section.5}
+\contentsline {section}{\numberline {A}\\Glossary}{40}{appendix.A}

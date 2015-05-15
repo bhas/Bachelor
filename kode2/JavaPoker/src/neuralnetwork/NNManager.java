@@ -33,8 +33,8 @@ public class NNManager {
 	private DataSet dataset;
 	private SupervisedLearning learning;
 
-	public NNManager(int version, int r, ArrayList<String> games) {
-		datasetFile = "nn/testdata" + version;
+	public NNManager(int version, int r, ArrayList<String> games, String name) {
+		datasetFile = "nn/default-data" + version;
 		nnFile = "nn/default-nn" + version;
 		if (version == 1) {
 			designNN1();
@@ -46,7 +46,7 @@ public class NNManager {
 			// test2();
 		} else if (version == 3) {
 			designNN2();
-			createDataset(r, games);
+			createDataset(r, games, name);
 		}
 	}
 
@@ -54,7 +54,7 @@ public class NNManager {
 		return neural.getLayerAt(layer).getNeuronAt(index);
 	}
 
-	public void createDataset(int maxRounds, ArrayList<String> games) {
+	public void createDataset(int maxRounds, ArrayList<String> games, String name) {
 		DataReader dr = new DataReader();
 		DataAnalyser da = new DataAnalyser();
 
@@ -71,7 +71,7 @@ public class NNManager {
 					}
 
 					for (int i = 0; i < data.hands.length; i++) {
-						if (!data.hands[i].equals("-")) {
+						if (!data.hands[i].equals("-") && data.players[i].equals(name) ) {
 							// found a player with a hand
 
 							// pre-flop
@@ -112,7 +112,7 @@ public class NNManager {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-			dataset.saveAsTxt("nn/datasetFile" + ".txt", ",");
+			dataset.saveAsTxt("nn/PokiSimA" + ".txt", ",");
 			// dataset.save(datasetFile + "test");
 			dr.closeConnection();
 		}
