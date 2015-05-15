@@ -19,6 +19,7 @@
 \contentsline {subsubsection}{\numberline {2.2.4}Finding the optimal number of hidden neurons}{28}{subsubsection.2.2.4}
 \contentsline {subsection}{\numberline {2.3}Discussion}{28}{subsection.2.3}
 \contentsline {subsection}{\numberline {2.4}Conclusion}{29}{subsection.2.4}
+<<<<<<< HEAD
 \contentsline {section}{\numberline {3}Learning to adapt to opponents}{31}{section.3}
 \contentsline {subsubsection}{\numberline {3.0.1}Player modeling}{31}{subsubsection.3.0.1}
 \contentsline {subsection}{\numberline {3.1}How can we model a player dynamically?}{32}{subsection.3.1}
@@ -28,3 +29,15 @@
 \contentsline {section}{\numberline {4}Discussion}{33}{section.4}
 \contentsline {section}{\numberline {5}Conclusion}{34}{section.5}
 \contentsline {section}{\numberline {A}\\Glossary}{39}{appendix.A}
+=======
+\contentsline {section}{\numberline {3}Learning to adapt to opponents}{30}{section.3}
+\contentsline {subsubsection}{\numberline {3.0.1}Player modeling}{30}{subsubsection.3.0.1}
+\contentsline {subsection}{\numberline {3.1}How can we model a player?}{31}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}How can we model a player dynamically?}{32}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}Test}{33}{subsection.3.3}
+\contentsline {subsection}{\numberline {3.4}Discussion}{33}{subsection.3.4}
+\contentsline {subsection}{\numberline {3.5}Conclusion}{33}{subsection.3.5}
+\contentsline {section}{\numberline {4}Discussion}{34}{section.4}
+\contentsline {section}{\numberline {5}Conclusion}{35}{section.5}
+\contentsline {section}{\numberline {A}\\Glossary}{40}{appendix.A}
+>>>>>>> b3c82856717a2a8d854dbc43a99ef637bba1d5c6
