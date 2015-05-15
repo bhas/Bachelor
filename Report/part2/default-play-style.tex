@@ -98,11 +98,12 @@ From the test in section \ref{sec:ann-test2}, we can see that the TNE is $\sim$1
 \label{sec:design3}
 For our first ANN we use the same structure as the second ANN, see figure \ref{fig:nn2}. We believe that the reason the second ANN did not work is because the data is found of random players. Each player may have a different strategy resulting in different actions. This will make it hard for an ANN to find a pattern. 
 
-Instead we use data of a single player in all games the player is relevant. The test in section \ref{sec:ann-test3}
+Instead we use data of a single player in all games the player is relevant. The test in section \ref{sec:ann-test3} shows that the TNE varies quite a bit between the players. The higher the TNE are the harder the player is to predict. Since poker is a game of deception most players will be hard for our ANN to learn.
+
+To further optimise the ANN, we try to adjust the number of hidden neurons, see section \ref{ref:ann-test4}.
 
 \subsection{Test}
 \label{sec:default-test}
-
 The University of Alberta has a research group that specializes in the field of artificial intelligence in poker \cite{alberta}. They have released a dataset containing data from $\sim$18.000 real-life rounds of Texas hold'em limit poker. The dataset only contains data about the hole cards of the players who made it to the showdown. We will refer to these players as relevant players.
 
 The dataset consists of multiple files. The file called \textit{hroster} contains the names of all players at the beginning of the round. The file called \textit{hdb} contains the information about the community cards and the flop after each game state. For each player a file called \textit{pdb.}<playername> exists. This file includes the hole cards (if the player did not fold), chips, profit from round and actions during each game state. 
@@ -142,16 +143,73 @@ We train the MLP from \ref{sec:design2} and get the NTE graph shown in figure \r
 
 \subsubsection{Find the TNE of the third ANN}
 \label{sec:ann-test3}
-For this test the dataset contains the same data as the previous test but all data is found for a single player.
+For this test the dataset contains the same data as the previous test but all data is found for a single player. We try to find the TNE for three different players to see if this makes the ANN more accurate. The players we test are JimR, mayor, and PokiSimA.
 
-We train the MLP from \ref{sec:design3} and get the NTE graph shown in figure \ref{fig:tneg3}. The TNE does not get any lower than $\sim$19,1 \%.
+For each player we train the MLP from \ref{sec:design3} and find the TNE. The results are shown in table \ref{tab:tneg3}.
 
-\begin{figure}[H]
-  \center
-    \includegraphics[scale=0.6]{images/nn/default-nn2-err.png}
-  \caption{TNE graph from training the third ANN.\label{fig:tneg3}}
-\end{figure}
+\vspace{4mm}
+\begin{table}[H]
+\center
+\begin{tabular}{ | l | l |}
+  \hline
+  player & TNE (\%) \\
+  \hline
+  JimR & $\sim$18,7 \\
+  mayor & $\sim$14,5 \\
+  PokiSimA & $\sim$21,1 \\
+  \hline
+\end{tabular}
+\caption{TNE from training the ANN with different player data.\label{tab:tneg3}}
+\end{table}
+\vspace{4mm}
+
+\subsubsection{Finding the optimal number of hidden neurons}
+\label{sec:ann-test4}
+
+In this test we use the data from the same three player as in section \ref{sec:ann-test3}. We construct three new ANN's with three, five, and seven hidden neurons. The TNE's can be seen in table \ref{tab:tneg4}. We have included the results from section \ref{sec:ann-test3} for comparison. 
+
+The number of hidden neurons does not seem to make the overall TNE get any lower.
+
+\vspace{4mm}
+\begin{table}[H]
+\center
+\begin{tabular}{ | l | l | l | l | }
+  \hline
+  \#hidden neurons & JimR's TNE (\%) & mayor's TNE (\%) & PokiSimA's TNE (\%) \\
+  \hline
+  2 & $\sim$19,4 & $\sim$14,5 & $\sim$21,1 \\
+  3 & $\sim$19,5 & $\sim$14,0 & $\sim$20,9 \\
+  5 & $\sim$19,1 & $\sim$15,0 & $\sim$21,1 \\
+  7 & $\sim$17,8 & $\sim$14,9 & $\sim$21,3 \\
+  \hline
+\end{tabular}
+\caption{TNE from training ANN's with different numbers of hidden neurons.\label{tab:tneg4}}
+\end{table}
+\vspace{4mm}
 
 \subsection{Discussion}
-In this chapter we try to develop a default strategy by implementing an ANN to observe actions from other players and learn their strategy. This solution did not work for us. 
+In this chapter we try to develop a default strategy by implementing a self-learning algorithm. We use ANN's to observe actions from other players and learn their strategy. Alternatively, we could have programmed the procedures of determining the action directly in the code. We ran into a few problems by trying to implementing the ANN.\\
+
+The first problem is related to the data we use. The problem is that  the data is not complete since we do not have the data about the hole cards of the irrelevant players. This means that we can not learn the ANN when to fold, as we have no input for the hole cards. To solve this we either need a complete data set or to program the procedure for determining when to fold. 
+
+Additionally, since we get the results as an action (defensive or aggressive), The expected results of each output is either zero or one, due to the limitation of possible actions. These are the two extremes and it can be hard for the ANN to find an approximation.
+
+The second problem was to determine the number of inputs for the ANN. We did not have much luck using only five inputs for our ANN. Since most players adapt their strategy to strategies of the opponents, it is close to impossible to learn the strategy of the player without knowing the strategy of the opponents.
+
+The final problem we encountered was defining our requirements for the ANN. We do know what TNE is realistic and our requirements may be unrealistic. \\
+
+It was a bad idea to try learn a default strategy from random player in random rounds. The players had most likely already gained information about the opponents and thus adapted their strategy to the opponents. It would have made more sense to observe players who just joined a table to see how they played in a situation where they had not adapted to the opponents yet.
+Additionally, trying to learn an approximation of every strategy is a bad idea. Observing bad players will cause the default strategy to take bad decisions. It would make more sense to observe only a few successful players. This way we can ensure the decisions to be smart. 
+
 \subsection{Conclusion}
+In this chapter we try to answer problem statement 2:
+
+\vspace{4mm}
+\begin{statementBox2}{Problem statement 2}
+How can one develop a strategy without having any information about the opponents?
+\end{statementBox2}
+\vspace{4mm}
+
+We develop the strategy by creating an ANN and train it using data from real-life poker games. This solution did not work for us.\\
+
+We trained our ANN to the strategy of random players by observing their actions and the information about the game in the moment of the action. We then found the TNE of the ANN's, and compared them to our requirement of having a TNE of five percent or less. Our best ANN had an TNE of $\sim$14.0~\% and therefore did not fulfil our requirement of five percent or less. 
