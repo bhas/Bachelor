@@ -16,27 +16,16 @@
 \BOOKMARK [3][-]{subsubsection.2.2.1}{Find the TNE of the first ANN}{subsection.2.2}% 16
 \BOOKMARK [3][-]{subsubsection.2.2.2}{Find the TNE of the second ANN}{subsection.2.2}% 17
 \BOOKMARK [3][-]{subsubsection.2.2.3}{Find the TNE of the third ANN}{subsection.2.2}% 18
-<<<<<<< HEAD
 \BOOKMARK [3][-]{subsubsection.2.2.4}{Finding the optimal number of hidden neurons}{subsection.2.2}% 19
 \BOOKMARK [2][-]{subsection.2.3}{Discussion}{section.2}% 20
 \BOOKMARK [2][-]{subsection.2.4}{Conclusion}{section.2}% 21
 \BOOKMARK [1][-]{section.3}{Learning to adapt to opponents}{}% 22
 \BOOKMARK [2][-]{subsubsection.3.0.1}{Player modeling}{section.3}% 23
-\BOOKMARK [2][-]{subsection.3.1}{How can we model a player dynamically?}{section.3}% 24
-\BOOKMARK [2][-]{subsection.3.2}{Test}{section.3}% 25
-\BOOKMARK [2][-]{subsection.3.3}{Discussion}{section.3}% 26
-\BOOKMARK [2][-]{subsection.3.4}{Conclusion}{section.3}% 27
-=======
-\BOOKMARK [2][-]{subsection.2.3}{Discussion}{section.2}% 19
-\BOOKMARK [2][-]{subsection.2.4}{Conclusion}{section.2}% 20
-\BOOKMARK [1][-]{section.3}{Learning to adapt to opponents}{}% 21
-\BOOKMARK [2][-]{subsubsection.3.0.1}{Player modeling}{section.3}% 22
-\BOOKMARK [2][-]{subsection.3.1}{How can we model a player?}{section.3}% 23
-\BOOKMARK [2][-]{subsection.3.2}{How can we model a player dynamically?}{section.3}% 24
-\BOOKMARK [2][-]{subsection.3.3}{Test}{section.3}% 25
-\BOOKMARK [2][-]{subsection.3.4}{Discussion}{section.3}% 26
-\BOOKMARK [2][-]{subsection.3.5}{Conclusion}{section.3}% 27
->>>>>>> b3c82856717a2a8d854dbc43a99ef637bba1d5c6
-\BOOKMARK [1][-]{section.4}{Discussion}{}% 28
-\BOOKMARK [1][-]{section.5}{Conclusion}{}% 29
-\BOOKMARK [1][-]{appendix.A}{Glossary}{}% 30
+\BOOKMARK [2][-]{subsection.3.1}{How can we model a player?}{section.3}% 24
+\BOOKMARK [2][-]{subsection.3.2}{How can we model a player dynamically?}{section.3}% 25
+\BOOKMARK [2][-]{subsection.3.3}{Test}{section.3}% 26
+\BOOKMARK [2][-]{subsection.3.4}{Discussion}{section.3}% 27
+\BOOKMARK [2][-]{subsection.3.5}{Conclusion}{section.3}% 28
+\BOOKMARK [1][-]{section.4}{Discussion}{}% 29
+\BOOKMARK [1][-]{section.5}{Conclusion}{}% 30
+\BOOKMARK [1][-]{appendix.A}{Glossary}{}% 31
