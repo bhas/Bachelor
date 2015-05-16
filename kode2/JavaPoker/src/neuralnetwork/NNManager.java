@@ -1,21 +1,15 @@
 package neuralnetwork;
 
-import graph.Graph;
-import graph.GraphData;
-import graph.GraphWindow;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Random;
 
 import montecarlo.ProbabilityCalc;
 
 import org.neuroph.core.NeuralNetwork;
 import org.neuroph.core.Neuron;
-import org.neuroph.core.learning.DataSet;
+import org.neuroph.core.data.DataSet;
 import org.neuroph.core.learning.SupervisedLearning;
-import org.neuroph.core.transfer.Step;
 import org.neuroph.nnet.MultiLayerPerceptron;
 import org.neuroph.nnet.Perceptron;
 import org.neuroph.nnet.learning.BackPropagation;

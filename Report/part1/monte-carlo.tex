@@ -45,37 +45,38 @@ The calculator considers it a win only if the hand beats every other hand of the
 
 In order to ensure the quality of the calculator, we have the following requirements:
 \begin{itemize}
-\item It must be able to return the probability of winning with a given hand in any game state with up to ten players.
 \item It must have a maximum error percentage of one percent. (deviation from the true probability)
-\item It must calculate the probability in less than three seconds.
+\item It must calculate the probability in less than five seconds.
+\item It must be able to return the probability of winning with a given hand in any game state with up to ten players.
 \end{itemize}
-
-For requirement one we chose ten players because ten is the maximum number of players in a single round.
-For requirement two we chose an error percentage of one because we found it adequate.
-For requirement three we chose three second as it seemed fast enough since most players usually have 20-30 seconds for each decision making.
 
 \subsubsection{Monte Carlo method}
 The Monte Carlo method is used to find the distribution of outcomes for a domain. Given a set of user defined inputs the Monte Carlo method performs the simulation to find the outcome. For each simulation the method tracks the outcomes and as the number of simulations increases, so will the accuracy of the distribution. This distribution can help to get a better understanding of the domain.
 
 \subsection{Test}
-As mentioned earlier the number of simulations affects the accuracy of the result. First we test what number of simulations is needed to fulfil the requirements. 
-In order to find the accuracy of the probabilities we first need to know the true probabilities. For this we use caniwin \ref{caniwin}. Caniwin is a website that has simulated all possible outcomes of any pre-flop hands. Caniwin's results are limited to the pre-flop game state, so we can only test the calculator for this game state.\\
+We have created tests to ensure the calculator fulfils all the requirements. 
+ 
+In order to find the accuracy of the probabilities we first need to know the true probabilities. For this we use caniwin \ref{caniwin}. Caniwin is a website that has simulated all possible outcomes of any pre-flop hands. Caniwin's results are limited to the pre-flop game state, so we can only test the calculator for this game state.
 
-After we find an optimal number of simulations we will test the accuracy of the calculator in different game states using this number of simulations.
+The number of simulations affects the error percentage as well as the calculation time. We start by finding a number of simulations that meets the first and second requirement. We test what number of simulations are needed in order to get a maximum error of one percent. Afterwards we will find the number of simulations that results in a calculation time in less than five seconds.
 
-\subsubsection{Number of simulations}
-To find the optimal number of simulations for the calculator we test 
-a single hand with a different number of simulations. The calculator calculates the probability 50 times for each test. Each test is performed with the hand J\clubsuit ~ J\diamondsuit ~ in pre-flop with one opponent and the true probability of this is 77,1~\%. We then find the absolute max error and the average computation time of all calculations. The error percentage in table \ref{tab:pre-flop-test} is found using the formula: 
+Once we have a suitable number of simulations we test if the calculator finds the correct probability.
+
+\subsubsection{Finding the maximum error}
+\label{sec:mc-test1}
+As mentioned earlier the number of simulations affects the accuracy of the result. In this test we will find the number of simulations that fulfils the requirement of having a maximum error percentage of one percent.
+
+Each test is performed with the hand J\clubsuit ~ J\diamondsuit ~ in pre-flop with one opponent. The calculator calculates the probability 50 times for each test. The true probability found by caniwin is $\sim$77,1~\%. 
+We then calculate the error of each calculation using the the formula:
 
 \[err = P_{O} - P_{T}\]
 
 Here $P_{O}$ is the probability found by the calculator and $P_{T} $ is the true probability. 
 
 We plotted the results of each test in a graph, see figure \ref{fig:mc1}, \ref{fig:mc10}, and \ref{fig:mc50}. 
-Each test result is indicated with a red dot. The three graphs clearly shows that when using a higher amount of simulations, the more accurate the probability becomes.
+Each test result is indicated with a red dot. The three graphs clearly shows that when using a higher amount of simulations, the more accurate the probability are.
 
-The error percentage can be seen in table \ref{tab:mc-total}.
-
+Table \ref{tab:mc-total} shows the range of results as well as the maximum error for the tests.
 
 \begin{figure}[H]
   \center
@@ -95,10 +96,50 @@ The error percentage can be seen in table \ref{tab:mc-total}.
   \caption{Result of the calculator with 50.000 simulations \label{fig:mc50}}
 \end{figure}
 
-We settled for 50.000 as the number of simulations for our calculator. This satisfies our requirements.
+\begin{table}[H]
+  \center
+  \begin{tabular}{ | l | l | l | }
+    \hline
+    simulations & range (\%) & max error (\%) \\
+    \hline                       
+    1000 & 5,2 & 2,7 \\
+    10.000 & 2,2 & 1,5 \\
+    50.000 & 0,9 & 0,7 \\
+  \hline  
+  \end{tabular}
+  \caption{Combined test results from running the calculator with different numbers of simulations. \label{tab:mc-total}}
+\end{table}
+\vspace{4mm}
 
-\subsubsection{Accuracy of the calculator}
-To test if the calculator can calculate the correct probabilities we find the probability of a number of different pre-flop scenarios and compare the result with the results by caniwin. Every test have been preformed with 50.000 simulations against one opponent. The result can be seen in table \ref{tab:pre-flop-test}. From the results we can see that for all hole cards the error percentage is less than one.
+Using 50.000 simulations fulfils our requirements.
+
+\subsubsection{Finding the calculation time}
+In this test we run the calculator 100 times with the same hand in order to find an average computation time. 
+In table \ref{tab:mc-time} the average computation time can be seen. As we expect the computation time increases as the number of simulations increases. 
+
+\vspace{4mm}
+\begin{table}[H]
+  \center
+  \begin{tabular}{ | l | l | }
+    \hline
+    simulations & Average computation time\\
+    \hline                       
+    1000 & $\sim$0,01 seconds\\
+    10.000 & $\sim$0,04 seconds\\
+    50.000 & $\sim$0,15 seconds\\
+  \hline  
+  \end{tabular}
+  \caption{Calculation times from running the calculator with different numbers of simulations. \label{tab:mc-time}}
+\end{table}
+\vspace{4mm}
+
+Luckily, using 50.000 simulations gives a average computation time of $\sim$0,15 seconds which also satisfies the second requirement. We therefore settle for 50.000 simulation as the number of simulations for the calculator.
+
+\subsubsection{Determining the correctness of the calculator}
+To test if the calculator can calculate the correct probabilities, we find the probability of a number of different pre-flop scenarios and compare the result with the true probability. Every test is preformed with 50.000 simulations against one opponent. We use the formula described in section \ref{sec:mc-test1}:
+\[err = P_{O} - P_{T}\]
+
+The result can be seen in table \ref{tab:pre-flop-test}. From the results we can see that for all tests the error percentage is less than one and the calculator therefore works for the pre-flop.
 \vspace{4mm}
 \def\arraystretch{1.5}
 \begin{table}[H]
@@ -124,7 +165,10 @@ To test if the calculator can calculate the correct probabilities we find the pr
 \end{table}
 \vspace{4mm} 
 
-The pair of fives in table \ref{tab:percent} have a zero percent chance of winning at the river, because the monte carlo does not count a draw as a win.
+Testing the calculator for other game states is a bit problematic because we were not able to find any probabilities for anything but pre-flop. Instead we calculate the probability of some combinations of hole cards and community cards. 
+
+In table \ref{tab:percent} we can see the results. For the first situation (A\clubsuit ~ K\diamondsuit) the player start with a strong hand but does not hit anything from the community cards. As expected the probability decreases. The second hand (2\diamondsuit ~ 5\spadesuit) is bad until the turn where it hits a straight. This is also clearly shown by the percentages. Likewise the third hand (8\spadesuit ~ 9\spadesuit) hits a flush on the river and the probability increases drastically. Finally we have the hand (5\spadesuit ~ 5\clubsuit) where there is a straight from the community cards. This results in a zero percent win chance because the community cards are public and therefore the result is either a draw or a lose.
+The data suggests that the calculator also works for all game states.
 \vspace{4mm}
 \def\arraystretch{1.5}
 \begin{table}[H]
@@ -146,9 +190,6 @@ The pair of fives in table \ref{tab:percent} have a zero percent chance of winni
 \end{table}
 \vspace{4mm} 
 
-Despite a pair of aces is a good hand, the number of opponents makes the chances of winning a lot less
-\vspace{4mm}
-\def\arraystretch{1.5}
 \begin{table}[H]
   \center
   \begin{tabular}{ | l | l | l | l | l | l | l | l | l | l |}
@@ -161,24 +202,9 @@ Despite a pair of aces is a good hand, the number of opponents makes the chances
     \caption{Chance of winning with the hole cards A\spadesuit ~ A\clubsuit ~ in pre-flop \label{tab:winchance}}
 \end{table}
 
-In table \ref{tab:mc-total} you can see the combined result. The range is the difference between the lowest and highest result and the max error is the maximum deviation from caniwin.
+From table \ref{tab:winchance} we can see that the probability also decreases as the number of players increases, which suggest it works for multiple players as well.
 
-The time have been calculated by finding an average of 100 calculations of the same hole cards.
-\vspace{4mm}
-\begin{table}[H]
-  \center
-  \begin{tabular}{ | l | l | l | l | }
-    \hline
-    simulations & range (\%) & max error (\%) & time (seconds) \\
-    \hline                       
-    1000 & 5,2 & 2,7 & \textasciitilde{ 0,01} \\
-    10.000 & 2,2 & 1,5 & \textasciitilde{ 0.04}\\
-    50.000 & 0,9 & 0,7 & \textasciitilde{ 0.15}\\
-  \hline  
-  \end{tabular}
-  \caption{Combined test results from running the calculator with different numbers of simulations. \label{tab:mc-total}}
-\end{table}
-\vspace{4mm}
+The calculator passed all tests and seems to work in every situation. 
 
 \subsection{Discussion}
 For the implementation of the calculator the Monte Carlo method was. This method works well for the needs. The calculator can calculate the probability with an error percentage of less than one percent when using 50.000 simulations. This solution can be used for any poker state with up to ten players. At first it did not seem necessary to optimise the calculator any further, as the running time is acceptable. But in regards to later use or if were to scale the project, we decided to make an obvious optimisation by making it multi-threaded which speeded up the calculations by roughly 3 times.	
