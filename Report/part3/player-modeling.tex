@@ -7,7 +7,7 @@ The goal of this chapter is to learn the APC to create an algorithm to develop t
 
 \vspace{4mm}
 \begin{statementBox2}{Problem statement 3}
-  How can one develop a strategy adapted to the opponents?
+How can one further develop a strategy for a poker computer to be able to adapt to the playing style of the opponent?
 \end{statementBox2}
 \vspace{4mm} 
 
@@ -16,8 +16,20 @@ In poker there is no such thing as a single optimal strategy. Every strategy has
 Once one understand the strategy of the opponent one has to adapt oneself's strategy.
 
 \subsection{Design}
-In order to learn the strategy of the opponents we try to model the player using player modeling, see section \ref{sec:pm}. When using player modeling one tries to describe a player with a set of attributes.
+In order to learn the strategy of the opponents we try to model the player using player modeling, see section \ref{sec:pm}. 
 
+In this section we will start by introducing the concept of player modeling. We then design the player model we wish to use for the APC and finally implement it as a subsystem called the poker player model.
+
+
+\subsubsection{Player modeling}
+\label{sec:pm}
+Player modeling is a loosely defined concept and may vary from one context to another. The concept of player modeling is to make a computational model of a player. This model includes game related attributes, such as play style and preferences, as well as non-game related attributes, such as cultural background, gender, and personality. All decisions of the player are ultimately made on the basis of these attributes. 
+
+Player modeling is used to describe or predict the players decisions, reasoning and reactions. In the field of artificial intelligences the human player is the most used model for developing computer players. Understanding the reason behind every choice of a player will not only bring a better understanding of the player but also a better understanding of the game and its mechanics.
+
+Since the player model can easily become extremely extensive one normally only includes the relevant attributes of the player.
+
+\subsubsection{Design of the player model}
 It is crucial to figure out which attributes are relevant to the specific player model. When trying to model a player there is almost no limit to what could be included. Attributes such as state of mind, energy, and distractions affect the decision of every human player.  
 
 We listed the attributes that we find most relevant for poker.
@@ -30,98 +42,27 @@ We listed the attributes that we find most relevant for poker.
 \item[Time of decision making] The time a player use for each decision can show the confidence of the players choice. A fast decisions indicates an easy decision. 
 \end{description}
 
-Since our APC is targeted towards computer players as well as human players, it makes no sense to use attributes such as body language and the time of decision making to model the opponents. Those attributes only affect human players. Instead we will model the opponents using the attributes aggressiveness and tightness.
+Since our APC is targeted towards computer players as well as human players, it makes no sense to use attributes such as body language and the time of decision making to model the opponents. Those attributes only affect human players. Instead we will model the opponents using the attributes aggressiveness, tightness, and riskiness.
 
 Aggressiveness is easy to find simply by looking at the actions of the opponent. We choose to divide aggressiveness into three attributes. The first is overall aggressiveness and indicates the average aggressiveness of the player throughout the whole game. The second is recent aggressiveness which shows the aggressiveness within the recent five rounds. finally we have current aggressiveness which refers to the aggressiveness of the previous states of the current round. 
 The reason we divide the aggressiveness into three attributes is to allow the system to register if the opponent changes strategy during the game. In such case the recent aggressiveness will differ significantly form the overall aggressiveness. 
 
 Tightness is a bit more complicated as we need to know the hole cards of the player. We only track the tightness of rounds where the player make it to the showdown. We will then find the average tightness for all rounds.
 
-Riskiness is relevant because it shows how beneficial it can be to play aggressive. Safe players is easier to force to fold by simply playing a bit more aggressive than usual by for instance bluffing. Likewise it is a lot more risky to bluff against a risky player.\\
+Riskiness is relevant because it shows how beneficial it can be to play aggressive. Safe players is easier to force to fold by simply playing a bit more aggressive than usual by for instance bluffing. Likewise it is a lot more risky to bluff against a risky player.
 
-We find the aggressiveness of each round 
+\subsubsection{Implementation of the player model?}
+To model each player we have created a subsystem called the poker player model (PPM). The PPM is responsible for tracking the aggressiveness, tightness, and riskiness.
 
-\subsubsection{Player modeling}
-\label{sec:pm}
-Player modeling is a loosely defined concept and may vary from one context to another. The concept of player modeling is to make a computational model of a player. This model includes game related attributes, such as play style and preferences, as well as non-game related attributes, such as cultural background, gender, and personality. All decisions of the player are ultimately made on the basis of these attributes. 
+A PPM object is created for each opponent and the PPM then tracks the attributes of the player if given the data from a round.
 
-Player modeling is used to describe or predict the players decisions, reasoning and reactions. In the field of artificial intelligences the human player is the most used model for developing computer players. Understanding the reason behind every choice of a player will not only bring a better understanding of the player but also a better understanding of the game and its mechanics.
+The aggressiveness is found as:
 
-Since the player model can easily become extremely extensive one normally only includes the relevant attributes of the player.
+\[Aggressiveness = \frac{Action_{Agg}}{Action_{Total}}\]
 
-If player can optimally model an opponent, that player will have a much greater chance of being successful. A player who have the same amount of knowledge regarding the fundamentals of poker as the opponent, but lacks the ability to change strategy throughout the game will probably not win as much as the opponent.
-
-\subsubsection{How can we model a player?}
-Quite a few decisions needs to be made when beginning to player model. It is crucial to figure out which attributes are relevant to the specific player model. When trying to model a player there is almost no limit to what could be included. A player model could include but is not limited to; the players childhood, if the player is hungry, distractions, the players body language etc. All of these and many more are what makes the player him. But as many of these are out of the scope of this project, this chapter will focus on a rather few but relevant attributes. 
-
-The attributes that is relevant when modeling a poker player:
-\begin{enumerate}
-  \item The players aggressiveness
-  \item The players bluff percentage
-  \item The players decision delay
-\end{enumerate}
-
-Each of these attributes and the reasoning behind the choices is described below.\\
-
-As being stated earlier, poker is a game of imperfect information. The betting strategy of a player is the only piece of information that an opponent is able to see.
-But just because a player is choosing to raise, does not necessarily mean that the player has a hand that has a good chance of winning.
-A player who knows the fundamentals of poker are aware that the way of betting could reflect what cards he is holding. A player will therefore often try to bet the opposite of what is logic in order to disguise his cards further.
-It goes without saying that predicting the cards of an opponent is rather impossible. \\
-
-The players aggressiveness can be split in two separate attributes; the overall aggressiveness and the current aggressiveness. We chose aggressiveness as one of the attributes for the player modeling as it could be a remedy in order to determine whether or not APC should fold or play on.
-The opponents aggressiveness can be calculated by looking at the history of the game. If a player raises in every game the system will address him as an aggressive player and calculate a value describing how aggressive he is. Likewise if the player is limiting his actions to bet/check then the aggressiveness value will decrease. 
-
-The players current aggressiveness can make APC prepared for any changes in the players characteristics. If a player has been playing safe the whole game and suddenly begins to raise, it is quite possible that he is either changing strategy or maybe he has received some good hole cards. If the player has a habit of raising each time he receives some good hole cards, it says a lot about his current strategy. However, the main focus will still be in regards to the player changing his strategy which APC will have to adapt to.
-
-The players bluff percentage is chosen as a relevant factor in regards to modeling of the player as it tells whether or not the player is playing solely from his point of view. If a player is playing solely from his own point of view and not thinking about the see-through he creates when doing this, then APC will have a great advantage. After several games, APC will notice a pattern for when the player is raising compared to the cards shown at the showdown. APC will then for the further games against this player be able to distinguish between if the player is bluffing or not.
+Her $Action_{Agg}$ is the number of aggressive actions (bet or raise) and  $Action_{Total}$ is the total number of actions. This is found for every round. Overall-, recent-, and current aggressiveness is found as an average of all rounds, last five rounds, and current round respectively.
 
 
-The delay in the players decision making may or may not be relevant when modeling the player. The time used by the player when making a decision does not necessarily mean that the player is uncertain if he should do this or that. Many factors come into play when a player is having his turn. A delay can be due to the player being away from the keyboard (AFK), whether or not he should fold, bet or raise based on his hole cards, the community cards, APCs action among other things. 
-\\
-
-\subsubsection{How can we model a player dynamically?}
-In order to make the player modeling dynamic we will have to introduce a new ANN. The ANN can learn dynamically based on the inputs given. The network keeps getting new inputs that can be used in the current dataset for an opponent and should be added so that the network can learn each time the opponent makes a decision that gives us more data.
-
-The adaptive part of APC will be using a multi-layer perceptron wtih the structure x-x-2. The supervised learning method will be used to make the network learn about the player by having an expected output. The initial part will be using the already developed default strategy from chapter 2 until the adaptive part has enough information about the player to choose a qualified action against the opponent.
-It is possible to retrain the whole network each time a round is finished. That way the ANN can train with the new data that is available but this would be time very time consuming compared to the small amount of new data at each round.
-A small amount of data may be insignificant to the training of the ANN, and therefore this is perhaps not the best approach.
-
-Another approach could be..... No freaking idea...
-
-The ANN will have the following inputs:
-
-\begin{enumerate}
-  \item The probability of the hole cards
-  \item Chips in the pot
-  \item Cost to call
-  \item Number of opponents
-  \item Opponents chips
-  \item Opponents aggressiveness
-  \item Opponents recent aggressiveness
-\end{enumerate}
-
-
-Each of these attributes and the reasoning behind the choices is described below.\\
-
-The probability of the hole cards is always a part of the decision making when a player is choosing whether or not to play the hand or not. The problem with this input is that a bad hand can have a much greater value later in the game. Likewise a good hand in the beginning can become very bad when the community cards are revealed. Therefore this is not the only input that is relevant when making a decision.
-
-
-The chips in the pot and the cost to call are two inputs that is very valuable to the player when making a decision. When a player is deciding he will look at the pot to see how much is able to win compared to what he could loose. This is a major factor in decision making. Of course a player wants to keep the risks of losing to a minimal but the chance of winning to a maximum.
-
-The number of opponents is also a relevant input as the choice a player takes depends loosely on how many opponents he is currently betting against. If a player is playing against nine opponents, his chances of winning is less than if he were playing against only one opponent. But the amount of winnings is quite larger in the game with nine opponents as each of these opponents has to lay the blinds, and likewise they are able to bet and raise the pot.
-Therefore a player with good cards have a few options, he could either play a little defensive hoping the others will try to bluff and thereby betting. This would allow our player to remain with disguised cards. Another option is to bet and revealing that he has a good hand, but that could lead to the other players to fold and he would loose profits that could have been. As the number of opponents can decrease throughout a round this is worth taking into account, as it will affect a players decisions.
-
-The amount of chips each opponent have is important to know because it will affect the players decision. Since a player wants to win the biggest amount possible, the player will need to predict how the opponents will react to the bet. It goes without saying that an opponent with a low amount of chips is unlikely to call a raise. Therefore the player will have to adapt his choice in order to gain the most from winning.
-
-The opponents aggressiveness is part of creating a player model of the opponent. It will be used in the neural network as the network has to take into perspective how aggressive the opponent is as it can really affect what strategy a player should use.
-The overall aggressiveness of the player is being defined by the formula:
-\[ Aggressive ~ actions ~ / ~ Total ~ actions \]
-
-
-Likewise the current aggressiveness of the opponent is worth looking at. While looking at the opponents overall aggressiveness is fine, it is not adaptive in the short term. Surely after many games the network will have adapted to the opponents change in strategy. But we want APC to change shortly after the opponent changed their strategy. Therefore we introduce the current aggressiveness of the opponent to notice any sudden changes in the strategy.
-
-The recent aggressiveness of the player is being defined by the formula:
-\[ Aggressive ~ action ~ / ~ 5 ~ last ~ actions \]
 
 
 
