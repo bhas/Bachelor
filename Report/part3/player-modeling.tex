@@ -44,23 +44,41 @@ We listed the attributes that we find most relevant for poker.
 
 Since our APC is targeted towards computer players as well as human players, it makes no sense to use attributes such as body language and the time of decision making to model the opponents. Those attributes only affect human players. Instead we will model the opponents using the attributes aggressiveness, tightness, and riskiness.
 
-Aggressiveness is easy to find simply by looking at the actions of the opponent. We choose to divide aggressiveness into three attributes. The first is overall aggressiveness and indicates the average aggressiveness of the player throughout the whole game. The second is recent aggressiveness which shows the aggressiveness within the recent five rounds. finally we have current aggressiveness which refers to the aggressiveness of the previous states of the current round. 
-The reason we divide the aggressiveness into three attributes is to allow the system to register if the opponent changes strategy during the game. In such case the recent aggressiveness will differ significantly form the overall aggressiveness. 
+Aggressiveness is easy to find simply by looking at the actions of the opponent. 
 
-Tightness is a bit more complicated as we need to know the hole cards of the player. We only track the tightness of rounds where the player make it to the showdown. We will then find the average tightness for all rounds.
+Tightness is a bit more complicated as we need to know the hole cards of the player. We only track the tightness of rounds where the player make it to the showdown.
 
-Riskiness is relevant because it shows how beneficial it can be to play aggressive. Safe players is easier to force to fold by simply playing a bit more aggressive than usual by for instance bluffing. Likewise it is a lot more risky to bluff against a risky player.
+Riskiness is also complicated to measure as it is relative to the hole cards of the player. If a player has a weak hand and calls or raise, it is considered a risky play.  
+
+The APC also need to be able to recognise if a player changes strategy during the game. To accomplish this we split each attribute into the two attributes: overall and recent. Overall covers every round throughout the game while recent only covers the last ten rounds.
+
+The reason we choose ten games recent is because a player might get lucky and get several strong hole cards in a row. This may cause the player to play more aggressive than usual even though the player still uses the same strategy. This will result in a miss read by the player model. We found ten games to be high enough to avoid miss reads and also low enough to actually track changes in the players strategy.
+
+Aggressiveness is also split into one additional attribute called current aggressiveness which is the previous aggressiveness of the current round.
+
+We end using the following attributes attributes for our player model:
+\begin{enumerate}
+\item Overall aggressiveness
+\item Recent aggressiveness
+\item Current aggressiveness
+\item Overall tightness
+\item Recent tightness
+\item Overall riskiness
+\item Recent riskiness
+\end{enumerate}
 
 \subsubsection{Implementation of the player model?}
-To model each player we have created a subsystem called the poker player model (PPM). The PPM is responsible for tracking the aggressiveness, tightness, and riskiness.
+To model each player we have created a subsystem called the poker player model (PPM). The PPM is responsible for tracking the aggressiveness, tightness, and riskiness of a player.
 
 A PPM object is created for each opponent and the PPM then tracks the attributes of the player if given the data from a round.
 
-The aggressiveness is found as:
+The aggressiveness of a round is found as:
 
-\[Aggressiveness = \frac{Action_{Agg}}{Action_{Total}}\]
+\[Agg_{n} = \frac{AA_{n}}{TA_{n}}\]
 
-Her $Action_{Agg}$ is the number of aggressive actions (bet or raise) and  $Action_{Total}$ is the total number of actions. This is found for every round. Overall-, recent-, and current aggressiveness is found as an average of all rounds, last five rounds, and current round respectively.
+$[Agg_{n}$ is the aggressiveness of round $n$, $AA_{n}$ is the number of aggressive actions (bet or raise) of round $n$ and  $TA_{n}$ is the total number of actions in round $n$. This is found for every round. Overall-, recent-, and current aggressiveness is found as an average of all rounds, last ten rounds, and current round respectively.\\
+
+The tightness of the player is found backtracking the actions of the player after the round is finished. This is of cause only done for rounds that makes it to the showdown since we otherwise do not know the hole cards of the player. 
 
 
 
