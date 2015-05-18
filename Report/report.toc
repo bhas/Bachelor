@@ -13,8 +13,8 @@
 \contentsline {subsubsection}{\numberline {2.1.2}First ANN design}{23}{subsubsection.2.1.2}
 \contentsline {subsubsection}{\numberline {2.1.3}Second ANN design}{25}{subsubsection.2.1.3}
 \contentsline {subsubsection}{\numberline {2.1.4}Third ANN design}{26}{subsubsection.2.1.4}
-\contentsline {subsection}{\numberline {2.2}Test}{26}{subsection.2.2}
-\contentsline {subsubsection}{\numberline {2.2.1}Find the TNE of the first ANN}{27}{subsubsection.2.2.1}
+\contentsline {subsection}{\numberline {2.2}Test}{27}{subsection.2.2}
+\contentsline {subsubsection}{\numberline {2.2.1}Find the TNE of the first ANN}{28}{subsubsection.2.2.1}
 \contentsline {subsubsection}{\numberline {2.2.2}Find the TNE of the second ANN}{28}{subsubsection.2.2.2}
 \contentsline {subsubsection}{\numberline {2.2.3}Find the TNE of the third ANN}{29}{subsubsection.2.2.3}
 \contentsline {subsubsection}{\numberline {2.2.4}Finding the optimal number of hidden neurons}{30}{subsubsection.2.2.4}

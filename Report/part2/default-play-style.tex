@@ -59,7 +59,7 @@ The neurons in an ANN are distributed in layers as shown in figure \ref{fig:perc
 
 The ANN can be trained using a training set of inputs. Using supervised learning, in contrast to unsupervised learning, one must also supply an expected output. For each input it will adjust the weights in order to get closer to the expected output. The TNE indicates the amount of training data that did not produce the expected result. The TNE is calculated during each iteration and the ANN will continue adjusting the weights until the TNE is acceptable. 
 
-Backpropagation is the most common algorithm for supervised ANNs. It adjust the weights from the end (the output neurons) back to the start (the input neurons).
+Backpropagation is the most common algorithm for supervised ANNs. It adjusts the weights from the end (the output neurons) back to the start (the input neurons).
 
 After the training the ANN can be validated to see if it works. This is done using a test set different from the training set and see if the results of the ANN matches the expected results of the test set.
 
@@ -68,14 +68,30 @@ After the training the ANN can be validated to see if it works. This is done usi
 For the first attempt we design a simple perceptron that takes two inputs, and returns two outputs, see figure \ref{fig:nn1}. 
 \input{other/models/default-nn1.tex}
 
-The first input is the hand strength. We use the calculator from chapter \ref{sec:part1} to calculate the probability of winning against a single opponent. The reason we always find the probability against a single opponent is because the probability of winning decreases drastically as the number of opponents increases. We use an absolute hand strength rather than a hand strength relative to the number of players. This makes it easier to compare the hands strengths in situations with different numbers of players. 
+The first input is the hand strength. We use the calculator from chapter \ref{sec:part1} to calculate the probability of winning against a single opponent. The reason we always find the probability against a single opponent is because the probability of winning decreases drastically as the number of opponents increases. We use an absolute hand strength rather than a hand strength relative to the number of players.
+This makes it easier to compare the hands strengths in situations with different numbers of players. 
+Since the inputs in the ANN has to be between 0 and 1 we will have to normalize our input data.
 
-The second input is the number of opponents. The input is normalized as \[I_{norm} = \frac{Opp}{Opp_{max}}\] 
+The first input is the hand strength which is already normalized. 
+
+The second input is the number of opponents. The second input is normalized as \[I2_ = \frac{Opp}{Opp_{max}}\] 
+
 Here $Opp$ is the number of opponents and $Opp_{max}$ is the maximum number of opponents (in our case nine).
 
 From the tests we found that this network had a TNE of $\sim$19,9 \%, see section \ref{sec:ann-test1}. This does not fulfil our requirement of a TNE of five percent or less.
 
-In order for a perceptron to be accurate the data have to be linear separable. This means that the outcomes can be separated by a single line if the are plotted in a graph. We plot some of the data in figure \ref{fig:linear-separable} to see if it is linear separable. The figure clearly shows that the data is not linear separable and therefore a single perceptron will not work.
+In order for a perceptron to be accurate the data have to be linear separable. This means that the outcomes can be separated by a single line if they are plotted in a graph. This line should clearly show the distinction between the two kinds of outputs. We plot some of the data in figure \ref{fig:linear-separable} to see if it is linear separable.  The figure clearly shows that the data is not linear separable as it cannot separate the two outputs with a single line and therefore a single perceptron will not work. NOTE: Linear separation is only possible with a perceptron.
+\begin{figure}[H]
+  \center
+    \includegraphics[scale=0.8]{images/nn/separable.png}
+  \caption{Example of linear separable data.\label{fig:lsexample}}
+\end{figure}
+
+\begin{figure}[H]
+  \center
+    \includegraphics[scale=0.8]{images/nn/non-separable.png}
+  \caption{Example of non linear separable data.\label{fig:nlsexample}}
+\end{figure}
 
 \begin{figure}[H]
   \center
@@ -87,14 +103,14 @@ In order for a perceptron to be accurate the data have to be linear separable. T
 \label{sec:design2}
 Since the first approach designing a perceptron did not fulfil our requirement we instead design a multilayer perceptron (MLP) with five inputs, see figure \ref{fig:nn2}.
 
-The MLP is taking the same inputs as the perceptron from section \ref{sec:design1}, but now it takes three additional inputs: The chips of the player, the cost for the player to call, and the pot. We normalize the three new inputs as: \[I_{norm} = \frac{I}{chips_{total}}\]. 
-Here $I$ is the input to be normalized and $chips_{total}$ is the total amount of chips in the game, including the pot and the bets.
+The MLP is taking the same inputs as the perceptron from section \ref{sec:design1}, and three additional inputs: The chips of the player, the cost for the player to call, and the pot. We normalize the three new inputs as: \[I3 = \frac{chips}{chips_{total}}\] \[I4 = \frac{cost}{chips_{total}}\] \[I5 = \frac{profit}{chips_{total}}\]. 
+Here $chip$ is our chips, $cost$ is how many chips it costs to call, $profit$ is the amount of chips at stake and $chips_{total}$ is the total amount of chips in the game, including the pot and the bets.
 
 The MLP has one hidden layer with two hidden neurons. One hidden neuron to calculate the likelihood of winning and another for the economically aspect.
 
 \input{other/models/default-nn2.tex}
 
-From the test in section \ref{sec:ann-test2}, we can see that the TNE is $\sim$19,1 \%. This is a small improvement compared to the first ANN but it still does not fulfil the requirement about a TNE of five percent or less.
+From the test in section \ref{sec:ann-test2}, we can see that the TNE is $\sim$19,1 \%. This is a small improvement compared to the first ANN but it still does not fulfil the requirement about a TNE of five percent or less. 
 
 \subsubsection{Third ANN design}
 \label{sec:design3}
