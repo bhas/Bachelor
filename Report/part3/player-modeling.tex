@@ -1,9 +1,9 @@
 \section{Learning to adapt to opponents}
 \label{sec:part3}
 
-In the previous chapter we created an algorithm to develop the default strategy for the APC. The default strategy is one of the two strategies that will be used to determine the actions of the APC. The other strategy is the adaptive strategy. \\
+In the previous chapter we tried to create an algorithm to develop the default strategy for the APC. \\
 
-The goal of this chapter is to learn the APC to create an algorithm to develop the adaptive strategy by solving problem statement 3.
+The goal of this chapter is to further develop the strategy of APC to also adapt to the strategies of the opponents. This chapter will be mainly theoretical since it is based on the strategy of the previous chapter, which did not work.
 
 \vspace{4mm}
 \begin{statementBox2}{Problem statement 3}
@@ -89,6 +89,14 @@ We took a sample of 100 defensive action and 100 aggressive actions and plotted 
 We define slow playing as playing defensive with a hand strength of more than 0,63.
 
 We define bluffing as playing aggressive with a hand strength of less than 0,46.
+
+We then find the tightness of a round $Ti_{n}$ using the formula:
+
+\[Ti_{n} = \dfrac{Bluff_{n} + Slow_{n}}{TA_{n}}\]
+
+Here $Bluff_{n}$ is the number of times the player bluffed, $Slow_{n}$ is the number of times the player slow played and $TA_{n}$ is the total number of actions.
+
+We then find the 
 
 \begin{figure}[H]
   \center

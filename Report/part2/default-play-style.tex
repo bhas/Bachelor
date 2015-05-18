@@ -8,7 +8,7 @@ In this chapter we will find a solution to the problem statement:
 
 \vspace{4mm}
 \begin{statementBox2}{Problem statement 2}
-How can one develop a strategy without having any information about the opponents?
+How can we develop a default strategy for APC without having information about the opponents?
 \end{statementBox2}
 \vspace{4mm}
 
@@ -69,11 +69,11 @@ If the training is succesful and the TNE is acceptable one can validate the ANN 
 \label{sec:default-test}
 The University of Alberta has a research group that specializes in the field of artificial intelligence in poker \cite{alberta}. They have released a dataset containing data from $\sim$18.000 real-life rounds of Texas hold'em limit poker. The dataset only contains data about the hole cards of the players who made it to the showdown. We will refer to these players as relevant players.
 
-The dataset consists of multiple files. The file called \textit{hroster} contains the names of all players at the beginning of the round. The file called \textit{hdb} contains the information about the community cards and the flop after each game state. For each player a file called \textit{pdb.}<playername> exists. This file includes the hole cards (if the player did not fold), chips, profit from round and actions during each game state. 
+The dataset consists of multiple files. One file contains the names of all players at the beginning of each round. Another one contains the information about the community cards and the flop after each game state. For each player a file exists. This file includes the hole cards (if the player did not fold), chips, profit from round and actions during each game state. 
 
-We have collected all the data from the different files into an single data file called \textit{refactored-data.txt} to make it easier to analyse the rounds. We discarded the data for all rounds that has no relevant players. This is because no information about the hole cards exists in such rounds and therefore it is irrelevant for us. 
+We have collected all the data from the different files into an single data file to make it easier to analyse the rounds. We discarded the data for all rounds that has no relevant players. This is because no information about the hole cards exists in such rounds and therefore it is irrelevant for us. 
 
-\textit{refactored-data.txt} will be used for training and testing the ANN's throughout this section.\\
+The new data file will be used for training and testing the ANN's throughout this section.\\
 
 For each test we create a new dataset. This dataset contains the information about the game for each action performed by a relevant player. All informations about the game is found in the moment of the action. For instance, an action in the pre-flop will have no information about the community cards.
 Each dataset contains data from 200 random poker rounds, resulting in $\sim$1200 actions distributed across all game states.
@@ -232,7 +232,7 @@ The second problem was to determine the number of inputs for the ANN. We did not
 
 The final problem we encountered was defining our requirements for the ANN. We do know what TNE is realistic and our requirements may be unrealistic. \\
 
-It was a bad idea to try learn a default strategy from random player in random rounds. The players had most likely already gained information about the opponents and thus adapted their strategy to the opponents. It would have made more sense to observe players who just joined a table to see how they played in a situation where they had not adapted to the opponents yet.
+It was a bad idea to try learn a default strategy from random players in random rounds. The players had most likely already gained information about the opponents and thus adapted their strategy to the opponents. It would have made more sense to observe players who just joined a table to see how they played in a situation where they had not adapted to the opponents yet.
 Additionally, trying to learn an approximation of every strategy is a bad idea. Observing bad players will cause the default strategy to take bad decisions. It would make more sense to observe only a few successful players. This way we can ensure the decisions to be smart. 
 
 \subsection{Conclusion}
@@ -240,10 +240,10 @@ In this chapter we try to answer problem statement 2:
 
 \vspace{4mm}
 \begin{statementBox2}{Problem statement 2}
-How can one develop a strategy without having any information about the opponents?
+How can we develop a default strategy for APC without having information about the opponents?
 \end{statementBox2}
 \vspace{4mm}
 
-We develop the strategy by creating an ANN and train it using data from real-life poker games. This solution did not work for us.\\
+We try to develop the strategy by creating different ANN approaches and train them using data from real-life poker games. This solution did not work for us.\\
 
 We trained our ANN to the strategy of random players by observing their actions and the information about the game in the moment of the action. We then found the TNE of the ANN's, and compared them to our requirement of having a TNE of five percent or less. Our best ANN had an TNE of $\sim$14.0~\% and therefore did not fulfil our requirement of five percent or less. 
