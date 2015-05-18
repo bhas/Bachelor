@@ -1,6 +1,6 @@
 \section{Learning a default strategy}
 \label{sec:part2}
-In the previous chapter we created a calculator that can determine the strength of a hand by calculating the probability of winning. In this chapter we shall use the calculator to calculate the strength of the hands.\\
+In the previous chapter we created a calculator that can determine the strength of a hand by calculating the probability of winning. In this chapter we shall use this calculator.
 
 When the APC first joins a poker game it has no information about the opponent, and in this case it must use a default strategy while it gathers more information.
 
@@ -34,6 +34,8 @@ We use an iterative development method to design the ANN. We start by designing 
 All our ANN's have exactly two outputs. The first output is whether or not to be defensive by checking or calling and the second output is whether or not to be aggressive by betting or raising. The closer an output is to the value one, the more certain the ANN is, that it is the correct decision. 
 
 All our ANN's use normalised inputs and a sigmoid function as transfer function. The reason we settle for a sigmoid function rather than a step function is because the sigmoid function allows us to see how certain the ANN is of each decision being correct.
+
+The ANN's use backpropagation for learning.
 
 \subsubsection{Artificial neural network (ANN)}
 \label{sec:nn}
