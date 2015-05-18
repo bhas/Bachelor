@@ -81,17 +81,23 @@ Here $Opp$ is the number of opponents and $Opp_{max}$ is the maximum number of o
 From the tests we found that this network had a TNE of $\sim$19,9 \%, see section \ref{sec:ann-test1}. This does not fulfil our requirement of a TNE of five percent or less.
 
 In order for a perceptron to be accurate the data have to be linear separable. This means that the outcomes can be separated by a single line if they are plotted in a graph. This line should clearly show the distinction between the two kinds of outputs. We plot some of the data in figure \ref{fig:linear-separable} to see if it is linear separable.  The figure clearly shows that the data is not linear separable as it cannot separate the two outputs with a single line and therefore a single perceptron will not work. NOTE: Linear separation is only possible with a perceptron.
-\begin{figure}[H]
-  \center
-    \includegraphics[scale=0.8]{images/nn/separable.png}
-  \caption{Example of linear separable data.\label{fig:lsexample}}
+\begin{centering}
+\begin{figure}
+  \begin{subfigure}[b]{0.4\textwidth}
+    \includegraphics[width=\textwidth]{images/nn/separable.png}
+    \caption{Linear separable data.}
+    \label{fig:1}
+  \end{subfigure}
+  %
+  \hspace{12mm}
+  \begin{subfigure}[b]{0.4\textwidth}
+    \includegraphics[width=\textwidth]{images/nn/non-separable.png}
+    \caption{Non linear separable data.}
+    \label{fig:2}
+  \end{subfigure}
+  \caption{Example of linear separable data.}
 \end{figure}
-
-\begin{figure}[H]
-  \center
-    \includegraphics[scale=0.8]{images/nn/non-separable.png}
-  \caption{Example of non linear separable data.\label{fig:nlsexample}}
-\end{figure}
+\end{centering}
 
 \begin{figure}[H]
   \center
@@ -114,7 +120,7 @@ From the test in section \ref{sec:ann-test2}, we can see that the TNE is $\sim$1
 
 \subsubsection{Third ANN design}
 \label{sec:design3}
-For our first ANN we use the same structure as the second ANN, see figure \ref{fig:nn2}. We believe that the reason the second ANN did not work is because the data is found of random players. Each player may have a different strategy resulting in different actions. This will make it hard for an ANN to find a pattern. 
+For our third ANN we use the same structure as the second ANN, see figure \ref{fig:nn2}. We believe that the reason the second ANN did not work is because the data is found of random players. Each player may have a different strategy resulting in different actions. This will make it hard for an ANN to find a pattern. 
 
 Instead we use data of a single player in all games the player is relevant. The test in section \ref{sec:ann-test3} shows that the TNE varies quite a bit between the players. The higher the TNE are the harder the player is to predict. Since poker is a game of deception most players will be hard for our ANN to learn.
 
