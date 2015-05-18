@@ -1,7 +1,7 @@
 \section*{Introduction}
 Poker is arguably the most popular card game in the world. It involves intelligence, statistics, psychology, and luck. Even though the game itself is fairly simple, it takes years of practice to master all elements of the game.
 
-In poker reading an opponent refers to the process of figuring out the opponents strategy based on their actions. The top players are able to read their opponents and adapt to their strategy in order to gain an advantage. Players often mix in unorthodox actions or change strategies in order to mislead the opponents.
+In poker, reading an opponent refers to the process of figuring out the opponents strategy based on their actions. The top players are able to read their opponents and adapt to their strategy in order to gain an advantage. Players often mix in unorthodox actions or change strategies in order to mislead the opponents.
 
 Another big element of poker is statistics. Since the players do not know the cards that will be dealt throughout the game, players must calculate the likelihood of winning. \\
 
@@ -16,7 +16,7 @@ In the field of artificial intelligence, games are interesting because of their 
 Computers have already mastered some of the popular games, one example is the chess computer Deep Blue which won against Garry Kasparov, the world champion of chess at the time.
 Chess is a game of perfect information, as no information is hidden from the players.
 
-Since then the interest of the artificial intelligence research has shifted towards games with imperfect information. These types of games presents new challenges such as deception and hidden information. Poker is an example of a game with imperfect information.\\
+Since then, the interest of the artificial intelligence research has shifted towards games with imperfect information. These types of games presents new challenges such as deception and hidden information. Poker is an example of a game with imperfect information.\\
 
 In may 2015 the contest \textit{Brains Vs. Artificial Intelligence} \cite{brain-vs-ai} was held with four of the best poker players in the world. Each of the players played $\sim$20.000 hands of Texas Hold'em no-limit heads-up against Claudico, the world's best poker computer at the time. Claudico was able to beat one of the four players, which proves that artificial intelligence in regards to poker have come a long way.\\
 
@@ -33,9 +33,9 @@ In order to achieve the goal of developing an APC, we will try to answer the fol
 \vspace{4mm}
 \begin{statementBox2}{Problem statements}
 \begin{enumerate}
-    \item \label{itm:q1} How can one determine the strength of a poker hand? \label{itm:ps1}
-    \item \label{itm:q2} How can we develop a default strategy without having information about the opponents? \label{itm:ps2}
-    \item \label{itm:q3} How can one develop a strategy adapted to the opponents. \label{itm:ps3}
+    \item \label{itm:q1} How can APC determine the strength of a poker hand at any game state? \label{itm:ps1}
+    \item \label{itm:q2} How can we develop a default strategy for APC without having information about the opponents? \label{itm:ps2}
+    \item \label{itm:q3} How can we further develop the APC's strategy to be able to adapt to the playing style of the opponent? \label{itm:ps3}
   \end{enumerate}
 \end{statementBox2}
 \vspace{4mm}
@@ -44,6 +44,6 @@ Our thesis is divided into three chapters each of which focuses on one of the th
 
 In chapter \ref{sec:part1} we find a solution to problem statement one. We develop a subsystem which is able to estimate the probability of winning for any set of hole cards in any poker state. The subsystem can calculate the probability of winning with an error percentage of one percent and it takes less than a second on average.
 
-In chapter \ref{sec:part2} we try to answer problem statement two. We implement a self-learning algorithm using artificial neural networks and use it to observe data from real-life poker games in order to learn the strategies of the players. The self-learning algorithm did not learn the strategy of the players. The data observed by the algorithm turned out not to be suited for the algorithm.
+In chapter \ref{sec:part2} we answer problem statement two. We implement a self-learning algorithm using artificial neural networks and use it to observe data from real-life poker games in order to learn the strategies of the players. The self-learning algorithm did not learn the strategy of the players. The data observed by the algorithm turned out not to be suited for the algorithm.
 
 In chapter \ref{sec:part3} ...

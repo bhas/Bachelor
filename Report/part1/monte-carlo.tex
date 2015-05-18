@@ -8,7 +8,7 @@ How can one determine the strength of a poker hand?
 \end{statementBox2}
 \vspace{4mm}
 
-The strength of a hand reflects the probability of winning so the stronger a hand is the more likely one are to win. Since the player does not know the outcome of the community cards during a round of poker, the player has to calculate the probability of winning based on the possible outcomes of the community cards. It is too time consuming to check every outcome as there are more than 250 millions different outcomes of community cards alone. In order to find the probability of winning without having to check all possible outcomes, one can instead make an estimate rather than calculating the true probability. 
+The strength of a hand reflects the probability of winning therefore the stronger a hand is the more likely one are to win. Since the player does not know the outcome of the community cards during a round of poker, the player has to calculate the probability of winning based on the possible outcomes of the community cards. It is too time consuming to check every outcome as there are more than 250 millions different outcomes of community cards alone. In order to find the probability of winning without having to check all possible outcomes, one can instead make an estimate rather than calculating the true probability. 
 
 \subsection{Design}
 When trying to estimate the strength of a hand, two options exist.
@@ -51,7 +51,7 @@ In order to ensure the quality of the calculator, we have the following requirem
 \end{itemize}
 
 \subsubsection{Monte Carlo method}
-The Monte Carlo method is used to find the distribution of outcomes for a domain. Given a set of user defined inputs the Monte Carlo method performs the simulation to find the outcome. For each simulation the method tracks the outcomes and as the number of simulations increases, so will the accuracy of the distribution. This distribution can help to get a better understanding of the domain.
+The Monte Carlo method is used to find the distribution of outcomes for a domain. Given a set of user defined inputs the Monte Carlo method performs the simulation to find the outcome. For each simulation the method tracks the outcomes and as the number of simulations increases, so will the accuracy of the distribution. This distribution can help to get a better understanding of the examined domain.
 
 \subsection{Test}
 We have created tests to ensure the calculator fulfils all the requirements. 
@@ -207,11 +207,11 @@ From table \ref{tab:winchance} we can see that the probability also decreases as
 The calculator passed all tests and seems to work in every situation. 
 
 \subsection{Discussion}
-For the implementation of the calculator the Monte Carlo method was. This method works well for the needs. The calculator can calculate the probability with an error percentage of less than one percent when using 50.000 simulations. This solution can be used for any poker state with up to ten players. At first it did not seem necessary to optimise the calculator any further, as the running time is acceptable. But in regards to later use or if were to scale the project, we decided to make an obvious optimisation by making it multi-threaded which speeded up the calculations by roughly 3 times.	
+For the implementation of the calculator the Monte Carlo method was exactly what was needed to fulfil the needs. The calculator can calculate the probability with an error percentage of less than one percent when using 50.000 simulations. This solution can be used for any poker state with up to ten players. At first it did not seem necessary to optimise the calculator any further, as the running time is acceptable. But in regards to later use or if were are to scale the project, we decided to make an obvious optimisation by making it multi-threaded which speeded up the calculations by roughly 3 times.	
 
-Since we compare the results of the calculator to caniwin, one would have to ensure the reliability of that source. It is not directly shown who have written the article but when trying to contact the owner of the write we are directed to Bobby. It is very difficult to know if Bobby is the author and whether or not he has any reputation and expertise in the field. However after finding out that the probability from caniwin heads-up and 10 players is very close to the results from the calculator we concluded that caniwin were a reliable source of information.
+Since we compare the results of the calculator to caniwin, we would have to ensure the reliability of that source. We contacted Bobby who published the results on caniwin, in order to hear if he had any reputation or expertise in the field. Bobby responded saying that he has a bachelor in math from the University of Southern California in LA. Knowing this about Bobby, and that the results from caniwin heads-up and caniwin 10 players is close to the results from the calculator, we expect caniwin to be a reliable source of information.
 
-Alternatively we could have created our own formula to calculate a rank, or used an existing one, for instance the Chen formula. By using this method we will get a less accurate result but it will be easier to calculate. We would also have to create a formula for each game state which would cause even more work. Since performance is not a problem for our calculator we chose to use the Monte Carlo method.
+Alternatively we could have created our own formula to calculate a rank, or used an existing one, for instance the Chen formula. However, this has been beyond the scope of this thesis.
 
 \subsection{Conclusion}
 In this section we have answered the question:
@@ -221,6 +221,6 @@ How can we predict the probability of ending up with the winning hand?
 \end{statementBox2}
 \vspace{4mm}
 
-We have implemented a subsystem called the calculator that can estimate the probability of winning with a set of hole cards. The calculator uses the Monte Carlo method and it works for every poker state with up to ten players. We have found that 50.000 simulations is a good number of simulations for our calculator. 
+We have implemented a subsystem called the calculator that can estimate the probability of winning with any given set of hole cards. The calculator uses the Monte Carlo method and it works for every poker state with up to ten players. 50.000 simulations  met the requirements we made for the calculator.   
 
 We compare our results to caniwin, which is a website that calculates the actual probabilities of all the 169 combinations of hole cards. The calculator has a maximal error percentage of one percent and performs the simulation in less than a second.
