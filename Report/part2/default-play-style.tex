@@ -37,7 +37,7 @@ All our ANN's use normalised inputs and a sigmoid function as transfer function.
 
 The ANN's use backpropagation for learning.
 
-\subsubsection{Artificial neural network (ANN)}
+\subsection{Artificial neural network (ANN)}
 \label{sec:nn}
 An artificial neural network (ANN) is inspired by the human brain. It can be used for pattern recognition or classification among other things. An ANN can take any number of inputs and return any number of outputs. 
 
@@ -57,76 +57,15 @@ The neurons in an ANN are distributed in layers as shown in figure \ref{fig:perc
 \vspace{4mm}
 \input{other/models/multi-perceptron.tex}
 
-The ANN can be trained using a training set of inputs. Using supervised learning, in contrast to unsupervised learning, one must also supply an expected output. For each input it will adjust the weights in order to get closer to the expected output. The TNE indicates the amount of training data that did not produce the expected result. The TNE is calculated during each iteration and the ANN will continue adjusting the weights until the TNE is acceptable. 
+The ANN can be trained using a training set of inputs. Using supervised learning, in contrast to unsupervised learning, one must also supply an expected output. For each input it will adjust the weights in order to get closer to the expected output. 
 
-Backpropagation is the most common algorithm for supervised ANNs. It adjusts the weights from the end (the output neurons) back to the start (the input neurons).
+The TNE indicates the amount of training data that did not produce the expected result. The TNE is calculated during each iteration and the ANN will continue adjusting the weights until the TNE is acceptable. During testing a TNE graph can be created to show how the TNE of the ANN decreases as the training progresses.  
 
-After the training the ANN can be validated to see if it works. This is done using a test set different from the training set and see if the results of the ANN matches the expected results of the test set.
+Backpropagation is the most common algorithm for training supervised ANNs. It adjusts the weights from the end (the output neurons) back to the start (the input neurons).
 
-\subsubsection{First ANN design}
-\label{sec:design1}
-For the first attempt we design a simple perceptron that takes two inputs, and returns two outputs, see figure \ref{fig:nn1}. 
-\input{other/models/default-nn1.tex}
+If the training is succesful and the TNE is acceptable one can validate the ANN using a validation set. The validation set should be different from the training set and it is used to see if the ANN has learned the entire domain of which it has trained or if it has only learned the inputs given in the training set.
 
-The first input is the hand strength. We use the calculator from chapter \ref{sec:part1} to calculate the probability of winning against a single opponent. The reason we always find the probability against a single opponent is because the probability of winning decreases drastically as the number of opponents increases. We use an absolute hand strength rather than a hand strength relative to the number of players.
-This makes it easier to compare the hands strengths in situations with different numbers of players. 
-Since the inputs in the ANN has to be between 0 and 1 we will have to normalize our input data.
-
-The first input is the hand strength which is already normalized. 
-
-The second input is the number of opponents. The second input is normalized as \[I2_ = \frac{Opp}{Opp_{max}}\] 
-
-Here $Opp$ is the number of opponents and $Opp_{max}$ is the maximum number of opponents (in our case nine).
-
-From the tests we found that this network had a TNE of $\sim$19,9 \%, see section \ref{sec:ann-test1}. This does not fulfil our requirement of a TNE of five percent or less.
-
-In order for a perceptron to be accurate the data have to be linear separable. This means that the outcomes can be separated by a single line if they are plotted in a graph. This line should clearly show the distinction between the two kinds of outputs. We plot some of the data in figure \ref{fig:linear-separable} to see if it is linear separable.  The figure clearly shows that the data is not linear separable as it cannot separate the two outputs with a single line and therefore a single perceptron will not work. NOTE: Linear separation is only possible with a perceptron.
-\begin{centering}
-\begin{figure}
-  \begin{subfigure}[b]{0.4\textwidth}
-    \includegraphics[width=\textwidth]{images/nn/separable.png}
-    \caption{Linear separable data.}
-    \label{fig:1}
-  \end{subfigure}
-  %
-  \hspace{12mm}
-  \begin{subfigure}[b]{0.4\textwidth}
-    \includegraphics[width=\textwidth]{images/nn/non-separable.png}
-    \caption{Non linear separable data.}
-    \label{fig:2}
-  \end{subfigure}
-  \caption{Example of linear separable data.}
-\end{figure}
-\end{centering}
-
-\begin{figure}[H]
-  \center
-    \includegraphics[scale=0.8]{images/nn/default-nn1-plot.png}
-  \caption{Distribution of actions. The x-axis  the number of opponents and the y-axis is the hand strength. Aggressive actions are indicated by red dots and defensive actions by blue dots. \label{fig:linear-separable}}
-\end{figure}
-
-\subsubsection{Second ANN design}
-\label{sec:design2}
-Since the first approach designing a perceptron did not fulfil our requirement we instead design a multilayer perceptron (MLP) with five inputs, see figure \ref{fig:nn2}.
-
-The MLP is taking the same inputs as the perceptron from section \ref{sec:design1}, and three additional inputs: The chips of the player, the cost for the player to call, and the pot. We normalize the three new inputs as: \[I3 = \frac{chips}{chips_{total}}\] \[I4 = \frac{cost}{chips_{total}}\] \[I5 = \frac{profit}{chips_{total}}\]. 
-Here $chip$ is our chips, $cost$ is how many chips it costs to call, $profit$ is the amount of chips at stake and $chips_{total}$ is the total amount of chips in the game, including the pot and the bets.
-
-The MLP has one hidden layer with two hidden neurons. One hidden neuron to calculate the likelihood of winning and another for the economically aspect.
-
-\input{other/models/default-nn2.tex}
-
-From the test in section \ref{sec:ann-test2}, we can see that the TNE is $\sim$19,1 \%. This is a small improvement compared to the first ANN but it still does not fulfil the requirement about a TNE of five percent or less. 
-
-\subsubsection{Third ANN design}
-\label{sec:design3}
-For our third ANN we use the same structure as the second ANN, see figure \ref{fig:nn2}. We believe that the reason the second ANN did not work is because the data is found of random players. Each player may have a different strategy resulting in different actions. This will make it hard for an ANN to find a pattern. 
-
-Instead we use data of a single player in all games the player is relevant. The test in section \ref{sec:ann-test3} shows that the TNE varies quite a bit between the players. The higher the TNE are the harder the player is to predict. Since poker is a game of deception most players will be hard for our ANN to learn.
-
-To further optimise the ANN, we try to adjust the number of hidden neurons, see section \ref{ref:ann-test4}.
-
-\subsection{Test}
+\subsection{How to test ANN's}
 \label{sec:default-test}
 The University of Alberta has a research group that specializes in the field of artificial intelligence in poker \cite{alberta}. They have released a dataset containing data from $\sim$18.000 real-life rounds of Texas hold'em limit poker. The dataset only contains data about the hole cards of the players who made it to the showdown. We will refer to these players as relevant players.
 
@@ -141,7 +80,55 @@ Each dataset contains data from 200 random poker rounds, resulting in $\sim$1200
 
 To create and test the ANN's we use a framework called Neuroph \cite{neuroph}. Neuroph is a neural network framework programmed in java. 
 
-\subsubsection{Find the TNE of the first ANN}
+\subsection{Our ANN's}
+\subsubsection{ANN 1}
+\label{sec:design1}
+For the first attempt we design a simple perceptron that takes two inputs, and returns two outputs, see figure \ref{fig:nn1}. 
+\input{other/models/default-nn1.tex}
+
+The first input is the hand strength. We use the calculator from chapter \ref{sec:part1} to calculate the probability of winning against a single opponent. The reason we always find the probability against a single opponent is because the probability of winning decreases drastically as the number of opponents increases. In the start of a round all players are still in the game but it is unlikely that every player will make it to the showdown.
+
+To avoid calculating a hand strength that will most likely become outdated as players fold, we instead find an absolute hand strength that is not affected by the number of players. Instead we give the number of players to the ANN and let the ANN find the pattern between the number of players and the actions.
+
+We define an absolute hand strength as the hand strength versus one opponent. Using an absolute hand strength makes it easier to compare the hands strengths in situations with different numbers of players. \\
+
+Since the inputs in the ANN has to be between zero and one we will have to normalize some of our input data.
+
+The first input is the hand strength found using the calculator. It is already between zero and one so no normalisation is needed. 
+
+The second input is the number of opponents. The second input is normalized as \[I_{2} = \frac{Opp}{Opp_{max}}\] 
+
+Here $Opp$ is the number of opponents and $Opp_{max}$ is the maximum number of opponents (in our case nine).
+
+From the tests we found that this network had a TNE of $\sim$19,9 \%, see section \ref{sec:ann-test1}. This does not fulfil our requirement of a TNE of five percent or less.\\
+
+In order for a perceptron to be accurate the data have to be linear separable as shown in figure \ref{fig:ls-example}. This means that the outcomes can be separated by a single straight line if they are plotted in a graph. 
+
+\begin{centering}
+\begin{figure}
+  \begin{subfigure}[b]{0.4\textwidth}
+    \includegraphics[width=\textwidth]{images/nn/separable.png}
+    \caption{Linear separable data.}
+  \end{subfigure}
+  \hspace{12mm}
+  \begin{subfigure}[b]{0.4\textwidth}
+    \includegraphics[width=\textwidth]{images/nn/non-separable.png}
+    \caption{Non linear separable data.}
+  \end{subfigure}
+  \caption{Example of linear separable data.\label{fig:ls-example}}
+\end{figure}
+\end{centering}
+
+We plot some of the data in figure \ref{fig:linear-separable} to see if it is linear separable.  The figure clearly shows that the data is not linear separable and therefore a single perceptron will not work.
+
+
+\begin{figure}[H]
+  \center
+    \includegraphics[scale=0.8]{images/nn/default-nn1-plot.png}
+  \caption{Distribution of actions. The x-axis  the number of opponents and the y-axis is the hand strength. Aggressive actions are indicated by red dots and defensive actions by blue dots. \label{fig:linear-separable}}
+\end{figure}
+
+\subsubsection{Test of ANN 1}
 \label{sec:ann-test1}
 For this test the dataset only includes the normalized data about the hole cards of the player, the community cards and the number of opponents.
 
@@ -153,7 +140,25 @@ To find the TNE of the perceptron described in section \ref{sec:design1}, we tra
   \caption{TNE graph from training the first ANN.\label{fig:tneg1}}
 \end{figure}
 
-\subsubsection{Find the TNE of the second ANN}
+\subsubsection{ANN 2}
+\label{sec:design2}
+Since the first approach designing a perceptron did not fulfil our requirement we instead design a multilayer perceptron (MLP) with five inputs, see figure \ref{fig:nn2}.
+
+The MLP is taking the same inputs as the perceptron from section \ref{sec:design1}, and three additional inputs: The chips of the player, the cost for the player to call, and the pot. We normalize the three new inputs as: 
+
+\[I_{3} = \frac{chips}{chips_{total}}\] 
+\[I_{4} = \frac{cost}{chips_{total}}\]
+\[I_{5} = \frac{profit}{chips_{total}}\]
+
+Here $chip$ is our chips, $cost$ is how many chips it costs to call, $profit$ is the amount of chips at stake and $chips_{total}$ is the total amount of chips in the game, including the pot and the bets.
+
+The MLP has one hidden layer with two hidden neurons. One hidden neuron to calculate the likelihood of winning and another for the economically aspect.
+
+\input{other/models/default-nn2.tex}
+
+From the test in section \ref{sec:ann-test2}, we can see that the TNE is $\sim$19,1 \%. This is a small improvement compared to the first ANN but it still does not fulfil the requirement about a TNE of five percent or less. 
+
+\subsubsection{Test of ANN 2}
 \label{sec:ann-test2}
 For this test the dataset also includes the normalised data about chips, cost and pot.
 
@@ -165,7 +170,15 @@ We train the MLP from \ref{sec:design2} and get the NTE graph shown in figure \r
   \caption{TNE graph from training the second ANN.\label{fig:tneg2}}
 \end{figure}
 
-\subsubsection{Find the TNE of the third ANN}
+\subsubsection{ANN 3}
+\label{sec:design3}
+For our third ANN we use the same structure as the second ANN, see figure \ref{fig:nn2}. We believe that the reason the second ANN did not work is because the data is found of random players. Each player may have a different strategy resulting in different actions. This will make it hard for an ANN to find a pattern. 
+
+Instead we use data of a single player in all games the player is relevant. The test in section \ref{sec:ann-test3} shows that the TNE varies quite a bit between the players. The higher the TNE are the harder the player is to predict. Since poker is a game of deception most players will be hard for our ANN to learn.
+
+To further optimise the ANN, we try to adjust the number of hidden neurons, see section \ref{ref:ann-test4}.
+
+\subsubsection{Test of ANN 3}
 \label{sec:ann-test3}
 For this test the dataset contains the same data as the previous test but all data is found for a single player. We try to find the TNE for three different players to see if this makes the ANN more accurate. The players we test are JimR, mayor, and PokiSimA.
 
@@ -187,10 +200,7 @@ For each player we train the MLP from \ref{sec:design3} and find the TNE. The re
 \end{table}
 \vspace{4mm}
 
-\subsubsection{Finding the optimal number of hidden neurons}
-\label{sec:ann-test4}
-
-In this test we use the data from the same three player as in section \ref{sec:ann-test3}. We construct three new ANN's with three, five, and seven hidden neurons. The TNE's can be seen in table \ref{tab:tneg4}. We have included the results from section \ref{sec:ann-test3} for comparison. 
+To further test the ANN we try to test it using different numbers of hidden neurons. We construct three new ANN's with three, five, and seven hidden neurons. The TNE's can be seen in table \ref{tab:tneg4}. 
 
 The number of hidden neurons does not seem to make the overall TNE get any lower.
 
