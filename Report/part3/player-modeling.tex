@@ -54,10 +54,10 @@ The APC also need to be able to recognise if a player changes strategy during th
 
 The reason we choose ten games recent is because a player might get lucky and get several strong hole cards in a row. This may cause the player to play more aggressive than usual even though the player still uses the same strategy. This will result in a miss read by the player model. We found ten games to be high enough to avoid miss reads and also low enough to actually track changes in the players strategy.
 
-Aggressiveness is also split into one additional attribute called current aggressiveness which is the previous aggressiveness of the current round.
+Aggressiveness is also split into one additional attribute called current aggressiveness which is the player's previous aggressiveness of the current round.
 
 We end using the following attributes attributes for our player model:
-\begin{enumerate}
+\begin{itemize}
 \item Overall aggressiveness
 \item Recent aggressiveness
 \item Current aggressiveness
@@ -65,20 +65,36 @@ We end using the following attributes attributes for our player model:
 \item Recent tightness
 \item Overall riskiness
 \item Recent riskiness
-\end{enumerate}
+\end{itemize}
 
 \subsubsection{Implementation of the player model?}
 To model each player we have created a subsystem called the poker player model (PPM). The PPM is responsible for tracking the aggressiveness, tightness, and riskiness of a player.
 
-A PPM object is created for each opponent and the PPM then tracks the attributes of the player if given the data from a round.
+A PPM object is created for each opponent and the PPM then tracks the attributes of the player when given the data from a round.\\
 
 The aggressiveness of a round is found as:
 
 \[Agg_{n} = \frac{AA_{n}}{TA_{n}}\]
 
-$[Agg_{n}$ is the aggressiveness of round $n$, $AA_{n}$ is the number of aggressive actions (bet or raise) of round $n$ and  $TA_{n}$ is the total number of actions in round $n$. This is found for every round. Overall-, recent-, and current aggressiveness is found as an average of all rounds, last ten rounds, and current round respectively.\\
+$Agg_{n}$ is the aggressiveness of round $n$, $AA_{n}$ is the player's number of aggressive actions (bet or raise) of round $n$ and  $TA_{n}$ is the player's total number of actions in round $n$. This is found for every round. 
 
-The tightness of the player is found backtracking the actions of the player after the round is finished. This is of cause only done for rounds that makes it to the showdown since we otherwise do not know the hole cards of the player. 
+Overall-, recent-, and current aggressiveness is found as an average of all rounds, last ten rounds, and current round respectively.\\
+
+The tightness of the player is found by backtracking the actions of the player after the round is finished. This is of cause only done for rounds that makes it to the showdown, since we otherwise do not know the hole cards of the player.
+
+In order to determine if a player either bluff or slow play we first establish some boundaries based on the hand strength. 
+
+We took a sample of 100 defensive action and 100 aggressive actions and plotted the data in figure \ref{fig:dist-act}. The boundary for bluffing (red line) shows that the players tends to play defensive below this line. Likewise the boundary for slow play (blue line) shows that the players tends to play aggressive above this line.
+
+We define slow playing as playing defensive with a hand strength of more than 0,63.
+
+We define bluffing as playing aggressive with a hand strength of less than 0,46.
+
+\begin{figure}[H]
+  \center
+    \includegraphics[scale=0.775]{images/modeling/action-dist.png}
+  \caption{Distribution of actions in regards to the hand strength. Red dots indicates aggressive actions and blue dots defensive actions. The red line indicates the boundary for slow play and the blue line the boundary for bluffing. \label{fig:dist-act}}
+\end{figure}
 
 
 
