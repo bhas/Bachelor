@@ -97,7 +97,9 @@ Since the inputs in the ANN has to be between zero and one we will have to norma
 
 The first input is the hand strength found using the calculator. It is already between zero and one so no normalisation is needed. 
 
-The second input is the number of opponents. The second input is normalized as \[I_{2} = \frac{Opp}{Opp_{max}}\]
+The second input is the number of opponents. The second input is normalized as 
+
+\[I_{2} = \frac{Opp}{Opp_{max}}\,.\]
 
 Here, $Opp$ is the number of opponents and $Opp_{max}$ is the maximum number of opponents (in our case nine).
 
@@ -234,17 +236,19 @@ From this we can tell that mayor is probably not shifting his strategy as much a
 \begin{figure}[H]
   \center
     \includegraphics[scale=0.6]{images/nn/finaltest.png}
-  \caption{TNE graph from training the second ANN.\label{fig:finaltest}}
+  \caption{Graph of the profits change throughout the game\label{fig:finaltest}}
 \end{figure}
 
-To further test whether or not the ANN can make profitable choices based on the training with the data from the player mayor, we choose to use a test-bed for poker bots called Poker Genius. Here we are able to test the ANN against the poker bots of Poker Genius. We manually recreated the choices the ANN made against the bots of Poker Genius. It was done manually, because we did not manage to get Poker Genius implementation of personal bots to work. As shown in figure \ref{fig:nn2} it is clear that the ANN is not able to compete on the same level as the bots from Poker Genius.
+To further test whether or not the ANN can make profitable choices based on the training with the data from the player mayor, we choose to use a test-bed for poker bots called Poker Genius. Here we are able to test the ANN against the poker bots of Poker Genius. We manually recreated the choices the ANN made against the poker bots of Poker Genius. It was done manually, because we did not manage to make APC work for Poker Genius. As shown in figure \ref{fig:finaltest} it is clear that the ANN is not able to compete on the same level as the poker bots from Poker Genius.
 
 
 \subsection{Discussion}
-In this chapter we try to develop a default strategy by implementing a self-learning algorithm. We use ANN's to observe actions from other players and learn their strategy. Alternatively, we could have programmed the procedures of determining the action directly in the code. We ran into a few problems by trying to implementing the ANN.\\
+In this chapter we try to develop a default strategy by implementing a self-learning algorithm. We use ANN's to observe the actions of other  in order to learn their strategy. Alternatively, we could have programmed the procedures of determining the action directly in the code. We ran into a few problems by trying to implementing the ANN.\\
 
-The first problem is related to the data we use. The problem is that  the data is not complete since we do not have the data about the hole cards of the irrelevant players. This means that we can not learn the ANN when to fold, as we have no input for the hole cards. On the other hand do we really need this information to create a default strategy? Poker is a game of imperfect information and human players are able to play a game of poker without learning from an experienced player so should the computer not have that ability too? 
-There are two solutions, one is to collect a complete dataset with all the information and disregard that poker should be a game of imperfect information. Another is to program the procedure for determining when to fold. 
+The first problem is related to the data we use. The problem is that  the data is not complete since we do not have the data about the hole cards of the irrelevant players. This means that we can not learn the APC when to fold, as we have no input for the hole cards. 
+
+
+If we want to observe a player and learn the strategy behind the players actions, we need to know the hole cards of the player. To solve this we need to find a new dataset with no hidden information about the player(s) we want the APC observe.
 
 
 Additionally, since we get the results as an action (defensive or aggressive), The expected results of each output is either zero or one, due to the limitation of possible actions. Zero or one are the two extremes and therefore it can be hard for the ANN to find an approximation.
@@ -253,7 +257,7 @@ Additionally, since we get the results as an action (defensive or aggressive), T
 The second problem was to determine the number of inputs for the ANN. We chose five inputs that we found relevant. Perhaps we overlooked some inputs that could be interesting to look at. It is also possible that one or more of the inputs simply are confusing the ANN more than it is helping figuring out a pattern in the players strategy. 
 
 
-The final problem we encountered was defining our requirements for the ANN. We do not know what TNE is realistic and our requirements may be unrealistic. Whether or not the TNE is somewhat fair is hard to determine. But it seems like we would have to get a much lower TNE in order to create a realistic strategy from the data of the player.\\
+The final problem we encountered was defining our requirements for the ANN. We do not know what TNE is realistic and our requirements may be unrealistic. But it seems like we would have to get a much lower TNE in order to create a realistic strategy from the data of the player.\\
 
 Learning a default strategy based on random players in random rounds are perhaps not the best option. However we were not able to retrieve any game data from a series of professional poker players.
 An alternative method would be to choose the most successful player in the dataset, but the rises the issue that just because a players strategy is good against one strategy does not make it good against another.
