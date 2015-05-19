@@ -20,13 +20,13 @@
 \contentsline {subsubsection}{\numberline {2.4.6}Test of ANN 3}{30}{subsubsection.2.4.6}
 \contentsline {subsection}{\numberline {2.5}Discussion}{31}{subsection.2.5}
 \contentsline {subsection}{\numberline {2.6}Conclusion}{33}{subsection.2.6}
-\contentsline {section}{\numberline {3}Learning to adapt to opponents}{35}{section.3}
-\contentsline {subsection}{\numberline {3.1}Design}{35}{subsection.3.1}
-\contentsline {subsubsection}{\numberline {3.1.1}Player modeling}{37}{subsubsection.3.1.1}
-\contentsline {subsubsection}{\numberline {3.1.2}Design of the player model}{37}{subsubsection.3.1.2}
-\contentsline {subsection}{\numberline {3.2}Combining the ANN and player model}{41}{subsection.3.2}
-\contentsline {subsection}{\numberline {3.3}Discussion}{42}{subsection.3.3}
-\contentsline {subsection}{\numberline {3.4}Conclusion}{42}{subsection.3.4}
-\contentsline {section}{\numberline {4}Discussion}{46}{section.4}
-\contentsline {section}{\numberline {5}Conclusion}{47}{section.5}
-\contentsline {section}{\numberline {A}\\Glossary}{52}{appendix.A}
+\contentsline {section}{\numberline {3}Learning to adapt to opponents}{34}{section.3}
+\contentsline {subsection}{\numberline {3.1}Design}{34}{subsection.3.1}
+\contentsline {subsubsection}{\numberline {3.1.1}Player modeling}{36}{subsubsection.3.1.1}
+\contentsline {subsubsection}{\numberline {3.1.2}Design of the player model}{36}{subsubsection.3.1.2}
+\contentsline {subsection}{\numberline {3.2}Combining the ANN and player model}{40}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}Discussion}{41}{subsection.3.3}
+\contentsline {subsection}{\numberline {3.4}Conclusion}{41}{subsection.3.4}
+\contentsline {section}{\numberline {4}Discussion}{45}{section.4}
+\contentsline {section}{\numberline {5}Conclusion}{46}{section.5}
+\contentsline {section}{\numberline {A}\\Glossary}{51}{appendix.A}
