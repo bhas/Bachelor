@@ -7,19 +7,34 @@ The goal of this chapter is to further develop the strategy of APC to also adapt
 
 \vspace{4mm}
 \begin{statementBox2}{Problem statement 3}
-How can one further develop a strategy for a poker computer to be able to adapt to the playing style of the opponent?
+How can we further develop the APC's strategy to be able to adapt to the playing style of the opponent?
 \end{statementBox2}
 \vspace{4mm} 
 
-In poker there is no such thing as a single optimal strategy. Every strategy has weaknesses and therefore the optimal strategy is one that takes advantage of the weaknesses of the strategies of the opponents. In order to take advantage of the opponents strategies one must first understand their strategy. In poker understanding the opponents is one of the most important key elements of the game. 
+In poker there is no such thing as a single strategy that is better than any other strategy. Every strategy has weaknesses and therefore the optimal strategy is one that takes advantage of the weaknesses of the strategies of the opponents. In order to take advantage of the opponents strategy, one must first understand their strategy. In poker understanding the opponents is one of the most important key elements of the game. 
 
-Once one understand the strategy of the opponent one has to adapt oneself's strategy.
+Once one understands the strategy of the opponent one has to adapt oneself's strategy.
+
+Since poker is a game of deception the opponents may change their strategy during the game. In this case the player needs to find out about this and adapt the strategy once again. 
 
 \subsection{Design}
-In order to learn the strategy of the opponents we try to model the player using player modeling, see section \ref{sec:pm}. 
+Because the work of this strategy is based on the ANN from chapter \ref{sec:part2}, the focus of this chapter is on the theory rather than implementation and testing. The reason is, that the ANN from chapter \ref{sec:part2} did not end up working properly, and therefore it would not be possible to tell if the solution did not work, due to the original ANN or due to the improvements created in this chapter. 
 
-In this section we will start by introducing the concept of player modeling. We then design the player model we wish to use for the APC and finally implement it as a subsystem called the poker player model.
+Instead of implementing the improvements, we just suggest how we could have implemented them.\\
 
+There is two commonly used approaches to develop a strategy that adapts to the strategy of the opponents.
+
+The traditional approach is to use statistics to learn about the opponents. Such an approach uses probabilities based on the players actions to determine the strength of the players hand. Such probabilities may include but are not limited to, the percentage of hand the player folds during each game state, the percentage of times the player bluffs on the river, and the strength of the hand the player has when calling aggression. This is useful against a player who use the same strategy throughout the whole game and who's actions are deterministic.
+
+The other approach is using player modeling, see section \ref{asd} and artificial neural networks (ANN), see section \ref{a}. This approach has gained increasing popularity through the recent years. In this approach the ANN is responsible of learning the strategy of the player. This approach is good for learning the strategy of a player who performs non-deterministic actions. It can also adapt in case the player changes strategy.\\
+
+We choose to us the second approach and create a player model and an ANN. We find it more interesting to use player modeling and ANN's as this approach seems to have a lot of potential within the field of artificial intelligence in poker.
+
+Aaron Davidson is a master of science from the University of Alberta. In his thesis about opponent modeling in poker \cite{opp-mod}, he uses ANN's in combination with player modeling in order to develop the poker computer Poki. An ANN was designed to predict the action of an opponent. The ANN uses a total of 17 player specific inputs. Using this design, Poki was able to win against most online poker players and computers but was far from world class.
+
+G. Nicolai and R. Hilderman also made use of ANN's and player modeling in their thesis \cite{poker-agents}. They use a single ANN to determine the action of the computer. The model each player using overall aggressiveness and recent aggressiveness and give it as an input to the ANN. Although their computer agent was no way as advanced as Poki, it still showed potential.
+
+Using ANN's in combination with player modeling looks like variable approach. In the rest of this chapter, we will discuss this approach and suggest a potential way of implementing it. We will start by introducing the concept of player modeling. We then design a player model suitable for the APC and finally design the ANN.
 
 \subsubsection{Player modeling}
 \label{sec:pm}
@@ -27,7 +42,7 @@ Player modeling is a loosely defined concept and may vary from one context to an
 
 Player modeling is used to describe or predict the players decisions, reasoning and reactions. In the field of artificial intelligences the human player is the most used model for developing computer players. Understanding the reason behind every choice of a player will not only bring a better understanding of the player but also a better understanding of the game and its mechanics.
 
-Since the player model can easily become extremely extensive one normally only includes the relevant attributes of the player.
+Since the player model can easily become extremely extensive one has to determine which attributes are relevant.
 
 \subsubsection{Design of the player model}
 It is crucial to figure out which attributes are relevant to the specific player model. When trying to model a player there is almost no limit to what could be included. Attributes such as state of mind, energy, and distractions affect the decision of every human player.  
@@ -36,27 +51,27 @@ We listed the attributes that we find most relevant for poker.
 
 \begin{description}
 \item[Aggressiveness] How often does the player tend to bet or raise.
-\item[Tightness] How strictly does the player's actions reflect the strength of the hand. For instance, a tight player will play aggressive when having a strong hand and defensive or fold when having a weak hand. A loose player may bluff (play aggressive having a weak hand) and slow play (play defensive having a strong hand) a lot.
-\item[Riskiness] How easy is it to push the player to fold. Risky players tend to fold less often and are therefore harder to bluff.
-\item[Body language] Most human players unconsciously show emotions through their body language. The professional poker players can tell a lot about a players hole cards solely by looking at their body language.
+\item[Tightness] How strictly does the player's actions reflect the strength of the player's hand. For instance, a tight player will play aggressive when having a strong hand and defensive or fold when having a weak hand. A loose player may bluff (play aggressive while having a weak hand) and slow play (play defensive while having a strong hand) a lot.
+\item[Riskiness] How easy is it to push the player to fold. Risky players tend to fold less often while under pressure from the opponents and are therefore harder to bluff.
+\item[Body language] Most human players unconsciously show emotions through their body language. The professional poker players can often tell a lot about an opponent's hole cards solely by looking at the opponent's body language.
 \item[Time of decision making] The time a player use for each decision can show the confidence of the players choice. A fast decisions indicates an easy decision. 
 \end{description}
 
 Since our APC is targeted towards computer players as well as human players, it makes no sense to use attributes such as body language and the time of decision making to model the opponents. Those attributes only affect human players. Instead we will model the opponents using the attributes aggressiveness, tightness, and riskiness.
 
-Aggressiveness is easy to find simply by looking at the actions of the opponent. 
+Aggressiveness can be found by simply looking at the actions of the opponent. 
 
-Tightness is a bit more complicated as we need to know the hole cards of the player. We only track the tightness of rounds where the player make it to the showdown.
+Tightness is a bit more complicated as we need to know the hole cards of the player. Therefore we can only track the tightness of rounds where the player makes it to the showdown.
 
-Riskiness is also complicated to measure as it is relative to the hole cards of the player. If a player has a weak hand and calls or raise, it is considered a risky play.  
+Riskiness is also easy to measure. Riskiness shows how likely the player is to call while under pressure from opponents. We can determine the riskiness of the player by tracking the number of times the player folds contra the number of times the player calls or raises.
 
-The APC also need to be able to recognise if a player changes strategy during the game. To accomplish this we split each attribute into the two attributes: overall and recent. Overall covers every round throughout the game while recent only covers the last ten rounds.
+The APC needs to be able to recognise if a player changes strategy during the game. To accomplish this we split each attribute into the two attributes: overall and recent. Overall covers every round throughout the game while recent only covers the last ten rounds.
 
-The reason we choose ten games recent is because a player might get lucky and get several strong hole cards in a row. This may cause the player to play more aggressive than usual even though the player still uses the same strategy. This will result in a miss read by the player model. We found ten games to be high enough to avoid miss reads and also low enough to actually track changes in the players strategy.
+The reason we choose ten games for the recent attribute, is because a player might get lucky and get several strong hole cards in a row. This may cause the player to play more aggressive than usual even though the player still uses the same strategy. This will result in a miss read by the player model. We found ten games to be high enough to avoid miss reads and also low enough to actually track changes in the players strategy.
 
-Aggressiveness is also split into one additional attribute called current aggressiveness which is the player's previous aggressiveness of the current round.
+Aggressiveness is also split into one additional attribute called current aggressiveness, which is the player's aggressiveness in previous game states of the current round.
 
-We end using the following attributes attributes for our player model:
+We end up using the following attributes for our player model:
 \begin{itemize}
 \item Overall aggressiveness
 \item Recent aggressiveness
@@ -67,36 +82,21 @@ We end using the following attributes attributes for our player model:
 \item Recent riskiness
 \end{itemize}
 
-\subsubsection{Implementation of the player model?}
-To model each player we have created a subsystem called the poker player model (PPM). The PPM is responsible for tracking the aggressiveness, tightness, and riskiness of a player.
+In the rest of this section we will describe one way we could have implemented the player model. Note that the player model has not been implemented but this is only a description of how we would have done it.
 
-A PPM object is created for each opponent and the PPM then tracks the attributes of the player when given the data from a round.\\
+The aggressiveness of a round $n$ can be found as:
 
-The aggressiveness of a round is found as:
+\[Agg,n = \frac{A_{bet},n + A_{raise},n}{A_{total},n}\]
 
-\[Agg_{n} = \frac{AA_{n}}{TA_{n}}\]
+$A_{agg},n$ is the player's number of bets $A_{bet},n$ and raises $A_{raise},n$ in round $n$ and  $A_{total},n$ is the player's total number of actions in round $n$. 
 
-$Agg_{n}$ is the aggressiveness of round $n$, $AA_{n}$ is the player's number of aggressive actions (bet or raise) of round $n$ and  $TA_{n}$ is the player's total number of actions in round $n$. This is found for every round. 
+Overall aggressiveness can be found as the average aggressiveness of all rounds, recent aggressiveness would be found as the average aggressiveness of the last ten rounds and finally the current aggressiveness would be found as the average aggressiveness of the previous game states of the current round.\\
 
-Overall-, recent-, and current aggressiveness is found as an average of all rounds, last ten rounds, and current round respectively.\\
+The tightness of the player can be found by backtracking the actions of the player after the round is finished. This is of cause only possible for rounds that makes it to the showdown, since we otherwise do not know the hole cards of the player.
 
-The tightness of the player is found by backtracking the actions of the player after the round is finished. This is of cause only done for rounds that makes it to the showdown, since we otherwise do not know the hole cards of the player.
+In order to determine if a player either bluffs or slow plays, we would have to establish some boundaries based on the hand strength. 
 
-In order to determine if a player either bluff or slow play we first establish some boundaries based on the hand strength. 
-
-We took a sample of 100 defensive action and 100 aggressive actions and plotted the data in figure \ref{fig:dist-act}. The boundary for bluffing (red line) shows that the players tends to play defensive below this line. Likewise the boundary for slow play (blue line) shows that the players tends to play aggressive above this line.
-
-We define slow playing as playing defensive with a hand strength of more than 0,63.
-
-We define bluffing as playing aggressive with a hand strength of less than 0,46.
-
-We then find the tightness of a round $Ti_{n}$ using the formula:
-
-\[Ti_{n} = \frac{Bluff_{n} + Slow_{n}}{TA_{n}}\]
-
-Here $Bluff_{n}$ is the number of times the player bluffed, $Slow_{n}$ is the number of times the player slow played and $TA_{n}$ is the total number of actions.
-
-We then find the 
+We took a sample of 100 defensive actions and 100 aggressive actions, and plotted the data in figure \ref{fig:dist-act}. The boundary for bluffing (red line) shows that the players tends to play defensive below this line. Likewise the boundary for slow play (blue line) shows that the players tends to play aggressive above this line.
 
 \begin{figure}[H]
   \center
@@ -104,13 +104,135 @@ We then find the
   \caption{Distribution of actions in regards to the hand strength. Red dots indicates aggressive actions and blue dots defensive actions. The red line indicates the boundary for slow play and the blue line the boundary for bluffing. \label{fig:dist-act}}
 \end{figure}
 
+We define slow playing as playing defensive with a hand strength of more than 0,63.
 
+We define bluffing as playing aggressive with a hand strength of less than 0,46.
 
+We can then find the tightness of a round $n$ using the formula:
 
+<<<<<<< HEAD
+\[Ti_{n} = \frac{Bluff_{n} + Slow_{n}}{TA_{n}}\]
+=======
+\[Ti,n = 1 - \frac{A_{bluff},n + A_{slow},n}{A_{total},n}\]
+>>>>>>> 7e3844d1bc72121a9e1d3c75ecbbcdd82e22268e
 
-\subsection{Test}
+Here $A_{bluff},n$ is the number of times the player has bluffed in round $n$, $A_{slow},n$ is the number of times the player has slow played in round $n$ and $A_{total},n$ is the total number of actions in round $n$.
 
+We can then find the overall- and recent tightness the same way as with the aggressiveness. Although we can only track the past ten rounds where the player made it to showdown.\\
+
+Finally we can find the riskiness of a round $n$ as the number of times the player calls or raise in regards to the number of times it costs the player to continue:
+
+\[Ri,n = \frac{A_{call},n + A_{raise},n}{A_{call},n + A_{raise},n + A_{fold},n}\]
+
+Here we have the number of times the player calls $A_{call},n$, raises $A_{raise},n$ and folds $A_{fold},n$, all in round $n$.
+
+\subsection{Combining the ANN and player model}
+The ANN for the adaptive strategy would be based on the ANN design from section \ref{sec:design2}, see figure \ref{fig:nn2}. 
+
+\input{other/models/default-nn2.tex}
+
+We choose to use the approach by G. Nicolai and R. Hilderman and construct a single ANN that takes the attributes of the players as inputs. The target is to learn the ANN what to do, based on the inputs about the game and attributes of the opponents.
+
+The inputs for the ANN can be seen in table \ref{ann-design}. The attributes of the players are the attributes found in the previous section. In case there is less than nine opponents all attributes of a non-existing player is set to zero. Since the input function finds the net input as the sum of all the weighted inputs all inputs that are zero will not affect the ANN.
+
+\begin{table}[H]
+\center
+\begin{tabular}{ | l | l | }
+\hline
+input & feature \\
+\hline
+1 & hand strength of APC\\
+2 & number of opponents\\
+3 & chips of the APC\\
+4 & cost of the APC\\
+5 & pot\\
+6 to 12 & attributes of opponent 1\\
+13 to 19 & attributes of opponent 2\\
+20 to 26 & attributes of opponent 3\\
+27 to 33 & attributes of opponent 4\\
+34 to 40 & attributes of opponent 5\\
+41 to 47 & attributes of opponent 6\\
+48 to 54 & attributes of opponent 7\\
+55 to 61 & attributes of opponent 8\\
+62 to 68 & attributes of opponent 9\\
+\hline
+\end{tabular}
+\caption{Inputs for the ANN design \label{tab:ann-design}}
+\end{table} 
 
 \subsection{Discussion}
+In this chapter we discuss how we could have improved the strategy of the APC to also take the opponent's play style into account. 
+
+We choose to use player modeling to model the opponents using seven attributes. 
+
 
 \subsection{Conclusion}
+In this chapter we discuss and suggest a solution to problem statement 3.
+
+\vspace{4mm}
+\begin{statementBox2}{Problem statement 3}
+How can we further develop the APC's strategy to be able to adapt to the playing style of the opponent?
+\end{statementBox2}
+\vspace{4mm} 
+
+One can either use a statistically approach or an approach using player modeling. We choose to use the approach using player modeling. 
+
+For our approach we use player modeling to find relevant attributes to define an opponent. These attributes will then be given as inputs to an ANN which then determines the action of the APC. 
+
+We find the following relevant attributes for the player model.
+
+\begin{description}
+\item[Aggressiveness] refers to how often the player bets or raises.
+\item[Tightness] refers to how strictly the player's actions reflect the strength of the player's hand.
+\item[Riskiness] refers to how often the player pays to continue instead of folding.
+\end{description}
+
+To make it possible for the APC to detect changes in the strategy of an opponent we split each attribute into an overall attribute and recent attribute. The overall attribute is the average of every round though the entire game whereas the recent attribute is the average of the last ten rounds. A change in strategy will affect the recent attribute and cause the APC to detect the change.
+
+Aggressiveness has been split into one additional attribute called current aggressiveness which is the aggressiveness of the previous game states of the current round.
+
+We end up with a total of 7 attributes:
+\begin{itemize}
+\item Overall aggressiveness
+\item Recent aggressiveness
+\item Current aggressiveness
+\item Overall tightness
+\item Recent tightness
+\item Overall riskiness
+\item Recent riskiness
+\end{itemize}
+
+We suggest the following way of finding the attributes.
+
+The aggressiveness of a round can be found as the number of times the player bets or raise divided by the total number of actions of the player for that round.
+
+The aggressiveness of a round can be found as the number of times the player bluffs or slow plays divided by the total number of actions of the player for that round.
+
+The riskiness of a round can be found as the number of times the calls or raise divided by the total number of times the player has to pay in order to continue.\\
+
+We then designed a new ANN that took the attributes for each a player as additionally inputs. The 68 inputs for the ANN can be seen in table \ref{tab:ann-design-con}. 
+
+\begin{table}
+\center
+\begin{tabular}{ | l | l | }
+\hline
+input & feature \\
+\hline
+1 & hand strength of APC\\
+2 & number of opponents\\
+3 & chips of the APC\\
+4 & cost of the APC\\
+5 & pot\\
+6 to 12 & attributes of opponent 1\\
+13 to 19 & attributes of opponent 2\\
+20 to 26 & attributes of opponent 3\\
+27 to 33 & attributes of opponent 4\\
+34 to 40 & attributes of opponent 5\\
+41 to 47 & attributes of opponent 6\\
+48 to 54 & attributes of opponent 7\\
+55 to 61 & attributes of opponent 8\\
+62 to 68 & attributes of opponent 9\\
+\hline
+\end{tabular}
+\caption{Inputs for the ANN design \label{tab:ann-design-con}}
+\end{table}
