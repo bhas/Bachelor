@@ -1,0 +1,7 @@
+We created a subsystem to a poker game called APC, which has to play against other players in a game of Texas Hold'em limit.
+
+The subsystem has been divided into three parts, each one handling a respective part of the system. In order to create a fully functional adaptive poker computer, all of these must work together.
+
+The first part of APC was to create a way of finding the probability of any given set of hole cards regardsless of how many opponents APC was up against.
+We chose to implement this part as a subsystem called the calculator. The calculator uses Monte Carlo simulations. The calculator works quite well, and is able to find the probability of any given set of hole cards, by simulating 50.000 games and calculating how many times the player will win with a given set of hole cards. 
+Alternative methods are available such as creating a formula that can calculate the 

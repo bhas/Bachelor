@@ -1,6 +1,6 @@
 \section{Learning a default strategy}
 \label{sec:part2}
-In the previous chapter we created a calculator that can determine the strength of a hand by calculating the probability of winning. In this chapter we shall use this calculator.
+In the previous chapter we created a calculator that can determine the strength of a hand by calculating the probability of winning. In this chapter we shall use this calculator in the process of developing a strategy for the APC.
 
 When the APC first joins a poker game it has no information about the opponent, and in this case it must use a default strategy while it gathers more information.
 
@@ -27,13 +27,13 @@ Since we do not have any particular insight in how to play poker and do not have
 
 To implement the self-learning algorithm we use an artificial neural network (ANN), see section \ref{sec:nn}. The ANN is well suited for finding patterns of the players decisions. 
 
-Our goal is to design an ANN with a total network error (TNE) of five percent or less. We find five percent to be acceptable as players often take irrational decisions and the ANN only tries to find an approximation of the results. 
+The total network error is how great a deviation there is from the expected output to the actual. Our goal is to design an ANN with a total network error (TNE) of five percent or less. We find five percent to be acceptable as players often take irrational decisions and the ANN only tries to find an approximation of the results. 
 
 We use an iterative development method to design the ANN. We start by designing a simple ANN and then move on to more complex ANN's.\\
 
 All our ANN's have exactly two outputs. The first output is whether or not to be defensive by checking or calling and the second output is whether or not to be aggressive by betting or raising. The closer an output is to the value one, the more certain the ANN is, that it is the correct decision. 
 
-All our ANN's use normalised inputs and a sigmoid function as transfer function. The reason we settle for a sigmoid function rather than a step function is because the sigmoid function allows us to see how certain the ANN is of each decision being correct.
+All our ANN's use normalised inputs, weighted sum as input function, and a sigmoid function as transfer function. The reason we settle for a sigmoid function rather than a step function is because the sigmoid function allows us to see how certain the ANN is of each decision being correct.
 
 The ANN's use backpropagation for learning.
 
@@ -51,7 +51,7 @@ Figure \ref{fig:neuron} models a neuron. Here the weighted inputs $w_{i1}$, $w_{
   \caption{Model of a neuron.\cite{neuron} \label{fig:neuron}}
 \end{figure}
 
-The neurons in an ANN are distributed in layers as shown in figure \ref{fig:perceptron} and \ref{fig:mlp}. The coloured circles represents neurons and the arrows represents the connections between the neurons. There are three layers, an input layer, a hidden layer, and an output layer. An ANN consists of one input layer and one output layer but may contain any number of hidden layers. The simplest type of ANN is the perceptron which has no hidden layers, see figure \ref{fig:perceptron}. It is used for single calculations. A multilayer perceptron is another type of ANN which contains hidden layers. It is used for more complex domains with multiple layers of computations. 
+The neurons in an ANN are distributed in layers as shown in figure \ref{fig:perceptron} and \ref{fig:mlp}. The coloured circles represents neurons and the arrows represents the connections between the neurons. There are three layers, an input layer, a hidden layer, and an output layer. An ANN consists of one input layer and one output layer but may contain any number of hidden layers. The simplest type of ANN is the perceptron which has no hidden layers, see figure \ref{fig:perceptron}. It is used for single calculations. A multilayer perceptron is another type of ANN which contains hidden layers. It is used for more complex domains with multiple layers of computations. A multilayer perceptron is illustrated in figure 6.
 
 \input{other/models/perceptron.tex}
 \vspace{4mm}
@@ -65,9 +65,9 @@ Backpropagation is the most common algorithm for training supervised ANNs. It ad
 
 If the training is succesful and the TNE is acceptable one can validate the ANN using a validation set. The validation set should be different from the training set and it is used to see if the ANN has learned the entire domain of which it has trained or if it has only learned the inputs given in the training set.
 
-\subsection{How to test ANN's}
+\subsection{Test and traning the ANN}
 \label{sec:default-test}
-The University of Alberta has a research group that specializes in the field of artificial intelligence in poker \cite{alberta}. They have released a dataset containing data from $\sim$18.000 real-life rounds of Texas hold'em limit poker. The dataset only contains data about the hole cards of the players who made it to the showdown. We will refer to these players as relevant players.
+The University of Alberta has a research group that specializes in the field of artificial intelligence in poker \cite{alberta}. They hxave released a dataset containing data from $\sim$18.000 real-life rounds of Texas hold'em limit poker. The dataset only contains data about the hole cards of the players who made it to the showdown. We will refer to these players as relevant players.
 
 The dataset consists of multiple files. One file contains the names of all players at the beginning of each round. Another one contains the information about the community cards and the flop after each game state. For each player a file exists. This file includes the hole cards (if the player did not fold), chips, profit from round and actions during each game state. 
 
@@ -81,6 +81,7 @@ Each dataset contains data from 200 random poker rounds, resulting in $\sim$1200
 To create and test the ANN's we use a framework called Neuroph \cite{neuroph}. Neuroph is a neural network framework programmed in java. 
 
 \subsection{Our ANN's}
+Below we present the three ANN's that we have constructed as well as the test results. Each ANN is more complicated than the preceding one.
 \subsubsection{ANN 1}
 \label{sec:design1}
 For the first attempt we design a simple perceptron that takes two inputs, and returns two outputs, see figure \ref{fig:nn1}. 
@@ -96,11 +97,24 @@ Since the inputs in the ANN has to be between zero and one we will have to norma
 
 The first input is the hand strength found using the calculator. It is already between zero and one so no normalisation is needed. 
 
-The second input is the number of opponents. The second input is normalized as \[I_{2} = \frac{Opp}{Opp_{max}}\] 
+The second input is the number of opponents. The second input is normalized as \[I_{2} = \frac{Opp}{Opp_{max}}\]
 
-Here $Opp$ is the number of opponents and $Opp_{max}$ is the maximum number of opponents (in our case nine).
+Here, $Opp$ is the number of opponents and $Opp_{max}$ is the maximum number of opponents (in our case nine).
 
-From the tests we found that this network had a TNE of $\sim$19,9 \%, see section \ref{sec:ann-test1}. This does not fulfil our requirement of a TNE of five percent or less.\\
+
+
+\subsubsection{Test of ANN 1}
+\label{sec:ann-test1}
+For this test the dataset only includes the normalized data about the hole cards of the player, the community cards and the number of opponents.
+
+To find the TNE of the perceptron described in section \ref{sec:design1}, we train it using the dataset. The graph seen in figure \ref{fig:tneg1} displays the TNE through each iteration of the training. From the graph we can see, that the TNE does not get any smaller than $\sim$19,9 \%.
+
+\begin{figure}[H]
+  \center
+    \includegraphics[scale=0.6]{images/nn/default-nn1-err.png}
+  \caption{TNE graph from training the first ANN.\label{fig:tneg1}}
+\end{figure}
+
 
 In order for a perceptron to be accurate the data have to be linear separable as shown in figure \ref{fig:ls-example}. This means that the outcomes can be separated by a single straight line if they are plotted in a graph. 
 
@@ -128,41 +142,27 @@ We plot some of the data in figure \ref{fig:linear-separable} to see if it is li
   \caption{Distribution of actions. The x-axis  the number of opponents and the y-axis is the hand strength. Aggressive actions are indicated by red dots and defensive actions by blue dots. \label{fig:linear-separable}}
 \end{figure}
 
-\subsubsection{Test of ANN 1}
-\label{sec:ann-test1}
-For this test the dataset only includes the normalized data about the hole cards of the player, the community cards and the number of opponents.
-
-To find the TNE of the perceptron described in section \ref{sec:design1}, we train it using the dataset. The graph seen in figure \ref{fig:tneg1} displays the TNE through each iteration of the training. From the graph we can see, that the TNE does not get any smaller than $\sim$19,9 \%.
-
-\begin{figure}[H]
-  \center
-    \includegraphics[scale=0.6]{images/nn/default-nn1-err.png}
-  \caption{TNE graph from training the first ANN.\label{fig:tneg1}}
-\end{figure}
-
 \subsubsection{ANN 2}
 \label{sec:design2}
-Since the first approach designing a perceptron did not fulfil our requirement we instead design a multilayer perceptron (MLP) with five inputs, see figure \ref{fig:nn2}.
+Since we would like the TNE to be equal to or less than five. We instead design a multilayer perceptron (MLP) with five inputs, in the hopes or lowering the TNE, see figure \ref{fig:nn2}.
 
-The MLP is taking the same inputs as the perceptron from section \ref{sec:design1}, and three additional inputs: The chips of the player, the cost for the player to call, and the pot. We normalize the three new inputs as: 
+The MLP is taking the same inputs as the perceptron from section \ref{sec:design1}, and three additional inputs: The chips of the player, the cost for the player to call, and the pot. Furthermore this ANN has two hidden neurons. We normalize the three new inputs as: 
 
 \[I_{3} = \frac{chips}{chips_{total}}\] 
 \[I_{4} = \frac{cost}{chips_{total}}\]
 \[I_{5} = \frac{profit}{chips_{total}}\]
 
-Here $chip$ is our chips, $cost$ is how many chips it costs to call, $profit$ is the amount of chips at stake and $chips_{total}$ is the total amount of chips in the game, including the pot and the bets.
+Here $chips$ is the APC's chips, $cost$ is how many chips it costs to call, $profit$ is the amount of chips at stake and $chips_{total}$ is the total amount of chips in the game, including the pot and the bets.
 
-The MLP has one hidden layer with two hidden neurons. One hidden neuron to calculate the likelihood of winning and another for the economically aspect.
 
 \input{other/models/default-nn2.tex}
 
-From the test in section \ref{sec:ann-test2}, we can see that the TNE is $\sim$19,1 \%. This is a small improvement compared to the first ANN but it still does not fulfil the requirement about a TNE of five percent or less. 
 
 \subsubsection{Test of ANN 2}
 \label{sec:ann-test2}
 For this test the dataset also includes the normalised data about chips, cost and pot.
 
-We train the MLP from \ref{sec:design2} and get the NTE graph shown in figure \ref{fig:tneg2}. The TNE does not get any lower than $\sim$19,1 \%.
+We train the MLP and get the TNE graph shown in figure \ref{fig:tneg2}.
 
 \begin{figure}[H]
   \center
@@ -170,19 +170,24 @@ We train the MLP from \ref{sec:design2} and get the NTE graph shown in figure \r
   \caption{TNE graph from training the second ANN.\label{fig:tneg2}}
 \end{figure}
 
+From the test in this section, we can see that the TNE does not get lower than $\sim$19,1 \%. 
+
+
+We believe that the reason the second ANN did not work is because the data is found from random players. Each player may have a different strategy resulting in different actions. This will make it hard for an ANN to find a pattern. 
+
+There is a small improvement compared to the first ANN in the terms of TNE. It might be a small improvement but perhaps this is the right direction that we are heading.
+
+
+
 \subsubsection{ANN 3}
 \label{sec:design3}
-For our third ANN we use the same structure as the second ANN, see figure \ref{fig:nn2}. We believe that the reason the second ANN did not work is because the data is found of random players. Each player may have a different strategy resulting in different actions. This will make it hard for an ANN to find a pattern. 
-
-Instead we use data of a single player in all games the player is relevant. The test in section \ref{sec:ann-test3} shows that the TNE varies quite a bit between the players. The higher the TNE are the harder the player is to predict. Since poker is a game of deception most players will be hard for our ANN to learn.
-
-To further optimise the ANN, we try to adjust the number of hidden neurons, see section \ref{ref:ann-test4}.
+For our third ANN we use the same structure as the second ANN, see figure \ref{fig:nn2}. Instead of collecting data from random players, we use data of a single player in all games where the player is relevant. This hopefully result in the ANN being able to recognize a pattern in the players strategy.
 
 \subsubsection{Test of ANN 3}
 \label{sec:ann-test3}
 For this test the dataset contains the same data as the previous test but all data is found for a single player. We try to find the TNE for three different players to see if this makes the ANN more accurate. The players we test are JimR, mayor, and PokiSimA.
 
-For each player we train the MLP from \ref{sec:design3} and find the TNE. The results are shown in table \ref{tab:tneg3}.
+For each player we train the MLP from \ref{sec:design2} and find the TNE. The results are shown in table \ref{tab:tneg3}.
 
 \vspace{4mm}
 \begin{table}[H]
@@ -200,7 +205,8 @@ For each player we train the MLP from \ref{sec:design3} and find the TNE. The re
 \end{table}
 \vspace{4mm}
 
-To further test the ANN we try to test it using different numbers of hidden neurons. We construct three new ANN's with three, five, and seven hidden neurons. The TNE's can be seen in table \ref{tab:tneg4}. 
+There is a rule of thumb when determine the number of hidden neurons that the number of hidden neurons should be between the number of inputs and the number of outputs,
+Therefore to further test the ANN we try to test it using different numbers of hidden neurons within that range. We construct three new ANN's with two, three, four, and five hidden neurons. The TNE's can be seen in table \ref{tab:tneg4}. 
 
 The number of hidden neurons does not seem to make the overall TNE get any lower.
 
@@ -213,27 +219,60 @@ The number of hidden neurons does not seem to make the overall TNE get any lower
   \hline
   2 & $\sim$19,4 & $\sim$14,5 & $\sim$21,1 \\
   3 & $\sim$19,5 & $\sim$14,0 & $\sim$20,9 \\
+  4 & $\sim$19,6 & $\sim$14,2 & $\sim$21,0 \\
   5 & $\sim$19,1 & $\sim$15,0 & $\sim$21,1 \\
-  7 & $\sim$17,8 & $\sim$14,9 & $\sim$21,3 \\
   \hline
 \end{tabular}
 \caption{TNE from training ANN's with different numbers of hidden neurons.\label{tab:tneg4}}
 \end{table}
 \vspace{4mm}
 
+The tests in this section shows that the TNE varies quite a bit between the players. The higher the TNE are the harder the player is to predict. Because poker is a game of deception, a player will often try to misguide the opponents by making illogical choices. This makes it hard for the ANN to figure out the players strategy.
+From this we can tell that mayor is probably not shifting his strategy as much as the two other players. Therefore mayor is the most preferable player when it comes to the success of adapting to another players strategy.
+
+
+\begin{figure}[H]
+  \center
+    \includegraphics[scale=0.6]{images/nn/finaltest.png}
+  \caption{TNE graph from training the second ANN.\label{fig:finaltest}}
+\end{figure}
+
+To further test whether or not the ANN can make profitable choices based on the training with the data from the player mayor, we choose to use a test-bed for poker bots called Poker Genius. Here we are able to test the ANN against the poker bots of Poker Genius. We manually recreated the choices the ANN made against the bots of Poker Genius. It was done manually, because we did not manage to get Poker Genius implementation of personal bots to work. As shown in figure \ref{fig:nn2} it is clear that the ANN is not able to compete on the same level as the bots from Poker Genius.
+
+
 \subsection{Discussion}
 In this chapter we try to develop a default strategy by implementing a self-learning algorithm. We use ANN's to observe actions from other players and learn their strategy. Alternatively, we could have programmed the procedures of determining the action directly in the code. We ran into a few problems by trying to implementing the ANN.\\
 
-The first problem is related to the data we use. The problem is that  the data is not complete since we do not have the data about the hole cards of the irrelevant players. This means that we can not learn the ANN when to fold, as we have no input for the hole cards. To solve this we either need a complete data set or to program the procedure for determining when to fold. 
+The first problem is related to the data we use. The problem is that  the data is not complete since we do not have the data about the hole cards of the irrelevant players. This means that we can not learn the ANN when to fold, as we have no input for the hole cards. On the other hand do we really need this information to create a default strategy? Poker is a game of imperfect information and human players are able to play a game of poker without learning from an experienced player so should the computer not have that ability too? 
+There are two solutions, one is to collect a complete dataset with all the information and disregard that poker should be a game of imperfect information. Another is to program the procedure for determining when to fold. 
 
-Additionally, since we get the results as an action (defensive or aggressive), The expected results of each output is either zero or one, due to the limitation of possible actions. These are the two extremes and it can be hard for the ANN to find an approximation.
 
-The second problem was to determine the number of inputs for the ANN. We did not have much luck using only five inputs for our ANN. Since most players adapt their strategy to strategies of the opponents, it is close to impossible to learn the strategy of the player without knowing the strategy of the opponents.
+Additionally, since we get the results as an action (defensive or aggressive), The expected results of each output is either zero or one, due to the limitation of possible actions. Zero or one are the two extremes and therefore it can be hard for the ANN to find an approximation.
 
-The final problem we encountered was defining our requirements for the ANN. We do know what TNE is realistic and our requirements may be unrealistic. \\
+
+The second problem was to determine the number of inputs for the ANN. We chose five inputs that we found relevant. Perhaps we overlooked some inputs that could be interesting to look at. It is also possible that one or more of the inputs simply are confusing the ANN more than it is helping figuring out a pattern in the players strategy. 
+
+
+The final problem we encountered was defining our requirements for the ANN. We do not know what TNE is realistic and our requirements may be unrealistic. Whether or not the TNE is somewhat fair is hard to determine. But it seems like we would have to get a much lower TNE in order to create a realistic strategy from the data of the player.\\
+
+Learning a default strategy based on random players in random rounds are perhaps not the best option. However we were not able to retrieve any game data from a series of professional poker players.
+An alternative method would be to choose the most successful player in the dataset, but the rises the issue that just because a players strategy is good against one strategy does not make it good against another.
+Another issue is that in order for a player to be successful the player has to be good at adapting to the opponents strategy. This would mean that the ANN would have a hard time learning the strategy of the player as the player probably changed strategy often.
+
+The ANN were not able to make profitable choices when playing against the bots of Poker Genius. But it is rather hard to determine whether or not this is because of its lack to learn from the player or due to the player not making wise decisions. We wonder if the result would be different if we had had data from a professional poker player.
+
+
+Ville slette det her og ned og bruge det ovenover... Hva synes du?
+
+
+The second problem was to determine the number of inputs for the ANN. Five relevant inputs was chosen for our ANN. Since most players adapt their strategy to strategies of the opponents, it is close to impossible to learn the strategy of the player without knowing the strategy of the opponents. 
+
 
 It was a bad idea to try learn a default strategy from random players in random rounds. The players had most likely already gained information about the opponents and thus adapted their strategy to the opponents. It would have made more sense to observe players who just joined a table to see how they played in a situation where they had not adapted to the opponents yet.
 Additionally, trying to learn an approximation of every strategy is a bad idea. Observing bad players will cause the default strategy to take bad decisions. It would make more sense to observe only a few successful players. This way we can ensure the decisions to be smart. 
+
+
+
 
 \subsection{Conclusion}
 In this chapter we try to answer problem statement 2:
@@ -244,6 +283,7 @@ How can we develop a default strategy for APC without having information about t
 \end{statementBox2}
 \vspace{4mm}
 
-We try to develop the strategy by creating different ANN approaches and train them using data from real-life poker games. This solution did not work for us.\\
+We try to develop the strategy by creating different ANN approaches and train them using data from real-life poker games. The last two approaches were able to learn from a player but unfortunately the ANN's ability to learn quickly dropped.\\
 
-We trained our ANN to the strategy of random players by observing their actions and the information about the game in the moment of the action. We then found the TNE of the ANN's, and compared them to our requirement of having a TNE of five percent or less. Our best ANN had an TNE of $\sim$14.0~\% and therefore did not fulfil our requirement of five percent or less. 
+For the final ANN we chose three randomly picked players. All the actions and information about the game in the moment of the action were collected to use in the training of the ANN. The TNE of each player specific ANN was compared to the hope of having a TNE of five percent or less. The best ANN had a TNE of $\sim$14.0~\% which is not what we hoped for. However the ANN is able to learn from the players to some degree. 
+It goes without saying that a complete dataset with the hole cards of all the players in the game would benefit the ANN's ability to learn how to handle each situation.
