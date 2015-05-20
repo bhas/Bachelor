@@ -1,7 +1,7 @@
 \section{Conclusion}
-In this thesis we have tried to implement an APC that can play Texas hold'em limit poker against up to nine opponents. The APC have been programmed in Java.
+In this thesis we have tried to implement an APC that can play Texas hold'em limit poker against multiple opponents. The APC have been programmed in Java.
 
-We started in chapter \ref{sec:part1} by answering problem statement 1:
+We started in chapter \ref{sec:part1}, by answering problem statement 1:
 \vspace{4mm}
 \begin{statementBox2}{Problem statement 1}
 How can APC determine the strength of a poker hand in any game state?
@@ -9,7 +9,7 @@ How can APC determine the strength of a poker hand in any game state?
 \vspace{4mm}
 
 We define the strength of a poker hand as the probability of winning with that hand.
-We have created a subsystem called the calculator which uses the Monte Carlo method. The calculator can, for a given hand and number of opponents, find an estimate of the true probability. 
+We have created a subsystem called the calculator which uses the Monte Carlo method. The calculator can, for any given hand and for up to nine opponents, find an estimate of the true probability. 
 
 It has an error of less than one percent and can calculate the result in $\sim$0,15 seconds.\\
 
@@ -22,12 +22,11 @@ How can we develop a default strategy for APC without having information about t
 
 We use an ANN to observe real-life poker players in order for it to learn the strategy of the players. 
 
-This was successful in the sense that we managed to make the ANN smarter through learning. But it did not fulfil our requirement of having a TNE of five percent or less after training. The closest we came was $\sim$14 \%, when the ANN only observed a single player. 
-We further tested how the ANN would perform against another poker bot. 
+This was successful in the sense that we managed to make the ANN smarter through learning. But it did not fulfil our requirement of having a TNE of five percent or less after training. The closest we came was $\sim$14~\%, when the ANN only observed a single player. 
 
-When tested against another simple poker bot it lost roughly half its chips over 80 rounds. Due to imperfect data, we were not able to learn the ANN when to fold, which we believe is the main reason of its bad performance.\\
+We further tested how the ANN would perform against another poker bot where it lost roughly half its chips over 80 rounds. Due to imperfect data, we were not able to learn the ANN when to fold, which we believe is the main reason for its lack of performance.\\
 
-Finally we answered problem statement 3.
+Finally, in chapter \ref{sec:part3}, we answered problem statement 3.
 \vspace{4mm}
 \begin{statementBox2}{Problem statement 3}
 How can we further develop the APC's strategy to be able to adapt to the playing style of the opponent?
@@ -38,9 +37,9 @@ We use player modelling to further adapt the strategy found from answering probl
 
 We have designed our own player model which has three main attributes: aggressiveness, tightness, and riskiness.
 
-Each of these attributes as been slit into a overall attributes which is tracked for the whole game and a recent attribute which is tracked for the last ten games. This is done to enable the APC to detects if the opponent changes strategy. 
+Each of these attributes has been split into two attributes: the overall attribute, which is tracked for the whole game, and the recent attribute, which is tracked for the last ten games. This design enables the APC to detect, if the opponent changes strategy. 
 
-Current aggressiveness is also added to the player model and it indicates the players previous aggressiveness of the current round.
+Current aggressiveness is also added to the player model and it indicates the opponents previous aggressiveness of the current round.
 
 This give a total of seven attributes: overall aggressiveness, recent aggressiveness, current aggressiveness, overall tightness, recent tightness, overall riskiness, and recent riskiness.
 

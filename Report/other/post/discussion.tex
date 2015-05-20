@@ -1,10 +1,18 @@
 \section{Discussion}
-To create the APC we have created a few subsystems it uses. We created a calculator which is able to estimate the probability of winning with any hand. The calculator uses the Monte Carlo method and it works perfectly.
+To create the APC we have created a few subsystems it uses. We created a calculator which is able to estimate the probability of winning with any hand. The calculator uses the Monte Carlo method and it works perfectly.\\
 
 We also use an ANN to learn the strategy of the APC. 
 
-We first tried to design the ANN using five input (hand strength, number of opponents, chips, cost, and pot) but this ANN did not learn the strategy of the observed players as well as we would have hoped. The reason it did not learn it, was because the our dataset did not have complete information about the players it observed. This also caused a problem where the APC did not learn when to fold thus causing it never to fold.
+We first tried to design the ANN using five input (hand strength, number of opponents, chips, cost, and pot) but this ANN did not learn the strategy of the observed players as well as we would have hoped. The reason it did not learn it, was because the our dataset did not have complete information about the players it observed. This also caused a problem where the APC did not learn when to fold thus causing it never to fold.\\
 
-Had we had a dataset with complete information we believe this approach could have worked and that the APC would have been able to compete against other simple bots. 
+To make the APC adaptive we use player modelling. We designed a player model based with three main attributes called aggressiveness, tightness, and riskiness. All these attributes are related to the play style of the player rather than the information about the game.  
 
-To make the APC adaptive we use player modelling. We designed a player model based with three main attributes called aggressiveness, tightness, and riskiness. All these attributes are related to the play style of the player rather than the information about the game.  We could also have considers attributes related to the 
+We could also have considers attributes related to the game rather than the play style of the opponent. Such attribute could have included the opponents position, chips, and committed chips during the round. Poki, the bot developed by A. Davidson, includes a lot of these types of input in the neural network. Poki is able to compete with average human player\\
+
+Had we had a dataset with complete information, we believe this approach could have worked and that the APC would have been able to compete against other simple bots.
+
+That said there is still quite a long way before the APC would be able to compete against average, human poker players. In order for our APC to be able to compete against amateur human players we would probably have to include more inputs about the state of the game, like it was done with Poki.\\
+
+Another approach we did not look into at all, is to let the APC play against itself and try out different things and note down the result. Based on the results of the different tries it can over time be able to tell which decisions are more likely to give a good result. This way the APC would become a fully self-learning algorithm but at the same time this looks like a way more advanced algorithm. 
+
+If the ambition was to develop a world class poker computer this might be worth looking into. This way the computer would might be able to learn highly advanced strategies that the humans are yet to discover.
