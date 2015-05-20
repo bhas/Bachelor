@@ -26,7 +26,7 @@ There is two commonly used approaches to develop a strategy that adapts to the s
 
 The traditional approach is to use statistics to learn about the opponents. Such an approach uses probabilities based on the players actions to determine the strength of the players hand. Such probabilities may include, but are not limited to, the percentage of hands the player folds during each game state, the percentage of times the player bluffs on the river, and the strength of the hand the player has when calling an aggressive player. This is useful against a player who uses the same strategy throughout the whole game and whose actions are deterministic.
 
-The other approach is using player modelling, see section \ref{asd} and artificial neural networks (ANN), see section \ref{a}. This approach has gained increasing popularity through the recent years. In this approach the ANN is responsible of learning the strategy of the player. This approach is good for learning the strategy of a player who performs non-deterministic actions. It can also adapt in case the player changes strategy.\\
+The other approach is using player modelling, see section \ref{sec:pm} and artificial neural networks (ANN), see section \ref{sec:nn}. This approach has gained increasing popularity through the recent years. In this approach the ANN is responsible of learning the strategy of the player. This approach is good for learning the strategy of a player who performs non-deterministic actions. It can also adapt in case the player changes strategy.\\
 
 We choose to use the second approach and create a player model and an ANN. We find it more interesting to use player modelling and ANN's as this approach seems to have a lot of potential within the field of artificial intelligence in poker compared to the statistically approach.
 
@@ -125,11 +125,10 @@ Here we have the number of times the player calls $A_{call},n$, raises $A_{raise
 \subsection{Combining the ANN and player model}
 The ANN for the adaptive strategy would be based on the ANN design from section \ref{sec:design2}, see figure \ref{fig:nn2}. 
 
-\input{other/models/default-nn2.tex}
 
 We choose to use the approach by G. Nicolai and R. Hilderman and construct a single ANN that takes the attributes of the players as inputs. The target is to learn the ANN what to do, based on the inputs about the game and attributes of the opponents.
 
-The inputs for the ANN can be seen in table \ref{ann-design}. The attributes of the players are the attributes found in the previous section. In case there is less than nine opponents all attributes of a non-existing player is set to zero. Since the input function finds the net input as the sum of all the weighted inputs all inputs that are zero will not affect the ANN.
+The inputs for the ANN can be seen in table \ref{tab:ann-design}. The attributes of the players are the attributes found in the previous section. In case there is less than nine opponents all attributes of a non-existing player is set to zero. Since the input function finds the net input as the sum of all the weighted inputs all inputs that are zero will not affect the ANN.
 
 \begin{table}[H]
 \center
