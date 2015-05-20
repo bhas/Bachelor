@@ -26,11 +26,7 @@
 \contentsline {subsubsection}{\numberline {3.1.2}Design of the player model}{36}{subsubsection.3.1.2}
 \contentsline {subsection}{\numberline {3.2}Combining the ANN and player model}{40}{subsection.3.2}
 \contentsline {subsection}{\numberline {3.3}Discussion}{41}{subsection.3.3}
-<<<<<<< HEAD
-\contentsline {subsection}{\numberline {3.4}Conclusion}{42}{subsection.3.4}
-=======
 \contentsline {subsection}{\numberline {3.4}Conclusion}{41}{subsection.3.4}
->>>>>>> cb2d73131fb93f38a86f96937cdd02ebde5d09ff
 \contentsline {section}{\numberline {4}Discussion}{44}{section.4}
 \contentsline {section}{\numberline {5}Conclusion}{45}{section.5}
 \contentsline {section}{\numberline {A}\\Glossary}{51}{appendix.A}
