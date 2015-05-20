@@ -14,7 +14,7 @@ How can we further develop the APC's strategy to be able to adapt to the playing
 \vspace{4mm} 
 
 
-In poker there is no strategy that is better than any other strategy. Every strategy has weaknesses and therefore the optimal strategy is the one that takes advantage of the weaknesses of the strategies of the opponents. In order to take advantage of the opponents strategy, one must first understand their strategy. In poker understanding the opponents is one of the most important key elements of the game. Once a player gains insight in the opponents strategy, it is important to adapt the playing stategy accordingly.
+In poker there is no strategy that is better than any other strategy. Every strategy has weaknesses and therefore the optimal strategy is the one that takes advantage of the weaknesses of the strategies of the opponents. In order to take advantage of the opponents strategy, one must first understand their strategy. In poker understanding the opponents is one of the most important key elements of the game. Once a player gains insight in the opponents strategy, it is important to adapt the playing strategy accordingly.
 
 
 Since poker is a game of deception the opponents' may change their strategy during the game. In this case the player needs detect this and adapt the strategy once again. 
@@ -191,7 +191,7 @@ We find the following relevant attributes for the player model.
 \item[Riskiness] refers to how often the player pays to continue instead of folding.
 \end{description}
 
-To make it possible for the APC to detect changes in the strategy of an opponent we split each attribute into an overall attribute and recent attribute. The overall attribute is the average of every round though the entire game whereas the recent attribute is the average of the last ten rounds. A change in strategy will affect the recent attribute and cause the APC to detect the change.
+To make it possible for the APC to detect changes in the strategy of an opponent, each attribute is split into an overall attribute and recent attribute. The overall attribute is the average of every round though the entire game whereas the recent attribute is the average of the last ten rounds. A change in strategy will affect the recent attribute and cause the APC to detect the change.
 
 Aggressiveness has been split into one additional attribute called current aggressiveness which is the aggressiveness of the previous game states of the current round.
 
@@ -208,11 +208,11 @@ We end up with a total of 7 attributes:
 
 We suggest the following way of finding the attributes.
 
-The aggressiveness of a round can be found as the number of times the player bets or raise divided by the total number of actions of the player for that round.
+The aggressiveness of a round can be found as the number of times the opponent bets or raise divided by the total number of actions of the opponent for that round.
 
-The aggressiveness of a round can be found as the number of times the player bluffs or slow plays divided by the total number of actions of the player for that round.
+The aggressiveness of a round can be found as the number of times the opponent bluffs or slow plays divided by the total number of actions of the opponent for that round.
 
-The riskiness of a round can be found as the number of times he calls or raises divided by the total number of times the player has to pay in order to continue.\\
+The riskiness of a round can be found as the number of times the opponent calls or raises divided by the total number of times the opponent has to pay in order to continue.\\
 
 
-By designing a new ANN that took the attributes for each player as additionally inputs, we believe that the ANN with its 68 inputs have the information it needs to adapt to opponents.
+By designing a new ANN that takes the attributes for each opponent as additionally inputs, we believe that the ANN with its 68 inputs have the information it needs to adapt to opponents.
