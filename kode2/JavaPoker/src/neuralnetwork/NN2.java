@@ -27,33 +27,11 @@ public class NN2 {
 
 	public NN2() {
 		createNN();
-		testData("Kh Kc", 1);
-		testData("Kh Kc", 3);
-		testData("Kh Kc", 5);
-		testData("2c 7d", 5);
-		testData("2s 6c", 4);
 	}
 
 	public void createNN() {
 		// create training set
 		DataSet trainingSet = new DataSet(2, 1);
-		addEntry(trainingSet, "As Ac", 1);
-		addEntry(trainingSet, "As Ks", 1);
-		addEntry(trainingSet, "As Qh", 1);
-		addEntry(trainingSet, "Ks 9s", 1);
-		addEntry(trainingSet, "Qs Tc", 1);
-		addEntry(trainingSet, "9s 6c", 1);
-		addEntry(trainingSet, "4s 2c", 1);
-		addEntry(trainingSet, "8s 8c", 1);
-
-		addEntry(trainingSet, "As Ac", 3);
-		addEntry(trainingSet, "As Ks", 3);
-		addEntry(trainingSet, "As Qh", 3);
-		addEntry(trainingSet, "Ks 9s", 3);
-		addEntry(trainingSet, "Qs Tc", 3);
-		addEntry(trainingSet, "9s 6c", 3);
-		addEntry(trainingSet, "4s 2c", 3);
-		addEntry(trainingSet, "8s 8c", 3);
 
 		// create new perceptron network
 		neural = new Perceptron(2, 1, TransferFunctionType.SIGMOID);

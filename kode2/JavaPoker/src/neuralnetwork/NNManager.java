@@ -134,22 +134,6 @@ public class NNManager {
 
 	}
 
-	//
-	// public void test2() {
-	// double[] inputData = new double[5];
-	// for (int i = 0; i < 20; i++) {
-	// for (int j = 0; j < 5; j++) {
-	// inputData[i] = dataset.getRowAt(i).getInput()[j];
-	// }
-	// }
-	// neural.setInput(inputData);
-	// neural.calculate();
-	// double[] networkOutput = neural.getOutput();
-	// System.out.println(Arrays.toString(inputData) + " -> " +
-	// Arrays.toString(networkOutput));
-	//
-	// }
-
 	public void loadDataset(String file) {
 		dataset = DataSet.load(file);
 	}
