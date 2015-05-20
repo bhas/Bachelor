@@ -5,7 +5,7 @@ In poker, reading an opponent refers to the process of figuring out the opponent
 
 Another big element of poker is statistics. Since the players do not know the cards that will be dealt throughout the game, players must calculate the likelihood of winning. \\
 
-The goal of this thesis is to develop an adaptive poker computer (APC), that is capable of adapting to the strategies of the opponents. The APC will be programmed to play a variation of poker called Texas hold'em limit poker with up to nine opponents. The APC is programmed in Java.
+The goal of this thesis is to develop an adaptive poker agent (APA), that is capable of adapting to the strategies of the opponents. The APA will be programmed to play a variation of poker called Texas hold'em limit poker with up to nine opponents. The APA is programmed in Java.
 
 For the readers unfamiliar with Texas hold'em limit poker the following section describes the basic rules and flow of the game.
 
@@ -18,7 +18,7 @@ Chess is a game of perfect information, as no information is hidden from the pla
 
 Since then, the interest of the artificial intelligence research has shifted towards games with imperfect information. These types of games presents new challenges such as deception and hidden information. Poker is an example of a game with imperfect information.\\
 
-In may 2015 the contest \textit{Brains Vs. Artificial Intelligence} \cite{brain-vs-ai} was held with four of the best poker players in the world. Each of the players played 20.000 hands of Texas Hold'em no-limit heads-up against Claudico, the world's best poker computer at the time. Claudico was able to beat one of the four players, which proves that artificial intelligence in regards to poker have come a long way.\\
+In may 2015 the contest \textit{Brains Vs. Artificial Intelligence} \cite{brain-vs-ai} was held with four of the best poker players in the world. Each of the players played 20.000 hands of Texas Hold'em no-limit heads-up against Claudico, the world's best poker agent at the time. Claudico was able to beat one of the four players, which proves that artificial intelligence in regards to poker have come a long way.\\
 
 Developing an algorithm capable of playing poker is not only limited to the domain of poker, but can end up having a future applications in other domains as well.
 
@@ -26,16 +26,16 @@ Developing an algorithm capable of playing poker is not only limited to the doma
 \textit{``Bowling says the findings in this new research are especially valuable because they give us a hint at the scale of problems AI can solve. \ldots ~Solving a game as complex as heads-up limit Texas hold ’em could mean a breakthrough in our conception of how big is too big"} \cite{quote}
 \end{quotation}
 
-In essence a game presents a challenge for the APC to solve. How the APC approaches this challenge and what strategy the APC uses to solve it, is what determines the APC's success.\\
+In essence a game presents a challenge for the APA to solve. How the APA approaches this challenge and what strategy the APA uses to solve it, is what determines the APA's success.\\
 
-In order to achieve the goal of developing an APC, we will answer the following problem statements:
+In order to achieve the goal of developing an APA, we will answer the following problem statements:
 
 \vspace{4mm}
 \begin{statementBox2}{Problem statements}
 \begin{enumerate}
-    \item \label{itm:q1} How can APC determine the strength of a poker hand in any game state? \label{itm:ps1}
-    \item \label{itm:q2} How can we develop a default strategy for APC without having information about the playing style of the opponents? \label{itm:ps2}
-    \item \label{itm:q3} How can we further develop the APC's strategy to be able to adapt to the playing style of the opponent? \label{itm:ps3}
+    \item \label{itm:q1} How can APA determine the strength of a poker hand in any game state? \label{itm:ps1}
+    \item \label{itm:q2} How can we develop a default strategy for APA without having information about the playing style of the opponents? \label{itm:ps2}
+    \item \label{itm:q3} How can we further develop the APA's strategy to be able to adapt to the playing style of the opponent? \label{itm:ps3}
   \end{enumerate}
 \end{statementBox2}
 \vspace{4mm}
@@ -44,7 +44,7 @@ Our thesis is divided into three chapters each of which focuses on one of the th
 
 In chapter \ref{sec:part1} we find a solution to problem statement one. We develop a subsystem which is able to estimate the probability of winning for any set of hole cards in any poker state. The subsystem can calculate the probability of winning with an error percentage of one percent and it takes $\sim$0,15 seconds on average.
 
-In chapter \ref{sec:part2} we answer problem statement two. We implement an algorithm using artificial neural networks and use it to observe data from real-life poker games in order to learn the strategies of the players. The APC managed to learn the strategies of three different players with a total network error ranging from $\sim$14 \% to $\sim$20 \%, but it still have room for improvements.
+In chapter \ref{sec:part2} we answer problem statement two. We implement an algorithm using artificial neural networks and use it to observe data from real-life poker games in order to learn the strategies of the players. The APA managed to learn the strategies of three different players with a total network error ranging from $\sim$14 \% to $\sim$20 \%, but it still have room for improvements.
 
-In chapter \ref{sec:part3} we reflect upon problem statement three. We come up with a theoretical solution by using player modelling and artificial neural networks. We design a player model for the APC having seven inputs: overall aggressiveness, recent aggressiveness, current aggressiveness, overall tightness, recent tightness, overall riskiness, and recent riskiness. 
-We design an artificial neural network having 68 inputs, 62 which are related to the player model, that is responsible for determining the action of the APC. The artificial neural network takes the play style of the opponents into account when determining the action.
+In chapter \ref{sec:part3} we reflect upon problem statement three. We come up with a theoretical solution by using player modelling and artificial neural networks. We design a player model for the APA having seven inputs: overall aggressiveness, recent aggressiveness, current aggressiveness, overall tightness, recent tightness, overall riskiness, and recent riskiness. 
+We design an artificial neural network having 68 inputs, 62 which are related to the player model, that is responsible for determining the action of the APA. The artificial neural network takes the play style of the opponents into account when determining the action.
