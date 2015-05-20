@@ -1,4 +1,4 @@
-\section{Learning to adapt to opponents}
+	\section{Learning to adapt to opponents}
 \label{sec:part3}
 
 In the previous chapter we created an algorithm to develop the default strategy for the APC. \\
@@ -11,9 +11,8 @@ How can we further develop the APC's strategy to be able to adapt to the playing
 \end{statementBox2}
 \vspace{4mm} 
 
-In poker there is no strategy that is better than any other strategy. Every strategy has weaknesses and therefore the optimal strategy is one that takes advantage of the weaknesses of the strategies of the opponents. In order to take advantage of the opponents' strategy, one must first understand their strategy. In poker understanding the opponents' is one of the most important key elements of the game. 
+In poker there is no strategy that is better than any other strategy. Every strategy has weaknesses and therefore the optimal strategy is the one that takes advantage of the weaknesses of the strategies of the opponents. In order to take advantage of the opponents strategy, one must first understand their strategy. In poker understanding the opponents is one of the most important key elements of the game. Once a player gains insight in the opponents strategy, it is important to adapt the playing stategy accordingly.
 
-Once one understands the strategy of the opponents' one has to adapt oneself's strategy.
 
 Since poker is a game of deception the opponents' may change their strategy during the game. In this case the player needs detect this and adapt the strategy once again. 
 
@@ -22,11 +21,11 @@ This chapter is focused on the theoretical aspect an adaptive part to the APC ra
 
 Instead of implementing the improvements, we simply suggest how we could have implemented them.\\
 
-There is two commonly used approaches to develop a strategy that adapts to the strategy of the opponents.
+There are two commonly used approaches to develop a strategy that adapts to the strategy of the opponents.
 
-The traditional approach is to use statistics to learn about the opponents. Such an approach uses probabilities based on the players actions to determine the strength of the players hand. Such probabilities may include, but are not limited to, the percentage of hands the player folds during each game state, the percentage of times the player bluffs on the river, and the strength of the hand the player has when calling an aggressive player. This is useful against a player who uses the same strategy throughout the whole game and whose actions are deterministic.
+The traditional approach isthe use of statistics to gain information about the opponent. Such an approach uses probabilities based on the opponents' actions to determine the strength of the opponents' hands. These probabilities may include, but are not limited to, the percentage of hands the opponents' folds during each game state, the percentage of times the opponents' bluffs on the river, and the strength of the hand the opponents' has when calling an aggressive player. This is useful against an opponent who uses the same strategy throughout the whole game and has deterministic actions.
 
-The other approach is using player modelling, see section \ref{sec:pm} and artificial neural networks (ANN), see section \ref{sec:nn}. This approach has gained increasing popularity through the recent years. In this approach the ANN is responsible of learning the strategy of the player. This approach is good for learning the strategy of a player who performs non-deterministic actions. It can also adapt in case the player changes strategy.\\
+The other approach is using player modelling, see section \ref{sec:pm} and artificial neural networks (ANN), see section \ref{sec:nn}. This approach has gained increasing popularity through the recent years. In this approach the ANN is responsible of learning the strategy of the opponent. This approach is also good for learning the strategy of an opponent who performs non-deterministic actions. It can also adapt in case the opponent changes strategy.\\
 
 We choose to use the second approach and create a player model and an ANN. We find it more interesting to use player modelling and ANN's as this approach seems to have a lot of potential within the field of artificial intelligence in poker compared to the statistically approach.
 
@@ -40,30 +39,30 @@ Using ANN's in combination with player modelling looks like reasonable approach.
 \label{sec:pm}
 Player modelling is a loosely defined concept and may vary from one context to another. The concept of player modelling is to make a computational model of a player. This model includes game related attributes, such as play style and preferences, as well as non-game related attributes, such as cultural background, gender, and personality. All decisions of the player are ultimately made on the basis of these attributes. 
 
-Player modelling is used to describe or predict the players decisions, reasoning and reactions. In the field of artificial intelligences the human player is the most used model for developing computer players. Understanding the reason behind every choice of a player will not only bring a better understanding of the player but also a better understanding of the game and its mechanics.
+Player modelling is used to describe or predict the opponents' decisions, reasoning, and reactions. In the field of artificial intelligences the human player is the most used model for developing computer players. Understanding the reason behind every choice of an opponent will not only bring a better understanding of the opponent but also a better understanding of the game and its dynamics.
 
 Since the player model can easily become extremely extensive one has to determine which attributes are relevant.
 
 \subsubsection{Design of the player model}
 It is crucial that one figures out which attributes are relevant to the specific player model. When trying to model a player there is almost no limit to what could be included. Attributes such as state of mind, energy, and distractions affect the decision of every human player.  
 
-Below we have listed the attributes that we find most relevant for poker.
+Below we have listed the attributes that we find most relevant for a player model in poker.
 
 \begin{description}
-\item[Aggressiveness] How often does the player tend to bet or raise.
-\item[Tightness] How strictly does the players actions reflect the strength of the players hand. For instance, a tight player will play aggressive when having a strong hand and defensive or fold when having a weak hand. A loose player may bluff (play aggressive while having a weak hand) and slow play (play defensive while having a strong hand) a lot.
-\item[Riskiness] How easy is it to push the player to fold. Risky players tend to fold less often while under pressure from the opponents and are therefore harder to bluff against.
+\item[Aggressiveness] How often does the opponent tend to bet or raise.
+\item[Tightness] How strictly does the opponents actions reflect the strength of the opponents hand. For instance, a tight opponent will play aggressive when having a strong hand and defensive or fold when having a weak hand. A loose opponent may bluff (play aggressive while having a weak hand) and slow play (play defensive while having a strong hand) a lot.
+\item[Riskiness] How easy is it to push the opponent to fold. Risky opponents tend to fold less often while under pressure from a player and are therefore harder to bluff against.
 \item[Body language] Most human players unconsciously show emotions through their body language. The professional poker players can often tell a lot about an opponents hole cards solely by looking at the opponents body language.
-\item[Time of decision making] The time a player uses for each decision can show the confidence of the players choice. A fast decisions indicates an easy decision. However, the time spent on making a decision can be misleading as distractions can occur.
+\item[Time of decision making] The time an opponent uses for each decision can show the confidence of the opponents choice. A fast decision indicates an easy decision. However, the time spent on making a decision can be misleading as distractions can occur.
 \end{description}
 
 Since our APC is targeted towards computer players as well as human players, it makes no sense to use attributes such as body language and the time of decision making to model the opponents. Those attributes only affect human players. Instead we will model the opponents using the attributes aggressiveness, tightness, and riskiness.
 
 Aggressiveness can be found by simply looking at the actions of the opponent. 
 
-Tightness is a bit more complicated as we need to know the hole cards of the player. Therefore we can only track the tightness of rounds where the player makes it to the showdown.
+Tightness is a bit more complicated as we need to know the hole cards of the opponent. Therefore, we can only track the tightness of rounds where the opponent makes it to the showdown.
 
-Riskiness is also easy to measure. Riskiness shows how likely the player is to call while under pressure from opponents. We can determine the riskiness of the player by tracking the number of times the player folds contra the number of times the player calls or raises.
+Riskiness is also easy to measure. Riskiness shows how likely the opponent is to call while under pressure from APC. We can determine the riskiness of the player by tracking the number of times the opponent folds as compared to the number of times the opponent calls or raises.
 
 The APC needs to be able to recognise if a player changes strategy during the game. To accomplish this we split each attribute into the two attributes: overall and recent. Overall, covers every round throughout the game. Recent, only covers the last ten rounds.
 
@@ -88,15 +87,15 @@ The aggressiveness of a round $n$ can be found as:
 
 \[Agg,n = \frac{A_{bet},n + A_{raise},n}{A_{total},n}\]
 
-$A_{agg},n$ is the players number of bets $A_{bet},n$ and raises $A_{raise},n$ in round $n$ and  $A_{total},n$ is the players total number of actions in round $n$. 
+$A_{agg},n$ is the opponents' number of bets $A_{bet},n$ and raises $A_{raise},n$ in round $n$ and  $A_{total},n$ is the opponents' total number of actions in round $n$. 
 
-Overall aggressiveness can be found as the average aggressiveness of all rounds, recent aggressiveness would be found as the average aggressiveness of the last ten rounds and finally the current aggressiveness would be found as the average aggressiveness of the previous game states of the current round.\\
+Overall aggressiveness can be found as the average aggressiveness of all rounds, recent aggressiveness is found as the average aggressiveness of the last ten rounds and finally the current aggressiveness is found as the average aggressiveness of the previous game states of the current round.\\
 
-The tightness of the player can be found by backtracking the actions of the player after the round is finished. This is of course only possible for rounds that makes it to the showdown, since we otherwise do not know the hole cards of the player.
+The tightness of the opponent can is found by backtracking the actions of the opponent after the round is finished. This is of course only possible for rounds that makes it to the showdown, since we otherwise do not know the hole cards of the opponents.
 
 In order to determine if a player either bluffs or slow plays, we would have to establish some boundaries based on the hand strength. 
 
-We took a sample of 100 defensive actions and 100 aggressive actions, and inserted the data in figure \ref{fig:dist-act}. The boundary for bluffing (red line) shows that the players tends to play defensive below this line. Likewise the boundary for slow play (blue line) shows that the players tends to play aggressive above this line.
+We took a sample of 100 defensive actions and 100 aggressive actions, and inserted the data in figure \ref{fig:dist-act}. The boundary for bluffing (red line) shows that the players tends to play defensive below this line. Likewise, the boundary for slow play (blue line) shows that the players tends to play aggressive above this line.
 
 \begin{figure}[H]
   \center
@@ -116,7 +115,7 @@ Here $A_{bluff},n$ is the number of times the player has bluffed in round $n$, $
 
 We can then find the overall- and recent tightness the same way as with the aggressiveness. Although we can only track the past ten rounds where the player made it to showdown.\\
 
-Finally we can find the riskiness of a round $n$ as the number of times the player calls or raise in regards to the number of times it costs the player to continue:
+Finally we can find the riskiness of a round $n$ as the number of times the player calls or raises in regards to the number of times it costs the player to continue:
 
 \[Ri,n = \frac{A_{call},n + A_{raise},n}{A_{call},n + A_{raise},n + A_{fold},n}\]
 
