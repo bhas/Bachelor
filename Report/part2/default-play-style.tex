@@ -1,14 +1,14 @@
 \section{Learning a default strategy}
 \label{sec:part2}
-In the previous chapter we created a calculator that can determine the strength of a hand by calculating the probability of winning. In this chapter we shall use this calculator in the process of developing a strategy for the APC.
+In the previous chapter we created a subsystem called the calculator that can determine the strength of a hand by calculating the probability of winning. In this chapter we shall use this calculator in the process of developing a strategy for the APA.
 
-When the APC first joins a poker game it has no information about the opponents, and in this case it must use a default strategy while it gathers more information.
+When the APA first joins a poker game it has no information about the opponents, and in this case it must use a default strategy while it gathers more information.
 
 In this chapter we will find a solution to the problem statement:
 
 \vspace{4mm}
 \begin{statementBox2}{Problem statement 2}
-How can we develop a default strategy for APC without having information about the playing style of the opponents?
+How can we develop a default strategy for APA without having information about the playing style of the opponents?
 \end{statementBox2}
 \vspace{4mm}
 
@@ -23,7 +23,7 @@ Programming the procedures in the code requires the programmer to have a deep in
 
 The algorithm uses the concept watch and learn by observing other players and learn the strategy behind their decisions. This method requires that the algorithm has someone to observe.
 
-Since we do not have any particular insight in how to play poker and do not have expertise from a professional poker player, we will implement an algorithm. Additionally, by using this method the computer is not limited by our understanding of the game. 
+Since we do not have any particular insight in how to play poker and do not have expertise from a professional poker player, we will implement an algorithm. Additionally, by using this method the agent is not limited by our understanding of the game. 
 
 We will use data from real life poker games for the algorithm. The data is further described in section \ref{sec:default-test}.\\
 
@@ -157,7 +157,7 @@ The MLP is taking the same inputs as the perceptron from section \ref{sec:design
 \[I_{4} = \frac{cost}{chips_{total}}\]
 \[I_{5} = \frac{pot}{chips_{total}}\]
 
-Here $chips$ is the APC's chips, $cost$ is how many chips it costs to call, $pot$ is the amount of chips at stake, and $chips_{total}$ is the total amount of chips in the game, including the pot and the bets.
+Here $chips$ is the APA's chips, $cost$ is how many chips it costs to call, $pot$ is the amount of chips at stake, and $chips_{total}$ is the total amount of chips in the game, including the pot and the bets.
 
 
 \input{other/models/default-nn2.tex}
@@ -260,32 +260,32 @@ From this we can tell that mayor is probably more predictable compared to the tw
   \caption{Graph of the profits change throughout the game.\label{fig:finaltest}}
 \end{figure}
 
-To further test whether or not the ANN can make profitable choices based on the training with the data from the player mayor, we choose to use a test-bed for poker bots called Poker Genius. Here we are able to test the ANN against the poker bots of Poker Genius. We manually recreated the choices the ANN made against the poker bots of Poker Genius because we did not manage to make APC work for Poker Genius. As shown in figure \ref{fig:finaltest} it is clear that the ANN is not able to compete on the same level as the poker bots from Poker Genius.
+To further test whether or not the ANN can make profitable choices based on the training with the data from the player mayor, we choose to use a test-bed for poker bots called Poker Genius. Here we are able to test the ANN against the poker bots of Poker Genius. We manually recreated the choices the ANN made against the poker bots of Poker Genius because we did not manage to make APA work for Poker Genius. As shown in figure \ref{fig:finaltest} it is clear that the ANN is not able to compete on the same level as the poker bots from Poker Genius.
 
 
 \subsection{Discussion}
 We develop a default strategy by implementing an algorithm and use ANN's to observe the actions of players in order to learn their strategy. We ran into a few problems when implementing the ANN.\\
 
-The first problem is related to the data we use. The problem is that  the data is not complete since we do not have the data about the hole cards of the players who fold. This means that we can not learn the APC when to fold, as we have no input for the hole cards. 
+The first problem is related to the data we use. The problem is that  the data is not complete since we do not have the data about the hole cards of the players who fold. This means that we can not learn the APA when to fold, as we have no input for the hole cards. 
 
-If we want to observe a player and learn the strategy behind the players actions, we need to know the hole cards of the player. To solve this we need to find a new dataset with no hidden information about the player(s) we want the APC to observe.
+If we want to observe a player and learn the strategy behind the players actions, we need to know the hole cards of the player. To solve this we need to find a new dataset with no hidden information about the player(s) we want the APA to observe.
 
 Additionally, since we get the results as an action (defensive or aggressive), The expected results of each output is either zero or one, due to the limitation of possible actions. Zero or one are the two extremes and therefore it can be hard for the ANN to find an approximation. 
 
-Another problem we encountered was defining our requirements for the ANN. We do not know what TNE is realistic for an ANN for poker and our requirement of a TNE of five percent or less may be unrealistic. It would have been better set the requirement in regards to performance against other poker bots. For instance, a requirement could have been that the APC should have more chips than the test bot after playing a game of 200 rounds. \\
+Another problem we encountered was defining our requirements for the ANN. We do not know what TNE is realistic for an ANN for poker and our requirement of a TNE of five percent or less may be unrealistic. It would have been better set the requirement in regards to performance against other poker bots. For instance, a requirement could have been that the APA should have more chips than the test bot after playing a game of 200 rounds. \\
 
 Learning a default strategy based on random players in random rounds was not a good solution. However we were not able to retrieve any game data from professional poker players.
 An alternative method would be to choose the most successful player in the dataset, but that raises the issue that just because a players strategy is good against one strategy does not make it good against another.
 Another issue is that in order for a player to be successful the player has to be good at adapting to the opponents strategy. This would mean that the ANN would have a hard time learning the strategy of the player, as the player may change the strategy or may use a completely different strategy if given other opponents. Our data was tracked for a game where players can join and leave as they please. It is therefore very likely that the players we observed changed strategy during the game. 
 
-The ANN were not able to make profitable choices when playing against the poker bots of Poker Genius. We believe the main reason for the bad performance was the fact that the APC never learned when to fold. We believe that this method for developing a default strategy could have worked better if we were to get data from poker games where at least one of the players had no hidden information.
+The ANN were not able to make profitable choices when playing against the poker bots of Poker Genius. We believe the main reason for the bad performance was the fact that the APA never learned when to fold. We believe that this method for developing a default strategy could have worked better if we were to get data from poker games where at least one of the players had no hidden information.
 
 \subsection{Conclusion}
 In this chapter we answer problem statement 2:
 
 \vspace{4mm}
 \begin{statementBox2}{Problem statement 2}
-How can we develop a default strategy for APC without having information about the playing style of the opponents?
+How can we develop a default strategy for APA without having information about the playing style of the opponents?
 \end{statementBox2}
 \vspace{4mm}
 
@@ -299,4 +299,4 @@ Our best ANN design takes five inputs (hand strength, number of opponents, chips
 
 We tested it using three randomly picked players. We got an TNE of $\sim$14~\%, $\sim$19~\%, and $\sim$21~\% for each of the players respectively.
 
-We also tested the APC against a simple poker bot, and the APC end up losing roughly half its amount of chips in 80 rounds.
+We also tested the APA against a simple poker bot, and the APA end up losing roughly half its amount of chips in 80 rounds.

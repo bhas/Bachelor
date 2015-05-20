@@ -1,10 +1,10 @@
 \section{Determine the strength of a poker hand}
 \label{sec:part1}
-Our first step towards developing the APC is to find a way to determine the strength of any given hand in any game state. In this chapter we will answer the following problem statement: 
+Our first step towards developing the APA is to find a way to determine the strength of any given hand in any game state. In this chapter we will answer the following problem statement: 
 
 \vspace{4mm}
 \begin{statementBox2}{Problem statement 1}
-How can APC determine the strength of a poker hand in any game state?
+How can APA determine the strength of a poker hand in any game state?
 \end{statementBox2}
 \vspace{4mm}
 
@@ -17,7 +17,7 @@ The first option is to create a simplified formula. Such formulas already exist,
 
 The second option is to use the Monte Carlo method to simulate a large amount of games and get the distribution of outcomes. This distribution can then be used to find the probability of winning.
 
-For a human player a simplified formula is necessary but due to the computational power of a computer the Monte Carlo method is optimal for the APC. The computer can perform thousands of simulations in no time. This method also gives a trade-off between accuracy and the number of simulations. This allows us to adjust the accuracy of the probability by adjusting the number of simulations. The major poker sites also use the Monte Carlo method to determine each players probability of winning.
+For a human player a simplified formula is necessary but due to the computational power of a computer the Monte Carlo method is optimal for the APA. A computer can perform thousands of simulations in no time. This method also gives a trade-off between accuracy and the number of simulations. This allows us to adjust the accuracy of the probability by adjusting the number of simulations. The major poker sites also use the Monte Carlo method to determine each players probability of winning.
 
 The solution is implemented as a subsystem that uses the Monte Carlo method. We will refer to this subsystem as the calculator.
 
@@ -217,7 +217,7 @@ Alternatively we could have created our own formula to calculate a rank, or used
 In this chapter we have answered the question:
 \vspace{4mm}
 \begin{statementBox2}{Problem statement 1}
-How can APC determine the strength of a poker hand in any game state?
+How can APA determine the strength of a poker hand in any game state?
 \end{statementBox2}
 \vspace{4mm}
 
