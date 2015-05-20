@@ -191,22 +191,11 @@ We find the following relevant attributes for the player model.
 \item[Riskiness] refers to how often the player pays to continue instead of folding.
 \end{description}
 
-To make it possible for the APC to detect changes in the strategy of an opponent, each attribute is split into an overall attribute and recent attribute. The overall attribute is the average of every round though the entire game whereas the recent attribute is the average of the last ten rounds. A change in strategy will affect the recent attribute and cause the APC to detect the change.
+To make it possible for the APC to detect changes in the strategy of an opponent, each attribute is split into an overall attribute and a recent attribute. A change in strategy will affect the recent attribute and cause the APC to detect the change.
 
-Aggressiveness has been split into one additional attribute called current aggressiveness which is the aggressiveness of the previous game states of the current round.
+Aggressiveness has been split into one additional attribute called current aggressiveness which is the aggressiveness of the previous game states of the current round. Which ends up giving us a total of 7 attributes:
 
-We end up with a total of 7 attributes:
-\begin{itemize}
-\item Overall aggressiveness
-\item Recent aggressiveness
-\item Current aggressiveness
-\item Overall tightness
-\item Recent tightness
-\item Overall riskiness
-\item Recent riskiness
-\end{itemize}
-
-We suggest the following way of finding the attributes.
+We suggest the following way of finding the attributes:
 
 The aggressiveness of a round can be found as the number of times the opponent bets or raise divided by the total number of actions of the opponent for that round.
 
