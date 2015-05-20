@@ -1,8 +1,10 @@
 \section{Discussion}
-We created a subsystem to a poker game called APC, which has to play against other players in a game of Texas Hold'em limit.
+To create the APC we have created a few subsystems it uses. We created a calculator which is able to estimate the probability of winning with any hand. The calculator uses the Monte Carlo method and it works perfectly.
 
-The subsystem has been divided into three parts, each one handling a respective part of the system. In order to create a fully functional adaptive poker computer, all of these must work together.
+We also use an ANN to learn the strategy of the APC. 
 
-The first part of APC was to create a way of finding the probability of any given set of hole cards regardsless of how many opponents APC was up against.
-We chose to implement this part as a subsystem called the calculator. The calculator uses Monte Carlo simulations. The calculator works quite well, and is able to find the probability of any given set of hole cards, by simulating 50.000 games and calculating how many times the player will win with a given set of hole cards. 
-Alternative methods are available such as creating a formula that can calculate the 
+We first tried to design the ANN using five input (hand strength, number of opponents, chips, cost, and pot) but this ANN did not learn the strategy of the observed players as well as we would have hoped. The reason it did not learn it, was because the our dataset did not have complete information about the players it observed. This also caused a problem where the APC did not learn when to fold thus causing it never to fold.
+
+Had we had a dataset with complete information we believe this approach could have worked and that the APC would have been able to compete against other simple bots. 
+
+To make the APC adaptive we use player modelling. We designed a player model based with three main attributes called aggressiveness, tightness, and riskiness. All these attributes are related to the play style of the player rather than the information about the game.  We could also have considers attributes related to the 
