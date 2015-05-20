@@ -22,7 +22,7 @@
 \BOOKMARK [2][-]{subsection.2.6}{Conclusion}{section.2}% 22
 \BOOKMARK [1][-]{section.3}{Learning to adapt to opponents}{}% 23
 \BOOKMARK [2][-]{subsection.3.1}{Design}{section.3}% 24
-\BOOKMARK [3][-]{subsubsection.3.1.1}{Player modeling}{subsection.3.1}% 25
+\BOOKMARK [3][-]{subsubsection.3.1.1}{Player modelling}{subsection.3.1}% 25
 \BOOKMARK [3][-]{subsubsection.3.1.2}{Design of the player model}{subsection.3.1}% 26
 \BOOKMARK [2][-]{subsection.3.2}{Combining the ANN and player model}{section.3}% 27
 \BOOKMARK [2][-]{subsection.3.3}{Discussion}{section.3}% 28
