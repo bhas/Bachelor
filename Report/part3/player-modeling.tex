@@ -158,7 +158,7 @@ input & feature \\
 \end{table} 
 
 \subsection{Discussion}
-In this chapter we discuss how we could have improved the strategy of the APC to also take the opponent's play style into account. Since we have no tests it is close to impossible to say if our solution would work or not.
+We discuss how we could have improved the strategy of the APC to also take the opponent's play style into account. Since we have no tests it is close to impossible to say if our solution would work or not.
 
 We choose to use player modelling to model the opponents using seven attributes. The three main attributes we choose are aggressiveness, tightness, and riskiness. All these attributes are used to say something about the play style of the player. Other attributes more specific to the game state might also be worth considering such as: chips of the player, position of the player, the amount of chips the player has already committed in this round.
 Most of the inputs used for Poki are all related to the game state rather than the play style. 
@@ -179,21 +179,11 @@ How can we further develop the APC's strategy to be able to adapt to the playing
 \end{statementBox2}
 \vspace{4mm} 
 
-One can either use a statistically approach or an approach using player modelling. We choose to use the approach using player modelling. 
-
 For our approach we use player modelling to find relevant attributes to define an opponent. These attributes will then be given as inputs to an ANN which then determines the action of the APC. 
 
-We find the following relevant attributes for the player model.
+To make it possible for the APC to detect changes in the strategy of an opponent, we find two attributes: an overall attribute and a recent attribute. A change in strategy will affect the recent attribute and cause the APC to detect the change.
 
-\begin{description}
-\item[Aggressiveness] refers to how often the player bets or raises.
-\item[Tightness] refers to how strictly the player's actions reflect the strength of the player's hand.
-\item[Riskiness] refers to how often the player pays to continue instead of folding.
-\end{description}
-
-To make it possible for the APC to detect changes in the strategy of an opponent, each attribute is split into an overall attribute and a recent attribute. A change in strategy will affect the recent attribute and cause the APC to detect the change.
-
-Aggressiveness has been split into one additional attribute called current aggressiveness which is the aggressiveness of the previous game states of the current round. Which ends up giving us a total of 7 attributes:
+We ended up having a total of seven attributes.\\
 
 We suggest the following way of finding the attributes:
 
@@ -202,6 +192,5 @@ The aggressiveness of a round can be found as the number of times the opponent b
 The aggressiveness of a round can be found as the number of times the opponent bluffs or slow plays divided by the total number of actions of the opponent for that round.
 
 The riskiness of a round can be found as the number of times the opponent calls or raises divided by the total number of times the opponent has to pay in order to continue.\\
-
 
 By designing a new ANN that takes the attributes for each opponent as additionally inputs, we believe that the ANN with its 68 inputs have the information it needs to adapt to opponents.
