@@ -1,10 +1,10 @@
 \section{Conclusion}
-In this thesis we implemented an APC that can play Texas hold'em limit poker against multiple opponents. The APC have been programmed in Java.
+In this thesis we implemented an APA that can play Texas hold'em limit poker against multiple opponents. The APA have been programmed in Java.
 
 We started in chapter \ref{sec:part1}, by answering problem statement 1:
 \vspace{4mm}
 \begin{statementBox2}{Problem statement 1}
-How can APC determine the strength of a poker hand in any game state?
+How can APA determine the strength of a poker hand in any game state?
 \end{statementBox2}
 \vspace{4mm}
 
@@ -16,7 +16,7 @@ It has an error of less than one percent and can calculate the result in $\sim$0
 Next, in chapter \ref{sec:part2}, we answered problem statement 2:
 \vspace{4mm}
 \begin{statementBox2}{Problem statement 2}
-How can we develop a default strategy for APC without having information about the playing style of the opponents?
+How can we develop a default strategy for APA without having information about the playing style of the opponents?
 \end{statementBox2}
 \vspace{4mm}
 
@@ -29,7 +29,7 @@ We further tested how the ANN would perform against another poker bot where it l
 Finally, in chapter \ref{sec:part3}, we answered problem statement 3.
 \vspace{4mm}
 \begin{statementBox2}{Problem statement 3}
-How can we further develop the APC's strategy to be able to adapt to the playing style of the opponent?
+How can we further develop the APA's strategy to be able to adapt to the playing style of the opponent?
 \end{statementBox2}
 \vspace{4mm}
 
@@ -37,10 +37,10 @@ We use player modelling to further adapt the strategy found from answering probl
 
 We have designed our own player model which has three main attributes: aggressiveness, tightness, and riskiness.
 
-Each of these attributes has been split into two attributes: the overall attribute, which is tracked for the whole game, and the recent attribute, which is tracked for the last ten games. This design enables the APC to detect, if the opponent changes strategy. 
+Each of these attributes has been split into two attributes: the overall attribute, which is tracked for the whole game, and the recent attribute, which is tracked for the last ten games. This design enables the APA to detect, if the opponent changes strategy. 
 
 Current aggressiveness is also added to the player model and it indicates the opponents previous aggressiveness of the current round.
 
 This give a total of seven attributes: overall aggressiveness, recent aggressiveness, current aggressiveness, overall tightness, recent tightness, overall riskiness, and recent riskiness.
 
-All the attributes can then be given as extra inputs to the ANN thus making it have a total of 68 inputs. We believe this method can make the APC able to both model the strategy of the opponent as well as detecting any changes in the strategy. 
+All the attributes can then be given as extra inputs to the ANN thus making it have a total of 68 inputs. We believe this method can make the APA able to both model the strategy of the opponent as well as detecting any changes in the strategy. 
