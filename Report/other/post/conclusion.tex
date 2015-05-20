@@ -33,3 +33,15 @@ Finally we answered problem statement 3.
 How can we further develop the APC's strategy to be able to adapt to the playing style of the opponent?
 \end{statementBox2}
 \vspace{4mm}
+
+We use player modelling to further adapt the strategy found from answering problem statement 2. 
+
+We have designed our own player model which has three main attributes: aggressiveness, tightness, and riskiness.
+
+Each of these attributes as been slit into a overall attributes which is tracked for the whole game and a recent attribute which is tracked for the last ten games. This is done to enable the APC to detects if the opponent changes strategy. 
+
+Current aggressiveness is also added to the player model and it indicates the players previous aggressiveness of the current round.
+
+This give a total of seven attributes: overall aggressiveness, recent aggressiveness, current aggressiveness, overall tightness, recent tightness, overall riskiness, and recent riskiness.
+
+All the attributes can then be given as extra inputs to the ANN thus making it have a total of 68 inputs. We believe this method can make the APC able to both model the strategy of the opponent as well as detecting any changes in the strategy. 
