@@ -1,9 +1,9 @@
 \subsection*{Texas hold'em poker}
-As this thesis concerns Texas hold'em limit poker, we shall describe the basic rules and game play below. For a more in-depth description of Texas hold'em and other variants of poker see, e.g., \cite{poker-rules}. 
+As this thesis concerns Texas hold'em limit poker, we shall describe the basic rules and game play below. For a more in-depth description of Texas hold'em and other variants of poker see \cite{poker-rules}. 
 
 
 \subsubsection*{Game play}
-Texas hold'em limit poker is played with a standard deck of 52 cards and consists of multiple rounds. In each round each player is dealt two private cards called hole cards that are hidden for the opponents. Five public cards, called community cards, that are visible for everybody are dealt as the round progresses. 
+Texas hold'em limit poker is played with a standard deck of 52 cards and consists of multiple rounds. In each round each player is dealt two private cards called hole cards that are hidden for the opponents. Five public cards, called community cards, that are visible for everybody are dealt as the round progresses. We will refer to the hand of a player as the combination of the community cards and the hole cards of the player.
 
 A round is divided into four game states: pre-flop, flop, turn, and river. Each game state starts with cards being dealt and then the bidding begins. In the pre-flop the dealer will deal the hole cards to each player. In the flop the first three out of five community cards are dealt and in the turn and river the fourth and fifth community card are dealt respectively. 
 
@@ -17,16 +17,16 @@ The bidding is where the players in turn perform their actions. The actions incl
 A player can play aggressively by betting or raising which will increase the cost for the other players. Likewise, a player can also play defensively by calling or checking which will not increase the cost for other players. If a player decides to fold he will lose what he betted that round. Whenever a player chooses to play aggressively all other players must either fold or call in order for the bidding round to stop. The bidding continues until all players have called the aggressor or folded.
 
 \subsubsection*{Rules for determining the winner}
-The rules for finding the best hand a quite simple. Each player has to create the best possible hand choosing five of the seven available cards (hole cards and community cards). Each playing card has a card rank (2, ... , Q, K, A) and a suit (diamond, heart, club, or spade). The possible ranks of a hand can be seen in table \ref{tab:poker-ranks}. 
+The rules for finding the best hand are quite simple. Each player has to create the best possible hand choosing five of the seven available cards (hole cards and community cards). Each playing card has a card rank (2, ... , Q, K, A) and a suit (diamond, heart, club, or spade). The possible ranks of a hand can be seen in table \ref{tab:poker-ranks}. 
 
-First the rank of the hand of every player is found. In case two players has the same rank, the winner will be determined by more advanced rules. These rules is not described in this section as they are irrelevant for this thesis. An case the hands are still even after using the advanced rules the round results in a draw and the pot is split between the players.
+First the rank of the hand of every player is found. In case two players has the same rank, the winner will be determined by more advanced rules. These rules are not described in this section as they are irrelevant for this thesis. In case the hands are still even after using the advanced rules the round results in a draw and the pot is split between the players.
 
 Starting from the bottom (the worst hand) of table \ref{tab:poker-ranks} we have the explanations:\\
 \textbf{High card} is the highest card.  \\
 \textbf{One pair} is having two cards with the same card rank. \\
 \textbf{Two pairs} is having two pairs\\
 \textbf{Three of a kind} is having three cards with the same card rank \\
-\textbf{Straight} is having five cards in a row (e.g., 10-A or 4-9)\\
+\textbf{Straight} is having five cards in a row (e.g., 10, J, Q, K, A)\\
 \textbf{Flush} is having five cards with the same suit\\
 \textbf{Full house} is having three of a kind and a pair\\
 \textbf{Four of a kind} is having four cards with the same card rank \\

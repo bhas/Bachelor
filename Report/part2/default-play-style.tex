@@ -2,32 +2,34 @@
 \label{sec:part2}
 In the previous chapter we created a calculator that can determine the strength of a hand by calculating the probability of winning. In this chapter we shall use this calculator in the process of developing a strategy for the APC.
 
-When the APC first joins a poker game it has no information about the opponent, and in this case it must use a default strategy while it gathers more information.
+When the APC first joins a poker game it has no information about the opponents, and in this case it must use a default strategy while it gathers more information.
 
 In this chapter we will find a solution to the problem statement:
 
 \vspace{4mm}
 \begin{statementBox2}{Problem statement 2}
-How can we develop a default strategy for APC without having information about the opponents?
+How can we develop a default strategy for APC without having information about the playing style of the opponents?
 \end{statementBox2}
 \vspace{4mm}
 
-Even though players have different strategies they often have some decisions in common. Most players tend to play more aggressively the better their chances are of winning and likewise most players will fold if they have a weak hand. These tendencies can be used in a default strategy. The popular decisions are more likely to be good. For instance, most players agree that it is unwise to fold a pair of aces in the pre-flop. 
+Even though players have different strategies they often have some decisions in common. Most players tend to play more aggressively the stronger their hand are the bigger are their chances of winning and likewise most players will play defensive or fold if they have a weak hand. These tendencies can be used in a default strategy. The popular decisions are more likely to be good. For instance, most players agree that it is unwise to fold a pair of aces in the pre-flop. 
 
 The default strategy has to work against every strategy, therefore it is impossible for it to be better than all of them. The goal for the default strategy is not to win, although that is preferable, but instead to reduce the loses while it gathers information about the opponent.
 
 \subsection{Design}
-To develop a strategy in poker the two most commonly used options are to either directly program the procedures in the code or to create a self-learning algorithm. 
+To develop a strategy in poker the two most commonly used options are to either directly program the procedures in the code or to create an algorithm that can learn a strategy from a player. 
 
 Programming the procedures in the code requires the programmer to have a deep insight in how to play poker and how to make the optimal decisions during a game. One can also use the expertise of professional poker players in case one lacks the insight.
 
-The self-learning algorithm uses the concept watch and learn by observing other players and trying to learn the strategy behind their decisions. This method requires that the algorithm has someone to observe.
+The algorithm uses the concept watch and learn by observing other players and learn the strategy behind their decisions. This method requires that the algorithm has someone to observe.
 
-Since we do not have any particular insight in how to play poker and do not have expertise from any professional poker players, we will implement a self-learning algorithm. Additionally, by using this method the computer is not limited by our understanding of the game. We will use data from real life poker games for the algorithm. The data is further described in section \ref{sec:default-test}.\\
+Since we do not have any particular insight in how to play poker and do not have expertise from a professional poker player, we will implement an algorithm. Additionally, by using this method the computer is not limited by our understanding of the game. 
 
-To implement the self-learning algorithm we use an artificial neural network (ANN), see section \ref{sec:nn}. The ANN is well suited for finding patterns of the players decisions. 
+We will use data from real life poker games for the algorithm. The data is further described in section \ref{sec:default-test}.\\
 
-The total network error is how great a deviation there is from the expected output to the actual. Our goal is to design an ANN with a total network error (TNE) of five percent or less. We find five percent to be acceptable as players often take irrational decisions and the ANN only tries to find an approximation of the results. 
+To implement the algorithm we use an artificial neural network (ANN), see section \ref{sec:nn}. The ANN is well suited for finding patterns of the players decisions. 
+
+The total network error (TNE) is how great a deviation there is from the expected output to the actual output of the ANN. Our goal is to design an ANN with a TNE of five percent or less. We find five percent to be acceptable as players often take irrational decisions and the ANN only tries to find an approximation of the results. 
 
 We use an iterative development method to design the ANN. We start by designing a simple ANN and then move on to more complex ANN's.\\
 
@@ -35,13 +37,13 @@ All our ANN's have exactly two outputs. The first output is whether or not to be
 
 All our ANN's use normalised inputs, weighted sum as input function, and a sigmoid function as transfer function. The reason we settle for a sigmoid function rather than a step function is because the sigmoid function allows us to see how certain the ANN is of each decision being correct.
 
-The ANN's use backpropagation for learning.
+The ANN's uses backpropagation for learning with a learning rule of 0,2.
 
-\subsection{Artificial neural network (ANN)}
+\subsection{Artificial neural network}
 \label{sec:nn}
-An artificial neural network (ANN) is inspired by the human brain. It can be used for pattern recognition or classification among other things. An ANN can take any number of inputs and return any number of outputs. 
+An ANN is inspired by the human brain. It can be used for pattern recognition or classification among other things. An ANN can take any number of inputs and return any number of outputs. 
 
-An ANN is made up of neurons that are connected into a network. Each neuron takes a set of inputs and returns a single output. The output of a neuron is sent to all the connected neurons. Each input has a weight that determines influence of the input. The neuron uses an input function to calculate the net input, usually the sum of all weighted inputs, and pass it on to the transfer function. The type of transfer function determines the output. A step function returns zero or one if the net input is above a certain threshold. This is useful for logical functions. If one needs a value between zero and one a sigmoidal function can be used instead.
+An ANN is made up of neurons that are connected into a network. Each neuron takes a set of inputs and returns a single output. The output of a neuron is sent as an input to all the connected neurons. Each input has a weight that determines influence of the input. The neuron uses an input function to calculate the net input, usually the sum of all weighted inputs, and pass it on to the transfer function. The type of transfer function determines the output. A step function returns zero or one if the net input is above a certain threshold. This is useful for logical functions. If one needs a value between zero and one a sigmoidal function can be used instead.
 
 Figure \ref{fig:neuron} models a neuron. Here the weighted inputs $w_{i1}$, $w_{i2}$, and $w_{i3}$ are all sent to the input function $\sum$ which then calculates the net input $net_{i}$. The transfer function $f$ then calculates the output from the net input.
 
