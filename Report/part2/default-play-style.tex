@@ -2,32 +2,34 @@
 \label{sec:part2}
 In the previous chapter we created a calculator that can determine the strength of a hand by calculating the probability of winning. In this chapter we shall use this calculator in the process of developing a strategy for the APC.
 
-When the APC first joins a poker game it has no information about the opponent, and in this case it must use a default strategy while it gathers more information.
+When the APC first joins a poker game it has no information about the opponents, and in this case it must use a default strategy while it gathers more information.
 
 In this chapter we will find a solution to the problem statement:
 
 \vspace{4mm}
 \begin{statementBox2}{Problem statement 2}
-How can we develop a default strategy for APC without having information about the opponents?
+How can we develop a default strategy for APC without having information about the playing style of the opponents?
 \end{statementBox2}
 \vspace{4mm}
 
-Even though players have different strategies they often have some decisions in common. Most players tend to play more aggressively the better their chances are of winning and likewise most players will fold if they have a weak hand. These tendencies can be used in a default strategy. The popular decisions are more likely to be good. For instance, most players agree that it is unwise to fold a pair of aces in the pre-flop. 
+Even though players have different strategies they often have some decisions in common. Most players tend to play more aggressively the stronger their hand are the bigger are their chances of winning and likewise most players will play defensive or fold if they have a weak hand. These tendencies can be used in a default strategy. The popular decisions are more likely to be good. For instance, most players agree that it is unwise to fold a pair of aces in the pre-flop. 
 
 The default strategy has to work against every strategy, therefore it is impossible for it to be better than all of them. The goal for the default strategy is not to win, although that is preferable, but instead to reduce the loses while it gathers information about the opponent.
 
 \subsection{Design}
-To develop a strategy in poker the two most commonly used options are to either directly program the procedures in the code or to create a self-learning algorithm. 
+To develop a strategy in poker the two most commonly used options are to either directly program the procedures in the code or to create an algorithm that can learn a strategy from a player. 
 
 Programming the procedures in the code requires the programmer to have a deep insight in how to play poker and how to make the optimal decisions during a game. One can also use the expertise of professional poker players in case one lacks the insight.
 
-The self-learning algorithm uses the concept watch and learn by observing other players and trying to learn the strategy behind their decisions. This method requires that the algorithm has someone to observe.
+The algorithm uses the concept watch and learn by observing other players and learn the strategy behind their decisions. This method requires that the algorithm has someone to observe.
 
-Since we do not have any particular insight in how to play poker and do not have expertise from any professional poker players, we will implement a self-learning algorithm. Additionally, by using this method the computer is not limited by our understanding of the game. We will use data from real life poker games for the algorithm. The data is further described in section \ref{sec:default-test}.\\
+Since we do not have any particular insight in how to play poker and do not have expertise from a professional poker player, we will implement an algorithm. Additionally, by using this method the computer is not limited by our understanding of the game. 
 
-To implement the self-learning algorithm we use an artificial neural network (ANN), see section \ref{sec:nn}. The ANN is well suited for finding patterns of the players decisions. 
+We will use data from real life poker games for the algorithm. The data is further described in section \ref{sec:default-test}.\\
 
-The total network error is how great a deviation there is from the expected output to the actual. Our goal is to design an ANN with a total network error (TNE) of five percent or less. We find five percent to be acceptable as players often take irrational decisions and the ANN only tries to find an approximation of the results. 
+To implement the algorithm we use an artificial neural network (ANN), see section \ref{sec:nn}. The ANN is well suited for finding patterns of the players decisions. 
+
+The total network error (TNE) is how great a deviation there is from the expected output to the actual output of the ANN. Our goal is to design an ANN with a TNE of five percent or less. We find five percent to be acceptable as players often take irrational decisions and the ANN only tries to find an approximation of the results. 
 
 We use an iterative development method to design the ANN. We start by designing a simple ANN and then move on to more complex ANN's.\\
 
@@ -35,13 +37,13 @@ All our ANN's have exactly two outputs. The first output is whether or not to be
 
 All our ANN's use normalised inputs, weighted sum as input function, and a sigmoid function as transfer function. The reason we settle for a sigmoid function rather than a step function is because the sigmoid function allows us to see how certain the ANN is of each decision being correct.
 
-The ANN's use backpropagation for learning.
+The ANN's uses backpropagation for learning with a learning rule of 0,2.
 
-\subsection{Artificial neural network (ANN)}
+\subsection{Artificial neural network}
 \label{sec:nn}
-An artificial neural network (ANN) is inspired by the human brain. It can be used for pattern recognition or classification among other things. An ANN can take any number of inputs and return any number of outputs. 
+An ANN is inspired by the human brain. It can be used for pattern recognition or classification among other things. An ANN can take any number of inputs and return any number of outputs. 
 
-An ANN is made up of neurons that are connected into a network. Each neuron takes a set of inputs and returns a single output. The output of a neuron is sent to all the connected neurons. Each input has a weight that determines influence of the input. The neuron uses an input function to calculate the net input, usually the sum of all weighted inputs, and pass it on to the transfer function. The type of transfer function determines the output. A step function returns zero or one if the net input is above a certain threshold. This is useful for logical functions. If one needs a value between zero and one a sigmoidal function can be used instead.
+An ANN is made up of neurons that are connected into a network. Each neuron takes a set of inputs and returns a single output. The output of a neuron is sent as an input to all the connected neurons. Each input has a weight that determines influence of the input. The neuron uses an input function to calculate the net input, usually the sum of all weighted inputs, and pass it on to the transfer function. The type of transfer function determines the output. A step function returns zero or one if the net input is above a certain threshold. This is useful for logical functions. If one needs a value between zero and one a sigmoidal function can be used instead.
 
 Figure \ref{fig:neuron} models a neuron. Here the weighted inputs $w_{i1}$, $w_{i2}$, and $w_{i3}$ are all sent to the input function $\sum$ which then calculates the net input $net_{i}$. The transfer function $f$ then calculates the output from the net input.
 
@@ -243,40 +245,21 @@ To further test whether or not the ANN can make profitable choices based on the 
 
 
 \subsection{Discussion}
-In this chapter we try to develop a default strategy by implementing a self-learning algorithm. We use ANN's to observe the actions of other  in order to learn their strategy. Alternatively, we could have programmed the procedures of determining the action directly in the code. We ran into a few problems by trying to implementing the ANN.\\
+In this chapter we try to develop a default strategy by implementing a self-learning algorithm. We use ANN's to observe the actions of other  in order to learn their strategy. We ran into a few problems by trying to implementing the ANN.\\
 
-The first problem is related to the data we use. The problem is that  the data is not complete since we do not have the data about the hole cards of the irrelevant players. This means that we can not learn the APC when to fold, as we have no input for the hole cards. 
-
+The first problem is related to the data we use. The problem is that  the data is not complete since we do not have the data about the hole cards of the players who fold. This means that we can not learn the APC when to fold, as we have no input for the hole cards. 
 
 If we want to observe a player and learn the strategy behind the players actions, we need to know the hole cards of the player. To solve this we need to find a new dataset with no hidden information about the player(s) we want the APC observe.
 
+Additionally, since we get the results as an action (defensive or aggressive), The expected results of each output is either zero or one, due to the limitation of possible actions. Zero or one are the two extremes and therefore it can be hard for the ANN to find an approximation. 
 
-Additionally, since we get the results as an action (defensive or aggressive), The expected results of each output is either zero or one, due to the limitation of possible actions. Zero or one are the two extremes and therefore it can be hard for the ANN to find an approximation.
+Another problem we encountered was defining our requirements for the ANN. We do not know what TNE is realistic for an ANN for poker and our requirement of a TNE of five percent or less may be unrealistic. It would have been better set the requirement in regards to performance against other poker bots. For instance, a requirement could have been that the APC should should have more chips than the test bot after playing a game of 200 rounds. \\
 
-
-The second problem was to determine the number of inputs for the ANN. We chose five inputs that we found relevant. Perhaps we overlooked some inputs that could be interesting to look at. It is also possible that one or more of the inputs simply are confusing the ANN more than it is helping figuring out a pattern in the players strategy. 
-
-
-The final problem we encountered was defining our requirements for the ANN. We do not know what TNE is realistic and our requirements may be unrealistic. But it seems like we would have to get a much lower TNE in order to create a realistic strategy from the data of the player.\\
-
-Learning a default strategy based on random players in random rounds are perhaps not the best option. However we were not able to retrieve any game data from a series of professional poker players.
+Learning a default strategy based on random players in random rounds was not a good option. However we were not able to retrieve any game data from professional poker players.
 An alternative method would be to choose the most successful player in the dataset, but the rises the issue that just because a players strategy is good against one strategy does not make it good against another.
-Another issue is that in order for a player to be successful the player has to be good at adapting to the opponents strategy. This would mean that the ANN would have a hard time learning the strategy of the player as the player probably changed strategy often.
+Another issue is that in order for a player to be successful the player has to be good at adapting to the opponents strategy. This would mean that the ANN would have a hard time learning the strategy of the player, as the player may change the strategy or may use a completely different strategy if given other opponents. Our data was tracked for a game where people can join and leave as they please. It is therefore very likely that the players we observed changed strategy during the game. 
 
-The ANN were not able to make profitable choices when playing against the bots of Poker Genius. But it is rather hard to determine whether or not this is because of its lack to learn from the player or due to the player not making wise decisions. We wonder if the result would be different if we had had data from a professional poker player.
-
-
-Ville slette det her og ned og bruge det ovenover... Hva synes du?
-
-
-The second problem was to determine the number of inputs for the ANN. Five relevant inputs was chosen for our ANN. Since most players adapt their strategy to strategies of the opponents, it is close to impossible to learn the strategy of the player without knowing the strategy of the opponents. 
-
-
-It was a bad idea to try learn a default strategy from random players in random rounds. The players had most likely already gained information about the opponents and thus adapted their strategy to the opponents. It would have made more sense to observe players who just joined a table to see how they played in a situation where they had not adapted to the opponents yet.
-Additionally, trying to learn an approximation of every strategy is a bad idea. Observing bad players will cause the default strategy to take bad decisions. It would make more sense to observe only a few successful players. This way we can ensure the decisions to be smart. 
-
-
-
+The ANN were not able to make profitable choices when playing against the poker bots of Poker Genius. We believe the main reason for the bad performance was the fact that the APC never learned how to fold. We believe that this method for developing a default strategy could have worked if we were to get data from poker games where at least one of the players had no hidden information.
 
 \subsection{Conclusion}
 In this chapter we try to answer problem statement 2:
@@ -287,7 +270,14 @@ How can we develop a default strategy for APC without having information about t
 \end{statementBox2}
 \vspace{4mm}
 
-We try to develop the strategy by creating different ANN approaches and train them using data from real-life poker games. The last two approaches were able to learn from a player but unfortunately the ANN's ability to learn quickly dropped.\\
+We try to develop the strategy by creating different ANN approaches and train them using data from real-life poker games.
 
-For the final ANN we chose three randomly picked players. All the actions and information about the game in the moment of the action were collected to use in the training of the ANN. The TNE of each player specific ANN was compared to the hope of having a TNE of five percent or less. The best ANN had a TNE of $\sim$14.0~\% which is not what we hoped for. However the ANN is able to learn from the players to some degree. 
-It goes without saying that a complete dataset with the hole cards of all the players in the game would benefit the ANN's ability to learn how to handle each situation.
+The tests were partly successful, as they show that we in fact were able to train an ANN to recognise the strategy of the players. We created several TNE graphs that display how the ANN becomes smarter as the training progresses. Although we did not manage to design an ANN that could learn the strategy of a player well enough.
+
+By redesigning the structure of the ANN we managed to get an absolute improvement of the TNE of $\sim$6~\% which is a relative improvement of $\sim$30~\%.
+
+Our best ANN design takes five inputs (hand strength, number of opponents, chips, cost, and pot) and produce two outputs (whether to play defensive and whether to play aggressive). 
+
+We tested it using three randomly picked players. We got an TNE of $\sim$14~\%, $\sim$19~\%, and $\sim$21~\% for each of the players respectively.
+
+We also tested the APC against a simple poker bot, and the APC end up losing roughly half its amount of chips in 80 rounds.

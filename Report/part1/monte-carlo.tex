@@ -1,10 +1,10 @@
 \section{Determine the strength of a poker hand}
 \label{sec:part1}
-Our first step towards developing an adaptive poker bot is to find a way to determine the strength of any given hand in any game state. In this section we will answer the following problem statement: 
+Our first step towards developing the APC is to find a way to determine the strength of any given hand in any game state. In this chapter we will answer the following problem statement: 
 
 \vspace{4mm}
 \begin{statementBox2}{Problem statement 1}
-How can one determine the strength of a poker hand?
+How can APC determine the strength of a poker hand in any game state?
 \end{statementBox2}
 \vspace{4mm}
 
@@ -15,9 +15,9 @@ When trying to estimate the strength of a hand, two options exist.
 
 The first option is to create a simplified formula. Such formulas already exist, but since they are very simple they tend to be rather inaccurate. This option is straight forward, but the disadvantage is, that it is hard to make a formula that is accurate for every game state.
 
-The second option is to use the Monte Carlo method to simulate a large amount of games and get the distribution of outcomes. This distribution can then be used to find the probability for any of the outcomes.
+The second option is to use the Monte Carlo method to simulate a large amount of games and get the distribution of outcomes. This distribution can then be used to find the probability of winning.
 
-For a human player a simplified formula is necessary but due to the computational power of a computer the Monte Carlo method is optimal for the APC. The computer can perform thousands of simulations in no time. This method also gives a trade-off between accuracy and the number of simulations. This allows one to adjust the accuracy of the probability by adjusting the number of simulations. The major poker sites also use the Monte Carlo method to determine each players probability of winning.
+For a human player a simplified formula is necessary but due to the computational power of a computer the Monte Carlo method is optimal for the APC. The computer can perform thousands of simulations in no time. This method also gives a trade-off between accuracy and the number of simulations. This allows us to adjust the accuracy of the probability by adjusting the number of simulations. The major poker sites also use the Monte Carlo method to determine each players probability of winning.
 
 The solution is implemented as a subsystem that uses the Monte Carlo method. We will refer to this subsystem as the calculator.
 
@@ -43,6 +43,8 @@ The calculator takes three arguments: the hole cards of the player, the number o
 
 The calculator considers it a win only if the hand beats every other hand of the opponents.
 
+Algorithm 1 shows the pseudo-code for determining the result of a single simulation.
+
 In order to ensure the quality of the calculator, we have the following requirements:
 \begin{itemize}
 \item It must have a maximum error percentage of one percent. (deviation from the true probability)
@@ -56,11 +58,11 @@ The Monte Carlo method is used to find the distribution of outcomes for a domain
 \subsection{Test}
 We have created tests to ensure the calculator fulfils all the requirements. 
  
-In order to find the accuracy of the probabilities we first need to know the true probabilities. For this we use caniwin \ref{caniwin}. Caniwin is a website that has simulated all possible outcomes of any pre-flop hands. Caniwin's results are limited to the pre-flop game state, so we can only test the calculator for this game state.
+In order to find the accuracy of the probabilities we first need to know the true probabilities. For this we use caniwin \cite{caniwin}. Caniwin is a website that has simulated all possible outcomes of any pre-flop hands. Caniwin's results are limited to the pre-flop game state, so we can only test the calculator for this game state.
 
 The number of simulations affects the error percentage as well as the calculation time. We start by finding a number of simulations that meets the first and second requirement. We test what number of simulations are needed in order to get a maximum error of one percent. Afterwards we will find the number of simulations that results in a calculation time in less than five seconds.
 
-Once we have a suitable number of simulations we test if the calculator finds the correct probability.
+Once we have a suitable number of simulations we test if the calculator finds the correct probability using this number of simulations.
 
 \subsubsection{Finding the maximum error}
 \label{sec:mc-test1}
@@ -73,10 +75,10 @@ We then calculate the error of each calculation using the formula:
 
 Here $P_{O}$ is the probability found by the calculator and $P_{T} $ is the true probability. 
 
-We plotted the results of each test in a graph, see figure \ref{fig:mc1}, \ref{fig:mc10}, and \ref{fig:mc50}. 
+We inserted the results of each test in a graph, see figure \ref{fig:mc1}, \ref{fig:mc10}, and \ref{fig:mc50}. 
 Each test result is indicated with a red dot. The three graphs clearly shows that when using a higher amount of simulations, the more accurate the probability are.
 
-Table \ref{tab:mc-total} shows the range of results as well as the maximum error for the tests.
+Table \ref{tab:mc-total} shows the range of results as well as the maximum error for the tests. From this we can see that 50.000 simulations fulfils our first requirements.
 
 \begin{figure}[H]
   \center
@@ -111,8 +113,6 @@ Table \ref{tab:mc-total} shows the range of results as well as the maximum error
 \end{table}
 \vspace{4mm}
 
-Using 50.000 simulations fulfils our requirements.
-
 \subsubsection{Finding the calculation time}
 In this test we run the calculator 100 times with the same hand in order to find an average computation time. 
 In table \ref{tab:mc-time} the average computation time can be seen. As we expect the computation time increases as the number of simulations increases. 
@@ -133,13 +133,13 @@ In table \ref{tab:mc-time} the average computation time can be seen. As we expec
 \end{table}
 \vspace{4mm}
 
-Luckily, using 50.000 simulations gives a average computation time of $\sim$0,15 seconds which also satisfies the second requirement. We therefore settle for 50.000 simulation as the number of simulations for the calculator.
+Luckily, using 50.000 simulations gives an average computation time of $\sim$0,15 seconds which also satisfies the second requirement. We therefore settle for 50.000 simulation as the number of simulations for the calculator.
 
 \subsubsection{Determining the correctness of the calculator}
-To test if the calculator can calculate the correct probabilities, we find the probability of a number of different pre-flop scenarios and compare the result with the true probability. Every test is preformed with 50.000 simulations against one opponent. We use the formula described in section \ref{sec:mc-test1}:
+To test if the calculator can calculate the correct probabilities, we find the probability of a number of different pre-flop hands and compare the result with the true probability. Every test is preformed with 50.000 simulations against one opponent. We use the formula described in section \ref{sec:mc-test1}:
 \[err = P_{O} - P_{T}\]
 
-The result can be seen in table \ref{tab:pre-flop-test}. From the results we can see that for all tests the error percentage is less than one and the calculator therefore works for the pre-flop.
+The result can be seen in table \ref{tab:pre-flop-test}. From the results we can see that for all tests the error percentage is less than one percent and the calculator therefore works for the pre-flop.
 \vspace{4mm}
 \def\arraystretch{1.5}
 \begin{table}[H]
@@ -165,10 +165,10 @@ The result can be seen in table \ref{tab:pre-flop-test}. From the results we can
 \end{table}
 \vspace{4mm} 
 
-Testing the calculator for other game states is a bit problematic because we were not able to find any probabilities for anything but pre-flop. Instead we calculate the probability of some combinations of hole cards and community cards. 
+Testing the calculator for other game states is a bit problematic because we were not able to find any probabilities for anything but pre-flop. Instead we calculate the probability of some hands during all game states. 
 
-In table \ref{tab:percent} we can see the results. For the first situation (A\clubsuit ~ K\diamondsuit) the player start with a strong hand but does not hit anything from the community cards. As expected the probability decreases. The second hand (2\diamondsuit ~ 5\spadesuit) is bad until the turn where it hits a straight. This is also clearly shown by the percentages. Likewise the third hand (8\spadesuit ~ 9\spadesuit) hits a flush on the river and the probability increases drastically. Finally we have the hand (5\spadesuit ~ 5\clubsuit) where there is a straight from the community cards. This results in a zero percent win chance because the community cards are public and therefore the result is either a draw or a lose.
-The data suggests that the calculator also works for all game states.
+In table \ref{tab:percent} we can see the results. For the first situation (A\clubsuit ~ K\diamondsuit) the player start with a strong hand but does not hit anything from the community cards. As expected the probability decreases. The second hand (2\diamondsuit ~ 5\spadesuit) is weak until the turn where it hits a straight. This is also clearly shown by the percentages. Likewise the third hand (8\spadesuit ~ 9\spadesuit) hits a flush on the river and the probability increases drastically. Finally we have the hand (5\spadesuit ~ 5\clubsuit) where there is a straight from the community cards. This results in a zero percent win chance because the community cards are public and therefore the result is either a draw or a lose.
+The data suggests that the calculator works for all game states.
 \vspace{4mm}
 \def\arraystretch{1.5}
 \begin{table}[H]
@@ -207,9 +207,9 @@ From table \ref{tab:winchance} we can see that the probability also decreases as
 The calculator passed all tests and seems to work in every situation. 
 
 \subsection{Discussion}
-For the implementation of the calculator the Monte Carlo method was exactly what was needed to fulfil the needs. The calculator can calculate the probability with an error percentage of less than one percent when using 50.000 simulations. This solution can be used for any poker state with up to ten players. At first it did not seem necessary to optimise the calculator any further, as the running time is acceptable. But in regards to later use or if were are to scale the project, we decided to make an obvious optimisation by making it multi-threaded which speeded up the calculations by roughly 3 times.	
+For the implementation of the calculator the Monte Carlo method was exactly what was needed to fulfil the needs. The calculator can calculate the probability with an error percentage of less than one percent when using 50.000 simulations. This solution can be used for any poker state with up to ten players.	
 
-Since we compare the results of the calculator to caniwin, we would have to ensure the reliability of that source. We contacted Bobby who published the results on caniwin, in order to hear if he had any reputation or expertise in the field. Bobby responded saying that he has a bachelor in math from the University of Southern California in LA. Knowing this about Bobby, and that the results from caniwin heads-up and caniwin 10 players is close to the results from the calculator, we expect caniwin to be a reliable source of information.
+Since we compare the results of the calculator to caniwin, we need to ensure the reliability of that source. Bobby, the author of caniwin, has a bachelor in math from the University of Southern California in LA. The rest of the thesis is written on the assumption that the results from caniwin is correct
 
 Alternatively we could have created our own formula to calculate a rank, or used an existing one, for instance the Chen formula. However, this has been beyond the scope of this thesis.
 
@@ -217,10 +217,12 @@ Alternatively we could have created our own formula to calculate a rank, or used
 In this chapter we have answered the question:
 \vspace{4mm}
 \begin{statementBox2}{Problem statement 1}
-How can APC detemrine the strength of a poker hand at any game state?
+How can APC determine the strength of a poker hand in any game state?
 \end{statementBox2}
 \vspace{4mm}
 
+We define the strength of a poker hand as the probability of winning with that hand.
+
 We have implemented a subsystem called the calculator that can estimate the probability of winning with any given set of hole cards. The calculator uses the Monte Carlo method and it works for every poker state with up to ten players. 50.000 simulations  met the requirements we made for the calculator.   
 
-We compare our results to caniwin, which is a website that calculates the actual probabilities of all the 169 combinations of hole cards. The calculator has a maximal error percentage of one percent and performs the simulation in less than a second.
+The calculator has a maximal error percentage of one percent compared to the true probability and performs the calculation in $\sim$0,15 seconds.
