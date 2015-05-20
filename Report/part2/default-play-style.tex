@@ -192,7 +192,7 @@ For our third ANN we use the same structure as the second ANN, see figure \ref{f
 \label{sec:ann-test3}
 For this test the dataset contains the same data as the previous test but all data is found for a single player. We try to find the TNE for three different players to see if this makes the ANN more accurate. The players we test are JimR, mayor, and PokiSimA.
 
-For each player we train the MLP from \ref{sec:design2} and find the TNE. The results are shown in table \ref{tab:tneg3}.
+For each player we train the MLP from \ref{sec:design2} and find the TNE. The corresponding TNE graph for each player is shown in figure \ref{fig:jimr}, \ref{fig:mayor}, and \ref{fig:pokisima} and the TNE can be seen in table \ref{tab:tneg3}.
 
 \vspace{4mm}
 \begin{table}[H]
@@ -210,7 +210,25 @@ For each player we train the MLP from \ref{sec:design2} and find the TNE. The re
 \end{table}
 \vspace{4mm}
 
-There is a rule of thumb when determine the number of hidden neurons that the number of hidden neurons should be between the number of inputs and the number of outputs,
+\begin{figure}[H]
+  \center
+    \includegraphics[scale=0.5]{images/nn/JimR.png}
+  \caption{TNE graph from training with data from JimR.\label{fig:jimr}}
+\end{figure}
+
+\begin{figure}[H]
+  \center
+    \includegraphics[scale=0.5]{images/nn/mayor.png}
+  \caption{TNE graph from training with data from mayor.\label{fig:mayor}}
+\end{figure}
+
+\begin{figure}[H]
+  \center
+    \includegraphics[scale=0.5]{images/nn/PokiSimA.png}
+  \caption{TNE graph from training with data from PokiSimA.\label{fig:pokisima}}
+\end{figure}
+
+There is a rule of thumb when determine the number of hidden neurons, that the number of hidden neurons should be between the number of inputs and the number of outputs,
 Therefore to further test the ANN we try to test it using different numbers of hidden neurons within that range. We construct three new ANN's with two, three, four, and five hidden neurons. The TNE's can be seen in table \ref{tab:tneg4}. 
 
 The number of hidden neurons does not seem to make the overall TNE get any lower.
@@ -238,8 +256,8 @@ From this we can tell that mayor is probably more predictable compared to the tw
 
 \begin{figure}[H]
   \center
-    \includegraphics[scale=0.6]{images/nn/finaltest.png}
-  \caption{Graph of the profits change throughout the game\label{fig:finaltest}}
+    \includegraphics[scale=0.7]{images/nn/finaltest.png}
+  \caption{Graph of the profits change throughout the game.\label{fig:finaltest}}
 \end{figure}
 
 To further test whether or not the ANN can make profitable choices based on the training with the data from the player mayor, we choose to use a test-bed for poker bots called Poker Genius. Here we are able to test the ANN against the poker bots of Poker Genius. We manually recreated the choices the ANN made against the poker bots of Poker Genius because we did not manage to make APC work for Poker Genius. As shown in figure \ref{fig:finaltest} it is clear that the ANN is not able to compete on the same level as the poker bots from Poker Genius.
