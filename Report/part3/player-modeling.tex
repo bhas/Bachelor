@@ -4,6 +4,8 @@
 In the previous chapter we created an algorithm to develop the default strategy for the APC. \\
 
 In this chapter we will answer problem statement 3.
+As we did not have time to implement the adaptive part into the APC, we instead choose to focus on a more theoretically chapter.
+
 
 \vspace{4mm}
 \begin{statementBox2}{Problem statement 3}
@@ -11,19 +13,20 @@ How can we further develop the APC's strategy to be able to adapt to the playing
 \end{statementBox2}
 \vspace{4mm} 
 
+
 In poker there is no strategy that is better than any other strategy. Every strategy has weaknesses and therefore the optimal strategy is the one that takes advantage of the weaknesses of the strategies of the opponents. In order to take advantage of the opponents strategy, one must first understand their strategy. In poker understanding the opponents is one of the most important key elements of the game. Once a player gains insight in the opponents strategy, it is important to adapt the playing stategy accordingly.
 
 
 Since poker is a game of deception the opponents' may change their strategy during the game. In this case the player needs detect this and adapt the strategy once again. 
 
 \subsection{Design}
-This chapter is focused on the theoretical aspect an adaptive part to the APC rather than the implementation and testing. The reason is, that the ANN from chapter \ref{sec:part2} did not end up being as functional as expected. Therefore it would not be possible to tell if the solution would not work, due to the original ANN or due to the improvements created in this chapter. 
+This chapter is focused on the theoretical aspect an adaptive part to the APC rather than the implementation and testing. The reason is, that we did not have enough time to implement it and furthermore the ANN from chapter \ref{sec:part2} did not end up being as functional as expected. Therefore it would not be possible to tell if the solution would not work, due to the original ANN or due to the improvements created in this chapter. 
 
 Instead of implementing the improvements, we simply suggest how we could have implemented them.\\
 
 There are two commonly used approaches to develop a strategy that adapts to the strategy of the opponents.
 
-The traditional approach isthe use of statistics to gain information about the opponent. Such an approach uses probabilities based on the opponents' actions to determine the strength of the opponents' hands. These probabilities may include, but are not limited to, the percentage of hands the opponents' folds during each game state, the percentage of times the opponents' bluffs on the river, and the strength of the hand the opponents' has when calling an aggressive player. This is useful against an opponent who uses the same strategy throughout the whole game and has deterministic actions.
+The traditional approach is the use of statistics to gain information about the opponent. Such an approach uses probabilities based on the opponents' actions to determine the strength of the opponents' hands. These probabilities may include, but are not limited to, the percentage of hands the opponents' folds during each game state, the percentage of times the opponents' bluffs on the river, and the strength of the hand the opponents' has when calling an aggressive player. This is useful against an opponent who uses the same strategy throughout the whole game and has deterministic actions.
 
 The other approach is using player modelling, see section \ref{sec:pm} and artificial neural networks (ANN), see section \ref{sec:nn}. This approach has gained increasing popularity through the recent years. In this approach the ANN is responsible of learning the strategy of the opponent. This approach is also good for learning the strategy of an opponent who performs non-deterministic actions. It can also adapt in case the opponent changes strategy.\\
 
